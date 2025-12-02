@@ -10,7 +10,8 @@ import {
   ShoppingCartIcon,
   TruckIcon,
   UsersIcon,
-  SettingsIcon
+  SettingsIcon,
+  GlobeIcon
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -27,7 +28,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { path: "/admin/orders", label: "Siparişler", icon: ShoppingCartIcon },
     { path: "/admin/shipping", label: "Kargo", icon: TruckIcon },
     { path: "/admin/users", label: "Kullanıcılar", icon: UsersIcon },
-    { path: "/admin/settings", label: "Ayarlar", icon: SettingsIcon },
+    { path: "/admin/site-settings", label: "Site Ayarları", icon: GlobeIcon },
+    { path: "/admin/settings", label: "Stripe Ayarları", icon: SettingsIcon },
   ];
 
   return (

@@ -104,4 +104,25 @@ export default defineSchema({
     key: v.string(),
     value: v.string(),
   }).index("by_key", ["key"]),
+
+  siteConfig: defineTable({
+    siteName: v.string(),
+    siteDescription: v.string(),
+    logoStorageId: v.optional(v.id("_storage")),
+    faviconStorageId: v.optional(v.id("_storage")),
+    primaryColor: v.string(),
+    secondaryColor: v.string(),
+    socialLinks: v.object({
+      facebook: v.optional(v.string()),
+      instagram: v.optional(v.string()),
+      twitter: v.optional(v.string()),
+      youtube: v.optional(v.string()),
+    }),
+    contactInfo: v.object({
+      email: v.string(),
+      phone: v.string(),
+      address: v.string(),
+    }),
+    footerText: v.string(),
+  }),
 });

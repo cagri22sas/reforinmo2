@@ -19,6 +19,7 @@ import AdminOrdersPage from "./pages/admin/orders/page.tsx";
 import AdminShippingPage from "./pages/admin/shipping/page.tsx";
 import AdminUsersPage from "./pages/admin/users/page.tsx";
 import AdminSettingsPage from "./pages/admin/settings/page.tsx";
+import AdminSiteSettingsPage from "./pages/admin/site-settings/page.tsx";
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/admin/shipping" element={<AdminShippingPage />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />
           <Route path="/admin/settings" element={<AdminSettingsPage />} />
+          <Route path="/admin/site-settings" element={<AdminSiteSettingsPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

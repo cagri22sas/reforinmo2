@@ -19,6 +19,7 @@ export default function Header() {
   const categories = useQuery(api.categories.list, {});
   const currentUser = useQuery(api.users.getCurrentUser, {});
   const isAdmin = useQuery(api.users.isAdmin, {});
+  const siteConfig = useQuery(api.admin.siteConfig.get, {});
   const { signoutRedirect } = useAuth();
   
   // Generate or retrieve session ID for guest users
@@ -45,12 +46,22 @@ export default function Header() {
         <div className="flex h-24 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-2.5 rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <WavesIcon className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div className="text-2xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent tracking-tight">
-              YachtBeach
-            </div>
+            {siteConfig?.logoUrl ? (
+              <img 
+                src={siteConfig.logoUrl} 
+                alt={siteConfig.siteName}
+                className="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <>
+                <div className="bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-2.5 rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <WavesIcon className="h-6 w-6 text-primary-foreground" />
+                </div>
+                <div className="text-2xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent tracking-tight">
+                  {siteConfig?.siteName || "YachtBeach"}
+                </div>
+              </>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

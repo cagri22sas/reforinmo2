@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
-import { FacebookIcon, InstagramIcon, TwitterIcon } from "lucide-react";
+import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon, MailIcon, PhoneIcon, MapPinIcon } from "lucide-react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api.js";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const siteConfig = useQuery(api.admin.siteConfig.get, {});
 
   return (
     <footer className="bg-muted/50 border-t">
@@ -11,11 +14,27 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-              YachtBeach
+              {siteConfig?.siteName || "YachtBeach"}
             </div>
             <p className="text-sm text-muted-foreground">
-              Premium products for your luxury lifestyle
+              {siteConfig?.siteDescription || "Premium products for your luxury lifestyle"}
             </p>
+            {siteConfig?.contactInfo && (
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <MailIcon className="h-4 w-4" />
+                  <span>{siteConfig.contactInfo.email}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <PhoneIcon className="h-4 w-4" />
+                  <span>{siteConfig.contactInfo.phone}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPinIcon className="h-4 w-4" />
+                  <span>{siteConfig.contactInfo.address}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
@@ -66,21 +85,52 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <FacebookIcon className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <InstagramIcon className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <TwitterIcon className="h-5 w-5" />
-              </a>
+              {siteConfig?.socialLinks?.facebook && (
+                <a 
+                  href={siteConfig.socialLinks.facebook} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <FacebookIcon className="h-5 w-5" />
+                </a>
+              )}
+              {siteConfig?.socialLinks?.instagram && (
+                <a 
+                  href={siteConfig.socialLinks.instagram} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <InstagramIcon className="h-5 w-5" />
+                </a>
+              )}
+              {siteConfig?.socialLinks?.twitter && (
+                <a 
+                  href={siteConfig.socialLinks.twitter} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <TwitterIcon className="h-5 w-5" />
+                </a>
+              )}
+              {siteConfig?.socialLinks?.youtube && (
+                <a 
+                  href={siteConfig.socialLinks.youtube} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <YoutubeIcon className="h-5 w-5" />
+                </a>
+              )}
             </div>
           </div>
         </div>
 
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>&copy; {currentYear} YachtBeach. All rights reserved.</p>
+          <p>{siteConfig?.footerText || `© ${currentYear} YachtBeach. All rights reserved.`}</p>
         </div>
       </div>
     </footer>
