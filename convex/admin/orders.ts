@@ -143,6 +143,30 @@ export const getStats = query({
     // Recent orders (last 30 days)
     const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
     const recentOrders = orders.filter(o => o._creationTime > thirtyDaysAgo).length;
+    
+    // Previous 30 days for comparison
+    const sixtyDaysAgo = Date.now() - 60 * 24 * 60 * 60 * 1000;
+    const previousPeriodOrders = orders.filter(
+      o => o._creationTime > sixtyDaysAgo && o._creationTime <= thirtyDaysAgo
+    ).length;
+    
+    // Calculate revenue for last 30 days
+    const recentRevenue = orders
+      .filter(o => o._creationTime > thirtyDaysAgo && o.status !== "cancelled")
+      .reduce((sum, order) => sum + order.total, 0);
+      
+    // Previous period revenue
+    const previousRevenue = orders
+      .filter(o => o._creationTime > sixtyDaysAgo && o._creationTime <= thirtyDaysAgo && o.status !== "cancelled")
+      .reduce((sum, order) => sum + order.total, 0);
+
+    // Calculate trends
+    const ordersTrend = previousPeriodOrders > 0 
+      ? ((recentOrders - previousPeriodOrders) / previousPeriodOrders) * 100 
+      : 0;
+    const revenueTrend = previousRevenue > 0 
+      ? ((recentRevenue - previousRevenue) / previousRevenue) * 100 
+      : 0;
 
     return {
       totalRevenue,
@@ -152,6 +176,62 @@ export const getStats = query({
       totalCustomers: users.length,
       lowStockProducts,
       recentOrders,
+      recentRevenue,
+      ordersTrend,
+      revenueTrend,
+    };
+  },
+});
+
+export const getChartData = query({
+  args: {},
+  handler: async (ctx) => {
+    const user = await getCurrentUser(ctx);
+    if (user.role !== "admin") {
+      throw new ConvexError({
+        message: "Unauthorized",
+        code: "FORBIDDEN",
+      });
+    }
+
+    const orders = await ctx.db.query("orders").collect();
+
+    // Last 7 days revenue data
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() - (6 - i));
+      date.setHours(0, 0, 0, 0);
+      return date.getTime();
+    });
+
+    const revenueByDay = last7Days.map(dayStart => {
+      const dayEnd = dayStart + 24 * 60 * 60 * 1000;
+      const dayOrders = orders.filter(
+        o => o._creationTime >= dayStart && 
+             o._creationTime < dayEnd && 
+             o.status !== "cancelled"
+      );
+      const revenue = dayOrders.reduce((sum, order) => sum + order.total, 0);
+      
+      return {
+        date: new Date(dayStart).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' }),
+        revenue: revenue,
+        orders: dayOrders.length,
+      };
+    });
+
+    // Order status breakdown
+    const statusCounts = {
+      pending: orders.filter(o => o.status === "pending").length,
+      processing: orders.filter(o => o.status === "processing").length,
+      shipped: orders.filter(o => o.status === "shipped").length,
+      delivered: orders.filter(o => o.status === "delivered").length,
+      cancelled: orders.filter(o => o.status === "cancelled").length,
+    };
+
+    return {
+      revenueByDay,
+      statusCounts,
     };
   },
 });
