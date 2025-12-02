@@ -54,7 +54,7 @@ export default function CheckoutPage() {
     formState: { errors },
   } = useForm<CheckoutForm>({
     defaultValues: {
-      country: "Türkiye",
+      country: "Turkey",
     },
   });
 
@@ -73,7 +73,7 @@ export default function CheckoutPage() {
 
   const onSubmit = async (data: CheckoutForm) => {
     if (!data.shippingMethodId) {
-      toast.error("Lütfen bir kargo yöntemi seçin");
+      toast.error("Please select a shipping method");
       return;
     }
 
@@ -105,7 +105,7 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Sipariş oluşturulamadı",
+        error instanceof Error ? error.message : "Failed to create order",
       );
       setIsProcessing(false);
     }
@@ -123,19 +123,18 @@ export default function CheckoutPage() {
               className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4"
             >
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
-              Sepete Dön
+              Back to Cart
             </Link>
-            <h1 className="text-4xl font-bold">Ödeme</h1>
+            <h1 className="text-4xl font-bold">Checkout</h1>
           </div>
 
           <Unauthenticated>
             <div className="text-center py-20">
               <h2 className="text-2xl font-bold mb-4">
-                Ödeme yapmak için giriş yapın
+                Sign in to checkout
               </h2>
               <p className="text-muted-foreground mb-8">
-                Siparişinizi tamamlamak için hesabınıza giriş yapmanız
-                gerekmektedir.
+                You need to be signed in to complete your order.
               </p>
               <SignInButton />
             </div>
@@ -146,12 +145,12 @@ export default function CheckoutPage() {
               <Skeleton className="h-96 w-full" />
             ) : cartItems.length === 0 ? (
               <div className="text-center py-20">
-                <h2 className="text-2xl font-bold mb-4">Sepetiniz Boş</h2>
+                <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
                 <p className="text-muted-foreground mb-8">
-                  Ödeme yapmak için sepetinizde ürün olması gerekir.
+                  You need items in your cart to checkout.
                 </p>
                 <Link to="/products">
-                  <Button size="lg">Alışverişe Başla</Button>
+                  <Button size="lg">Start Shopping</Button>
                 </Link>
               </div>
             ) : (
@@ -162,15 +161,15 @@ export default function CheckoutPage() {
                     {/* Shipping Address */}
                     <Card>
                       <CardHeader>
-                        <CardTitle>Teslimat Adresi</CardTitle>
+                        <CardTitle>Shipping Address</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div>
-                          <Label htmlFor="name">Ad Soyad</Label>
+                          <Label htmlFor="name">Full Name</Label>
                           <Input
                             id="name"
                             {...register("name", {
-                              required: "Ad soyad gerekli",
+                              required: "Full name is required",
                             })}
                             placeholder="John Doe"
                           />
@@ -182,13 +181,13 @@ export default function CheckoutPage() {
                         </div>
 
                         <div>
-                          <Label htmlFor="street">Adres</Label>
+                          <Label htmlFor="street">Street Address</Label>
                           <Input
                             id="street"
                             {...register("street", {
-                              required: "Adres gerekli",
+                              required: "Street address is required",
                             })}
-                            placeholder="Sokak, Mahalle, No"
+                            placeholder="123 Main Street"
                           />
                           {errors.street && (
                             <p className="text-sm text-destructive mt-1">
@@ -199,13 +198,13 @@ export default function CheckoutPage() {
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="city">Şehir</Label>
+                            <Label htmlFor="city">City</Label>
                             <Input
                               id="city"
                               {...register("city", {
-                                required: "Şehir gerekli",
+                                required: "City is required",
                               })}
-                              placeholder="İstanbul"
+                              placeholder="Istanbul"
                             />
                             {errors.city && (
                               <p className="text-sm text-destructive mt-1">
@@ -215,11 +214,11 @@ export default function CheckoutPage() {
                           </div>
 
                           <div>
-                            <Label htmlFor="state">İlçe</Label>
+                            <Label htmlFor="state">State / Province</Label>
                             <Input
                               id="state"
                               {...register("state", {
-                                required: "İlçe gerekli",
+                                required: "State is required",
                               })}
                               placeholder="Kadıköy"
                             />
@@ -233,11 +232,11 @@ export default function CheckoutPage() {
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="zipCode">Posta Kodu</Label>
+                            <Label htmlFor="zipCode">ZIP / Postal Code</Label>
                             <Input
                               id="zipCode"
                               {...register("zipCode", {
-                                required: "Posta kodu gerekli",
+                                required: "ZIP code is required",
                               })}
                               placeholder="34000"
                             />
@@ -249,11 +248,11 @@ export default function CheckoutPage() {
                           </div>
 
                           <div>
-                            <Label htmlFor="phone">Telefon</Label>
+                            <Label htmlFor="phone">Phone</Label>
                             <Input
                               id="phone"
                               {...register("phone", {
-                                required: "Telefon gerekli",
+                                required: "Phone is required",
                               })}
                               placeholder="+90 555 123 4567"
                             />
@@ -266,13 +265,13 @@ export default function CheckoutPage() {
                         </div>
 
                         <div>
-                          <Label htmlFor="country">Ülke</Label>
+                          <Label htmlFor="country">Country</Label>
                           <Input
                             id="country"
                             {...register("country", {
-                              required: "Ülke gerekli",
+                              required: "Country is required",
                             })}
-                            placeholder="Türkiye"
+                            placeholder="Turkey"
                           />
                           {errors.country && (
                             <p className="text-sm text-destructive mt-1">
@@ -286,7 +285,7 @@ export default function CheckoutPage() {
                     {/* Shipping Method */}
                     <Card>
                       <CardHeader>
-                        <CardTitle>Kargo Yöntemi</CardTitle>
+                        <CardTitle>Shipping Method</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <RadioGroup
@@ -323,8 +322,8 @@ export default function CheckoutPage() {
                                   </div>
                                   <div className="font-medium">
                                     {method.price === 0
-                                      ? "ÜCRETSİZ"
-                                      : `₺${method.price.toFixed(2)}`}
+                                      ? "FREE"
+                                      : `€${method.price.toFixed(2)}`}
                                   </div>
                                 </div>
                               </Label>
@@ -333,7 +332,7 @@ export default function CheckoutPage() {
                         </RadioGroup>
                         {errors.shippingMethodId && (
                           <p className="text-sm text-destructive mt-2">
-                            Lütfen bir kargo yöntemi seçin
+                            Please select a shipping method
                           </p>
                         )}
                       </CardContent>
@@ -342,12 +341,12 @@ export default function CheckoutPage() {
                     {/* Notes */}
                     <Card>
                       <CardHeader>
-                        <CardTitle>Sipariş Notu (Opsiyonel)</CardTitle>
+                        <CardTitle>Order Notes (Optional)</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <Textarea
                           {...register("notes")}
-                          placeholder="Siparişiniz ile ilgili özel notlarınız..."
+                          placeholder="Any special instructions for your order..."
                           rows={4}
                         />
                       </CardContent>
@@ -358,7 +357,7 @@ export default function CheckoutPage() {
                   <div>
                     <Card className="sticky top-24">
                       <CardHeader>
-                        <CardTitle>Sipariş Özeti</CardTitle>
+                        <CardTitle>Order Summary</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="space-y-2">
@@ -371,7 +370,7 @@ export default function CheckoutPage() {
                                 {item.product.name} x {item.quantity}
                               </span>
                               <span>
-                                ₺
+                                €
                                 {(item.product.price * item.quantity).toFixed(
                                   2,
                                 )}
@@ -383,24 +382,24 @@ export default function CheckoutPage() {
                         <div className="border-t pt-4 space-y-2">
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">
-                              Ara Toplam
+                              Subtotal
                             </span>
-                            <span>₺{subtotal.toFixed(2)}</span>
+                            <span>€{subtotal.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Kargo</span>
+                            <span className="text-muted-foreground">Shipping</span>
                             <span>
                               {shippingCost === 0
-                                ? "ÜCRETSİZ"
-                                : `₺${shippingCost.toFixed(2)}`}
+                                ? "FREE"
+                                : `€${shippingCost.toFixed(2)}`}
                             </span>
                           </div>
                         </div>
 
                         <div className="border-t pt-4">
                           <div className="flex justify-between text-lg font-bold">
-                            <span>Toplam</span>
-                            <span>₺{total.toFixed(2)}</span>
+                            <span>Total</span>
+                            <span>€{total.toFixed(2)}</span>
                           </div>
                         </div>
 
@@ -413,15 +412,15 @@ export default function CheckoutPage() {
                           {isProcessing ? (
                             <>
                               <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-                              İşleniyor...
+                              Processing...
                             </>
                           ) : (
-                            "Ödemeye Geç"
+                            "Complete Order"
                           )}
                         </Button>
 
                         <div className="text-xs text-muted-foreground text-center">
-                          Stripe güvenli ödeme ile korunuyorsunuz
+                          Secured by Stripe payment processing
                         </div>
                       </CardContent>
                     </Card>

@@ -29,14 +29,14 @@ function OrdersContent() {
           <EmptyMedia variant="icon">
             <PackageIcon />
           </EmptyMedia>
-          <EmptyTitle>Henüz siparişiniz yok</EmptyTitle>
+          <EmptyTitle>No orders yet</EmptyTitle>
           <EmptyDescription>
-            İlk siparişinizi vermek için ürünleri keşfedin
+            Start shopping to place your first order
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
           <Link to="/products" className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-            Ürünleri Keşfet
+            Explore Products
           </Link>
         </EmptyContent>
       </Empty>
@@ -45,11 +45,11 @@ function OrdersContent() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { label: "Beklemede", variant: "secondary" as const },
-      processing: { label: "İşleniyor", variant: "default" as const },
-      shipped: { label: "Kargoda", variant: "default" as const },
-      delivered: { label: "Teslim Edildi", variant: "success" as const },
-      cancelled: { label: "İptal Edildi", variant: "destructive" as const },
+      pending: { label: "Pending", variant: "secondary" as const },
+      processing: { label: "Processing", variant: "default" as const },
+      shipped: { label: "Shipped", variant: "default" as const },
+      delivered: { label: "Delivered", variant: "success" as const },
+      cancelled: { label: "Cancelled", variant: "destructive" as const },
     };
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
@@ -57,7 +57,7 @@ function OrdersContent() {
   };
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("tr-TR", {
+    return new Date(timestamp).toLocaleDateString("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -65,7 +65,7 @@ function OrdersContent() {
   };
 
   const formatPrice = (price: number) => {
-    return `${price.toFixed(2)} TL`;
+    return `€${price.toFixed(2)}`;
   };
 
   return (
@@ -90,11 +90,11 @@ function OrdersContent() {
             <CardContent className="pb-4">
               <div className="flex items-center justify-between">
                 <div className="text-sm text-muted-foreground">
-                  <p>Teslimat: {order.shippingAddress.name}</p>
+                  <p>Delivery: {order.shippingAddress.name}</p>
                   <p>{order.shippingAddress.city}, {order.shippingAddress.state}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Toplam</p>
+                  <p className="text-sm text-muted-foreground">Total</p>
                   <p className="text-lg font-bold">{formatPrice(order.total)}</p>
                 </div>
               </div>
@@ -110,9 +110,9 @@ export default function OrdersPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Siparişlerim</h1>
+        <h1 className="text-3xl font-bold mb-2">My Orders</h1>
         <p className="text-muted-foreground">
-          Tüm siparişlerinizi görüntüleyin ve takip edin
+          View and track all your orders
         </p>
       </div>
 
@@ -121,7 +121,7 @@ export default function OrdersPage() {
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
               <p className="text-muted-foreground">
-                Siparişlerinizi görüntülemek için giriş yapmalısınız
+                Please sign in to view your orders
               </p>
               <SignInButton />
             </div>

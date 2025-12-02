@@ -21,7 +21,7 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = async () => {
     if (!user) {
-      toast.error("Sepete eklemek için giriş yapmalısınız");
+      toast.error("Please sign in to add items to cart");
       return;
     }
 
@@ -29,15 +29,15 @@ export default function ProductDetailPage() {
 
     try {
       await addToCart({ productId: product._id, quantity });
-      toast.success(`${quantity} adet ürün sepete eklendi`);
+      toast.success(`${quantity} item${quantity > 1 ? 's' : ''} added to cart`);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ürün eklenemedi");
+      toast.error(error instanceof Error ? error.message : "Failed to add item");
     }
   };
 
   const handleBuyNow = async () => {
     if (!user) {
-      toast.error("Satın almak için giriş yapmalısınız");
+      toast.error("Please sign in to purchase");
       return;
     }
 
@@ -47,7 +47,7 @@ export default function ProductDetailPage() {
       await addToCart({ productId: product._id, quantity });
       navigate("/cart");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ürün eklenemedi");
+      toast.error(error instanceof Error ? error.message : "Failed to add item");
     }
   };
 
@@ -69,12 +69,12 @@ export default function ProductDetailPage() {
         <Header />
         <div className="flex-1 container mx-auto px-4 py-8">
           <div className="text-center py-20">
-            <h1 className="text-3xl font-bold mb-4">Ürün Bulunamadı</h1>
-            <p className="text-muted-foreground mb-8">Aradığınız ürün mevcut değil.</p>
+            <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
+            <p className="text-muted-foreground mb-8">The product you're looking for doesn't exist.</p>
             <Link to="/products">
               <Button>
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
-                Ürünlere Dön
+                Back to Products
               </Button>
             </Link>
           </div>
@@ -106,7 +106,7 @@ export default function ProductDetailPage() {
           {/* Breadcrumb */}
           <div className="mb-8">
             <Link to="/products" className="text-sm text-muted-foreground hover:text-primary">
-              Ürünler
+              Products
             </Link>
             {product.category && (
               <>
@@ -135,12 +135,12 @@ export default function ProductDetailPage() {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                    Görsel Yok
+                    No Image
                   </div>
                 )}
                 {hasDiscount && (
                   <div className="absolute top-4 right-4 bg-destructive text-destructive-foreground px-3 py-1 rounded-md text-sm font-bold">
-                    %{discountPercentage} İNDİRİM
+                    {discountPercentage}% OFF
                   </div>
                 )}
               </div>
@@ -172,16 +172,16 @@ export default function ProductDetailPage() {
               <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
               {product.category && (
                 <p className="text-sm text-muted-foreground mb-4">
-                  Kategori: {product.category.name}
+                  Category: {product.category.name}
                 </p>
               )}
 
               <div className="mb-6">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-4xl font-bold">₺{product.price.toFixed(2)}</span>
+                  <span className="text-4xl font-bold">€{product.price.toFixed(2)}</span>
                   {hasDiscount && (
                     <span className="text-xl text-muted-foreground line-through">
-                      ₺{product.compareAtPrice!.toFixed(2)}
+                      €{product.compareAtPrice!.toFixed(2)}
                     </span>
                   )}
                 </div>
@@ -196,12 +196,12 @@ export default function ProductDetailPage() {
                 {product.stock > 0 ? (
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-green-500" />
-                    <span className="text-sm">Stokta mevcut ({product.stock} adet)</span>
+                    <span className="text-sm">In stock ({product.stock} available)</span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-red-500" />
-                    <span className="text-sm">Stokta yok</span>
+                    <span className="text-sm">Out of stock</span>
                   </div>
                 )}
               </div>
@@ -209,7 +209,7 @@ export default function ProductDetailPage() {
               {/* Quantity Selector */}
               {product.stock > 0 && (
                 <div className="mb-6">
-                  <label className="text-sm font-medium mb-2 block">Adet</label>
+                  <label className="text-sm font-medium mb-2 block">Quantity</label>
                   <div className="flex items-center gap-4">
                     <div className="flex items-center border rounded-lg">
                       <Button
@@ -243,7 +243,7 @@ export default function ProductDetailPage() {
                   onClick={handleAddToCart}
                 >
                   <ShoppingCartIcon className="mr-2 h-5 w-5" />
-                  Sepete Ekle
+                  Add to Cart
                 </Button>
                 <Button
                   size="lg"
@@ -252,7 +252,7 @@ export default function ProductDetailPage() {
                   disabled={product.stock === 0}
                   onClick={handleBuyNow}
                 >
-                  Hemen Al
+                  Buy Now
                 </Button>
               </div>
 

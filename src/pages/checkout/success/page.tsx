@@ -18,28 +18,28 @@ export default function CheckoutSuccessPage() {
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold">Ödeme Başarılı!</h1>
+            <h1 className="text-3xl font-bold">Payment Successful!</h1>
             <p className="text-muted-foreground">
-              Siparişiniz başarıyla oluşturuldu. Sipariş detaylarınız e-posta
-              adresinize gönderildi.
+              Your order has been successfully created. Order details have been
+              sent to your email address.
             </p>
           </div>
 
           <div className="space-y-3">
             <Link to="/orders" className="block">
               <Button size="lg" className="w-full">
-                Siparişlerimi Görüntüle
+                View My Orders
               </Button>
             </Link>
             <Link to="/products" className="block">
               <Button size="lg" variant="outline" className="w-full">
-                Alışverişe Devam Et
+                Continue Shopping
               </Button>
             </Link>
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <p>Teşekkür ederiz! 🎉</p>
+            <p>Thank you! 🎉</p>
           </div>
         </div>
       </div>

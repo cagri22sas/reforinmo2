@@ -40,7 +40,7 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link to="/products" className="text-sm font-medium hover:text-primary transition-colors">
-              Tüm Ürünler
+              All Products
             </Link>
             {categories?.slice(0, 4).map((category) => (
               <Link
@@ -59,7 +59,7 @@ export default function Header() {
               {isAdmin && (
                 <Link to="/admin">
                   <Button variant="ghost" size="sm">
-                    Admin Panel
+                    Admin
                   </Button>
                 </Link>
               )}
@@ -81,25 +81,25 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium">{currentUser?.name || "Kullanıcı"}</p>
+                    <p className="text-sm font-medium">{currentUser?.name || "User"}</p>
                     <p className="text-xs text-muted-foreground">{currentUser?.email}</p>
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/orders" className="cursor-pointer">
                       <PackageIcon className="h-4 w-4 mr-2" />
-                      Siparişlerim
+                      My Orders
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="cursor-pointer">
                       <UserIcon className="h-4 w-4 mr-2" />
-                      Profilim
+                      My Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => signoutRedirect()} className="cursor-pointer">
-                    Çıkış Yap
+                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

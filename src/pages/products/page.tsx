@@ -26,10 +26,10 @@ export default function ProductsPage() {
           {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2">
-              {selectedCategory ? selectedCategory.name : "Tüm Ürünler"}
+              {selectedCategory ? selectedCategory.name : "All Products"}
             </h1>
             <p className="text-muted-foreground">
-              {selectedCategory ? selectedCategory.description : "Premium koleksiyonumuzdaki tüm ürünleri keşfedin"}
+              {selectedCategory ? selectedCategory.description : "Explore our complete premium collection"}
             </p>
           </div>
 
@@ -39,7 +39,7 @@ export default function ProductsPage() {
               variant={!categoryId ? "default" : "outline"}
               onClick={() => setSearchParams({})}
             >
-              Tümü
+              All
             </Button>
             {categories?.map((category) => (
               <Button
@@ -61,7 +61,7 @@ export default function ProductsPage() {
             </div>
           ) : products.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-muted-foreground text-lg">Bu kategoride henüz ürün bulunmamaktadır.</p>
+              <p className="text-muted-foreground text-lg">No products available in this category yet.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">

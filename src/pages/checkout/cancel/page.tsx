@@ -18,22 +18,22 @@ export default function CheckoutCancelPage() {
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold">Ödeme İptal Edildi</h1>
+            <h1 className="text-3xl font-bold">Payment Cancelled</h1>
             <p className="text-muted-foreground">
-              Ödeme işleminiz iptal edildi. Sepetinizdeki ürünler
-              korunmaktadır.
+              Your payment has been cancelled. Your cart items have been
+              preserved.
             </p>
           </div>
 
           <div className="space-y-3">
             <Link to="/cart" className="block">
               <Button size="lg" className="w-full">
-                Sepete Dön
+                Return to Cart
               </Button>
             </Link>
             <Link to="/products" className="block">
               <Button size="lg" variant="outline" className="w-full">
-                Alışverişe Devam Et
+                Continue Shopping
               </Button>
             </Link>
           </div>

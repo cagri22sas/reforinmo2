@@ -29,15 +29,15 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.preventDefault();
     
     if (!user) {
-      toast.error("Sepete eklemek için giriş yapmalısınız");
+      toast.error("Please sign in to add items to cart");
       return;
     }
 
     try {
       await addToCart({ productId: product._id, quantity: 1 });
-      toast.success("Ürün sepete eklendi");
+      toast.success("Added to cart");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ürün eklenemedi");
+      toast.error(error instanceof Error ? error.message : "Failed to add item");
     }
   };
 
@@ -53,17 +53,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              Görsel Yok
+              No Image
             </div>
           )}
           {hasDiscount && (
             <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-2 py-1 rounded-md text-xs font-bold">
-              %{discountPercentage} İNDİRİM
+              {discountPercentage}% OFF
             </div>
           )}
           {product.stock === 0 && (
             <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
-              <span className="text-lg font-bold">Stokta Yok</span>
+              <span className="text-lg font-bold">Out of Stock</span>
             </div>
           )}
         </div>

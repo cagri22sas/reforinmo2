@@ -29,21 +29,21 @@ export default function Index() {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl">
-            <h1 className="text-5xl md:text-6xl font-bold text-balance mb-6 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-              Lüks Yaşamın Adresi
+            <h1 className="text-5xl md:text-6xl font-bold text-balance mb-6">
+              Luxury Living. Reimagined.
             </h1>
             <p className="text-xl text-muted-foreground mb-8 text-balance">
-              Yacht Beach ile denizin ve lüksün buluştuğu noktada, size özel seçilmiş premium ürünlerle tanışın
+              Discover our premium collection of floating platforms and marine accessories designed for the ultimate water experience.
             </p>
             <div className="flex gap-4">
               <Link to="/products">
                 <Button size="lg" className="group">
-                  Alışverişe Başla
+                  Shop Now
                   <ArrowRightIcon className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Button size="lg" variant="outline">
-                Koleksiyonları Keşfet
+                View Collections
               </Button>
             </div>
           </div>
@@ -59,8 +59,8 @@ export default function Index() {
                 <ShipIcon className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Ücretsiz Kargo</h3>
-                <p className="text-sm text-muted-foreground">500₺ üzeri tüm siparişlerde</p>
+                <h3 className="font-semibold mb-1">Free Shipping</h3>
+                <p className="text-sm text-muted-foreground">On orders over €500</p>
               </div>
             </div>
             <div className="flex items-start space-x-4">
@@ -68,8 +68,8 @@ export default function Index() {
                 <CreditCardIcon className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Güvenli Ödeme</h3>
-                <p className="text-sm text-muted-foreground">SSL sertifikalı ödeme sistemi</p>
+                <h3 className="font-semibold mb-1">Secure Payment</h3>
+                <p className="text-sm text-muted-foreground">SSL encrypted checkout</p>
               </div>
             </div>
             <div className="flex items-start space-x-4">
@@ -77,8 +77,8 @@ export default function Index() {
                 <TruckIcon className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Hızlı Teslimat</h3>
-                <p className="text-sm text-muted-foreground">2-3 iş günü içinde kapınızda</p>
+                <h3 className="font-semibold mb-1">Fast Delivery</h3>
+                <p className="text-sm text-muted-foreground">Ships within 2-3 business days</p>
               </div>
             </div>
           </div>
@@ -90,8 +90,8 @@ export default function Index() {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Kategoriler</h2>
-              <p className="text-muted-foreground">Size en uygun kategoriyi seçin</p>
+              <h2 className="text-3xl font-bold mb-4">Categories</h2>
+              <p className="text-muted-foreground">Browse by category</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {categories.slice(0, 4).map((category) => (
@@ -127,8 +127,8 @@ export default function Index() {
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Öne Çıkan Ürünler</h2>
-            <p className="text-muted-foreground">En çok tercih edilen premium ürünlerimiz</p>
+            <h2 className="text-3xl font-bold mb-4">Featured Products</h2>
+            <p className="text-muted-foreground">Our most popular premium products</p>
           </div>
           
           {!featuredProducts ? (
@@ -139,7 +139,7 @@ export default function Index() {
             </div>
           ) : featuredProducts.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">Henüz öne çıkan ürün bulunmamaktadır.</p>
+              <p className="text-muted-foreground">No featured products available yet.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -152,7 +152,7 @@ export default function Index() {
           <div className="text-center mt-12">
             <Link to="/products">
               <Button size="lg" variant="outline">
-                Tüm Ürünleri Görüntüle
+                View All Products
               </Button>
             </Link>
           </div>
@@ -170,13 +170,13 @@ export default function Index() {
       >
         <div className="absolute inset-0 bg-background/90" />
         <div className="container mx-auto px-4 relative z-10 text-center">
-          <h2 className="text-4xl font-bold mb-4">Lüks Yaşam Tarzınızı Keşfedin</h2>
+          <h2 className="text-4xl font-bold mb-4">Discover Your Luxury Lifestyle</h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            YachtBeach ile denizin huzurunu ve lüksün konforunu bir araya getirin
+            Experience the perfect blend of ocean serenity and luxury comfort with YachtBeach
           </p>
           <Link to="/products">
             <Button size="lg">
-              Koleksiyonu İnceleyin
+              Explore Collection
             </Button>
           </Link>
         </div>

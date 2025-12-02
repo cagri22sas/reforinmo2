@@ -29,25 +29,25 @@ export default function CartPage() {
     try {
       await updateQuantity({ cartItemId, quantity: newQuantity });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Miktar güncellenemedi");
+      toast.error(error instanceof Error ? error.message : "Failed to update quantity");
     }
   };
 
   const handleRemove = async (cartItemId: Id<"cart">) => {
     try {
       await removeItem({ cartItemId });
-      toast.success("Ürün sepetten kaldırıldı");
+      toast.success("Item removed from cart");
     } catch (error) {
-      toast.error("Ürün kaldırılamadı");
+      toast.error("Failed to remove item");
     }
   };
 
   const handleClearCart = async () => {
     try {
       await clearCart({});
-      toast.success("Sepet temizlendi");
+      toast.success("Cart cleared");
     } catch (error) {
-      toast.error("Sepet temizlenemedi");
+      toast.error("Failed to clear cart");
     }
   };
 
@@ -60,15 +60,15 @@ export default function CartPage() {
           <div className="mb-8">
             <Link to="/products" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4">
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
-              Alışverişe Devam Et
+              Continue Shopping
             </Link>
-            <h1 className="text-4xl font-bold">Sepetim</h1>
+            <h1 className="text-4xl font-bold">My Cart</h1>
           </div>
 
           <Unauthenticated>
             <div className="text-center py-20">
-              <h2 className="text-2xl font-bold mb-4">Sepetinizi görüntülemek için giriş yapın</h2>
-              <p className="text-muted-foreground mb-8">Alışveriş yapmak için hesabınıza giriş yapmanız gerekmektedir.</p>
+              <h2 className="text-2xl font-bold mb-4">Sign in to view your cart</h2>
+              <p className="text-muted-foreground mb-8">You need to be signed in to shop with us.</p>
               <SignInButton />
             </div>
           </Unauthenticated>
@@ -87,10 +87,10 @@ export default function CartPage() {
               </div>
             ) : cartItems.length === 0 ? (
               <div className="text-center py-20">
-                <h2 className="text-2xl font-bold mb-4">Sepetiniz Boş</h2>
-                <p className="text-muted-foreground mb-8">Henüz sepetinize ürün eklemediniz.</p>
+                <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
+                <p className="text-muted-foreground mb-8">You haven't added any items to your cart yet.</p>
                 <Link to="/products">
-                  <Button size="lg">Alışverişe Başla</Button>
+                  <Button size="lg">Start Shopping</Button>
                 </Link>
               </div>
             ) : (
@@ -99,7 +99,7 @@ export default function CartPage() {
                 <div className="md:col-span-2 space-y-4">
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">
-                      Sepetinizdeki Ürünler ({cartItems.length})
+                      Cart Items ({cartItems.length})
                     </h2>
                     <Button
                       variant="ghost"
@@ -107,7 +107,7 @@ export default function CartPage() {
                       onClick={handleClearCart}
                       className="text-destructive hover:text-destructive"
                     >
-                      Sepeti Temizle
+                      Clear Cart
                     </Button>
                   </div>
 
@@ -130,7 +130,7 @@ export default function CartPage() {
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
-                              Görsel Yok
+                              No Image
                             </div>
                           )}
                         </div>
@@ -189,7 +189,7 @@ export default function CartPage() {
 
                         {item.quantity >= item.product.stock && (
                           <p className="text-xs text-destructive mt-2">
-                            Maksimum stok miktarına ulaştınız
+                            Maximum stock quantity reached
                           </p>
                         )}
                       </div>
@@ -207,17 +207,17 @@ export default function CartPage() {
                 {/* Order Summary */}
                 <div>
                   <div className="bg-card rounded-lg border p-6 sticky top-24">
-                    <h2 className="text-xl font-semibold mb-6">Sipariş Özeti</h2>
+                    <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
 
                     <div className="space-y-4 mb-6">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Ara Toplam</span>
-                        <span className="font-medium">₺{subtotal.toFixed(2)}</span>
+                        <span className="text-muted-foreground">Subtotal</span>
+                        <span className="font-medium">€{subtotal.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Kargo</span>
+                        <span className="text-muted-foreground">Shipping</span>
                         <span className="text-muted-foreground">
-                          {shippingInfo?.isFreeShipping ? "ÜCRETSİZ" : "Sonraki adımda hesaplanacak"}
+                          {shippingInfo?.isFreeShipping ? "FREE" : "Calculated at checkout"}
                         </span>
                       </div>
                       
@@ -226,9 +226,9 @@ export default function CartPage() {
                         <div className="pt-2">
                           <div className="mb-2">
                             <div className="flex justify-between text-xs mb-1">
-                              <span className="text-muted-foreground">Ücretsiz kargo için</span>
+                              <span className="text-muted-foreground">For free shipping</span>
                               <span className="font-medium text-primary">
-                                ₺{shippingInfo.amountToFreeShipping.toFixed(2)} kaldı
+                                €{shippingInfo.amountToFreeShipping.toFixed(2)} more
                               </span>
                             </div>
                             <div className="w-full bg-muted rounded-full h-2">
@@ -241,35 +241,35 @@ export default function CartPage() {
                             </div>
                           </div>
                           <p className="text-xs text-muted-foreground">
-                            ₺{shippingInfo.threshold.toFixed(2)} üzeri siparişlerde kargo ücretsiz!
+                            Free shipping on orders over €{shippingInfo.threshold.toFixed(2)}!
                           </p>
                         </div>
                       )}
 
                       {shippingInfo?.isFreeShipping && (
                         <div className="bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-200 px-3 py-2 rounded-md text-sm font-medium">
-                          🎉 Ücretsiz kargo kazandınız!
+                          🎉 You've earned free shipping!
                         </div>
                       )}
                     </div>
 
                     <div className="border-t pt-4 mb-6">
                       <div className="flex justify-between text-lg font-bold">
-                        <span>Toplam</span>
-                        <span>₺{subtotal.toFixed(2)}</span>
+                        <span>Total</span>
+                        <span>€{subtotal.toFixed(2)}</span>
                       </div>
                     </div>
 
                     <Link to="/checkout">
                       <Button size="lg" className="w-full">
-                        Ödemeye Geç
+                        Proceed to Checkout
                       </Button>
                     </Link>
 
                     <div className="mt-4 space-y-2 text-xs text-muted-foreground">
-                      <p>✓ Güvenli ödeme</p>
-                      <p>✓ Hızlı teslimat</p>
-                      <p>✓ 14 gün iade garantisi</p>
+                      <p>✓ Secure payment</p>
+                      <p>✓ Fast delivery</p>
+                      <p>✓ 14-day return guarantee</p>
                     </div>
                   </div>
                 </div>
