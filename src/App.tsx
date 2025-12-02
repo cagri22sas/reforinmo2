@@ -11,6 +11,12 @@ import CheckoutSuccessPage from "./pages/checkout/success/page.tsx";
 import CheckoutCancelPage from "./pages/checkout/cancel/page.tsx";
 import OrdersPage from "./pages/orders/page.tsx";
 import OrderDetailPage from "./pages/orders/[id]/page.tsx";
+import AdminDashboard from "./pages/admin/page.tsx";
+import AdminProductsPage from "./pages/admin/products/page.tsx";
+import AdminCategoriesPage from "./pages/admin/categories/page.tsx";
+import AdminOrdersPage from "./pages/admin/orders/page.tsx";
+import AdminShippingPage from "./pages/admin/shipping/page.tsx";
+import AdminUsersPage from "./pages/admin/users/page.tsx";
 
 export default function App() {
   return (
@@ -27,6 +33,12 @@ export default function App() {
           <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/products" element={<AdminProductsPage />} />
+          <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+          <Route path="/admin/orders" element={<AdminOrdersPage />} />
+          <Route path="/admin/shipping" element={<AdminShippingPage />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
