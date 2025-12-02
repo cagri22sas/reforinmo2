@@ -359,7 +359,7 @@ function ProductsContent() {
           </p>
         </div>
 
-        <Button onClick={() => navigate("/admin/products/new")}>
+        <Button onClick={() => navigate("/admin/products/editor/new")}>
           <PlusIcon className="h-4 w-4 mr-2" />
           Yeni Ürün
         </Button>
@@ -416,7 +416,7 @@ function ProductsContent() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => navigate(`/admin/products/${product._id}`)}
+                      onClick={() => navigate(`/admin/products/editor/${product._id}`)}
                     >
                       <EditIcon className="h-4 w-4" />
                     </Button>
