@@ -230,9 +230,11 @@ export default function CartPage() {
                       </div>
                     </div>
 
-                    <Button size="lg" className="w-full">
-                      Ödemeye Geç
-                    </Button>
+                    <Link to="/checkout">
+                      <Button size="lg" className="w-full">
+                        Ödemeye Geç
+                      </Button>
+                    </Link>
 
                     <div className="mt-4 space-y-2 text-xs text-muted-foreground">
                       <p>✓ Güvenli ödeme</p>

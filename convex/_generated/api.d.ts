@@ -11,7 +11,11 @@
 import type * as cart from "../cart.js";
 import type * as categories from "../categories.js";
 import type * as helpers from "../helpers.js";
+import type * as http from "../http.js";
+import type * as orders from "../orders.js";
 import type * as products from "../products.js";
+import type * as shipping from "../shipping.js";
+import type * as stripe from "../stripe.js";
 import type * as users from "../users.js";
 
 import type {
@@ -24,7 +28,11 @@ declare const fullApi: ApiFromModules<{
   cart: typeof cart;
   categories: typeof categories;
   helpers: typeof helpers;
+  http: typeof http;
+  orders: typeof orders;
   products: typeof products;
+  shipping: typeof shipping;
+  stripe: typeof stripe;
   users: typeof users;
 }>;
 

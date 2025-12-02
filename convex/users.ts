@@ -1,5 +1,6 @@
 import { ConvexError } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { v } from "convex/values";
+import { mutation, query, internalMutation } from "./_generated/server";
 
 export const updateCurrentUser = mutation({
   args: {},
@@ -71,5 +72,24 @@ export const isAdmin = query({
       .unique();
 
     return user?.role === "admin";
+  },
+});
+
+export const updateStripeCustomer = internalMutation({
+  args: {
+    tokenIdentifier: v.string(),
+    customerId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", args.tokenIdentifier))
+      .unique();
+
+    if (user) {
+      await ctx.db.patch(user._id, {
+        stripeCustomerId: args.customerId,
+      });
+    }
   },
 });
