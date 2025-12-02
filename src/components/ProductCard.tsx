@@ -2,6 +2,10 @@ import { Card, CardContent } from "@/components/ui/card.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { ShoppingCartIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api.js";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth.ts";
 import type { Doc } from "@/convex/_generated/dataModel.d.ts";
 
 type Product = Doc<"products"> & {
@@ -13,10 +17,29 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { user } = useAuth();
+  const addToCart = useMutation(api.cart.add);
+  
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
   const discountPercentage = hasDiscount
     ? Math.round(((product.compareAtPrice! - product.price) / product.compareAtPrice!) * 100)
     : 0;
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (!user) {
+      toast.error("Sepete eklemek için giriş yapmalısınız");
+      return;
+    }
+
+    try {
+      await addToCart({ productId: product._id, quantity: 1 });
+      toast.success("Ürün sepete eklendi");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Ürün eklenemedi");
+    }
+  };
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
@@ -65,7 +88,11 @@ export default function ProductCard({ product }: ProductCardProps) {
               </div>
             )}
           </div>
-          <Button size="icon" disabled={product.stock === 0}>
+          <Button 
+            size="icon" 
+            disabled={product.stock === 0}
+            onClick={handleAddToCart}
+          >
             <ShoppingCartIcon className="h-4 w-4" />
           </Button>
         </div>

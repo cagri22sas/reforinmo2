@@ -1,18 +1,55 @@
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ShoppingCartIcon, MinusIcon, PlusIcon, ArrowLeftIcon } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth.ts";
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const product = useQuery(api.products.get, { slug: slug! });
+  const addToCart = useMutation(api.cart.add);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+
+  const handleAddToCart = async () => {
+    if (!user) {
+      toast.error("Sepete eklemek için giriş yapmalısınız");
+      return;
+    }
+
+    if (!product) return;
+
+    try {
+      await addToCart({ productId: product._id, quantity });
+      toast.success(`${quantity} adet ürün sepete eklendi`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Ürün eklenemedi");
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!user) {
+      toast.error("Satın almak için giriş yapmalısınız");
+      return;
+    }
+
+    if (!product) return;
+
+    try {
+      await addToCart({ productId: product._id, quantity });
+      navigate("/cart");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Ürün eklenemedi");
+    }
+  };
 
   if (product === undefined) {
     return (
@@ -203,9 +240,19 @@ export default function ProductDetailPage() {
                   size="lg"
                   className="w-full"
                   disabled={product.stock === 0}
+                  onClick={handleAddToCart}
                 >
                   <ShoppingCartIcon className="mr-2 h-5 w-5" />
                   Sepete Ekle
+                </Button>
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="w-full"
+                  disabled={product.stock === 0}
+                  onClick={handleBuyNow}
+                >
+                  Hemen Al
                 </Button>
               </div>
 
