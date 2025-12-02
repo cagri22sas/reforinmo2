@@ -11,6 +11,7 @@ import CheckoutSuccessPage from "./pages/checkout/success/page.tsx";
 import CheckoutCancelPage from "./pages/checkout/cancel/page.tsx";
 import OrdersPage from "./pages/orders/page.tsx";
 import OrderDetailPage from "./pages/orders/[id]/page.tsx";
+import ProfilePage from "./pages/profile/page.tsx";
 import AdminDashboard from "./pages/admin/page.tsx";
 import AdminProductsPage from "./pages/admin/products/page.tsx";
 import AdminCategoriesPage from "./pages/admin/categories/page.tsx";
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProductsPage />} />
           <Route path="/admin/categories" element={<AdminCategoriesPage />} />
