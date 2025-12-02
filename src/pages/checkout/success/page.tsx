@@ -26,7 +26,7 @@ export default function CheckoutSuccessPage() {
           </div>
 
           <div className="space-y-3">
-            <Link to="/profile/orders" className="block">
+            <Link to="/orders" className="block">
               <Button size="lg" className="w-full">
                 Siparişlerimi Görüntüle
               </Button>

@@ -1,15 +1,24 @@
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { ShoppingCartIcon, MenuIcon, UserIcon } from "lucide-react";
+import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
+import { useAuth } from "@/hooks/use-auth.ts";
 
 export default function Header() {
   const categories = useQuery(api.categories.list, {});
   const currentUser = useQuery(api.users.getCurrentUser, {});
   const isAdmin = useQuery(api.users.isAdmin, {});
+  const { signoutRedirect } = useAuth();
   
   // Skip cart query if not authenticated to avoid errors
   const cartCount = useQuery(
@@ -64,11 +73,36 @@ export default function Header() {
                   )}
                 </Button>
               </Link>
-              <Link to="/profile">
-                <Button variant="ghost" size="icon">
-                  <UserIcon className="h-5 w-5" />
-                </Button>
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <UserIcon className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <div className="px-2 py-1.5">
+                    <p className="text-sm font-medium">{currentUser?.name || "Kullanıcı"}</p>
+                    <p className="text-xs text-muted-foreground">{currentUser?.email}</p>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/orders" className="cursor-pointer">
+                      <PackageIcon className="h-4 w-4 mr-2" />
+                      Siparişlerim
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="cursor-pointer">
+                      <UserIcon className="h-4 w-4 mr-2" />
+                      Profilim
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => signoutRedirect()} className="cursor-pointer">
+                    Çıkış Yap
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </Authenticated>
             <Unauthenticated>
               <SignInButton />

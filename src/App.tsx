@@ -9,6 +9,8 @@ import CartPage from "./pages/cart/page.tsx";
 import CheckoutPage from "./pages/checkout/page.tsx";
 import CheckoutSuccessPage from "./pages/checkout/success/page.tsx";
 import CheckoutCancelPage from "./pages/checkout/cancel/page.tsx";
+import OrdersPage from "./pages/orders/page.tsx";
+import OrderDetailPage from "./pages/orders/[id]/page.tsx";
 
 export default function App() {
   return (
@@ -23,6 +25,8 @@ export default function App() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
           <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:id" element={<OrderDetailPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
