@@ -38,6 +38,24 @@ export default defineSchema({
     sku: v.optional(v.string()),
     featured: v.boolean(),
     active: v.boolean(),
+    seoTitle: v.optional(v.string()),
+    seoDescription: v.optional(v.string()),
+    seoKeywords: v.optional(v.string()),
+    specifications: v.optional(v.array(v.object({
+      label: v.string(),
+      value: v.string(),
+    }))),
+    dimensions: v.optional(v.object({
+      length: v.number(),
+      width: v.number(),
+      height: v.number(),
+      unit: v.string(),
+    })),
+    weight: v.optional(v.object({
+      value: v.number(),
+      unit: v.string(),
+    })),
+    relatedProducts: v.optional(v.array(v.id("products"))),
   }).index("by_slug", ["slug"])
     .index("by_category", ["categoryId"])
     .index("by_featured", ["featured"]),
@@ -104,6 +122,23 @@ export default defineSchema({
     key: v.string(),
     value: v.string(),
   }).index("by_key", ["key"]),
+
+  stripeConfig: defineTable({
+    publishableKey: v.string(),
+    secretKey: v.string(),
+    webhookSecret: v.optional(v.string()),
+    isTestMode: v.boolean(),
+  }),
+
+  mediaLibrary: defineTable({
+    fileName: v.string(),
+    fileType: v.string(),
+    fileSize: v.number(),
+    storageId: v.id("_storage"),
+    uploadedBy: v.id("users"),
+    tags: v.optional(v.array(v.string())),
+    alt: v.optional(v.string()),
+  }).index("by_user", ["uploadedBy"]),
 
   siteConfig: defineTable({
     siteName: v.string(),

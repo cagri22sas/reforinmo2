@@ -25,6 +25,47 @@ export const list = query({
   },
 });
 
+// Get single product
+export const get = query({
+  args: { id: v.id("products") },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUser(ctx);
+    if (user.role !== "admin") {
+      throw new ConvexError({
+        message: "Unauthorized",
+        code: "FORBIDDEN",
+      });
+    }
+
+    const product = await ctx.db.get(args.id);
+    if (!product) {
+      throw new ConvexError({
+        message: "Product not found",
+        code: "NOT_FOUND",
+      });
+    }
+
+    const category = await ctx.db.get(product.categoryId);
+    return { ...product, category };
+  },
+});
+
+// Generate upload URL for product images
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const user = await getCurrentUser(ctx);
+    if (user.role !== "admin") {
+      throw new ConvexError({
+        message: "Unauthorized",
+        code: "FORBIDDEN",
+      });
+    }
+
+    return await ctx.storage.generateUploadUrl();
+  },
+});
+
 export const create = mutation({
   args: {
     name: v.string(),
@@ -38,6 +79,13 @@ export const create = mutation({
     sku: v.optional(v.string()),
     featured: v.boolean(),
     active: v.boolean(),
+    seoTitle: v.optional(v.string()),
+    seoDescription: v.optional(v.string()),
+    seoKeywords: v.optional(v.string()),
+    specifications: v.optional(v.array(v.object({
+      label: v.string(),
+      value: v.string(),
+    }))),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);
@@ -80,6 +128,13 @@ export const update = mutation({
     sku: v.optional(v.string()),
     featured: v.boolean(),
     active: v.boolean(),
+    seoTitle: v.optional(v.string()),
+    seoDescription: v.optional(v.string()),
+    seoKeywords: v.optional(v.string()),
+    specifications: v.optional(v.array(v.object({
+      label: v.string(),
+      value: v.string(),
+    }))),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);

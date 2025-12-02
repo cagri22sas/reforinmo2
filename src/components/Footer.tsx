@@ -3,9 +3,30 @@ import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon, MailIcon, PhoneI
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 
+type SiteConfigWithUrls = {
+  siteName: string;
+  siteDescription: string;
+  primaryColor: string;
+  secondaryColor: string;
+  socialLinks: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+  };
+  contactInfo: {
+    email: string;
+    phone: string;
+    address: string;
+  };
+  footerText: string;
+  logoUrl: string | null;
+  faviconUrl: string | null;
+};
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const siteConfig = useQuery(api.admin.siteConfig.get, {});
+  const siteConfig = useQuery(api.admin.siteConfig.get, {}) as SiteConfigWithUrls | null | undefined;
 
   return (
     <footer className="bg-muted/50 border-t">

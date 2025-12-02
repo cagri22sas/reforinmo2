@@ -11,7 +11,9 @@ import {
   TruckIcon,
   UsersIcon,
   SettingsIcon,
-  GlobeIcon
+  GlobeIcon,
+  ImageIcon,
+  CreditCardIcon
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -28,8 +30,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { path: "/admin/orders", label: "Siparişler", icon: ShoppingCartIcon },
     { path: "/admin/shipping", label: "Kargo", icon: TruckIcon },
     { path: "/admin/users", label: "Kullanıcılar", icon: UsersIcon },
-    { path: "/admin/site-settings", label: "Site Ayarları", icon: GlobeIcon },
-    { path: "/admin/settings", label: "Stripe Ayarları", icon: SettingsIcon },
+    { path: "/admin/media", label: "Medya", icon: ImageIcon },
+    { path: "/admin/site-config", label: "Site Yapılandırması", icon: GlobeIcon },
+    { path: "/admin/stripe-config", label: "Stripe", icon: CreditCardIcon },
+    { path: "/admin/settings", label: "Genel Ayarlar", icon: SettingsIcon },
   ];
 
   return (

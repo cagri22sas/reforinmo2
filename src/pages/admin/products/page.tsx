@@ -37,6 +37,7 @@ import {
 import { PlusIcon, EditIcon, Trash2Icon } from "lucide-react";
 import AdminLayout from "@/components/AdminLayout.tsx";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface ProductFormData {
   name: string;
@@ -321,6 +322,7 @@ type Product = {
 };
 
 function ProductsContent() {
+  const navigate = useNavigate();
   const products = useQuery(api.admin.products.list, {});
   const deleteProduct = useMutation(api.admin.products.remove);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -357,28 +359,10 @@ function ProductsContent() {
           </p>
         </div>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setEditingProduct(undefined)}>
-              <PlusIcon className="h-4 w-4 mr-2" />
-              Yeni Ürün
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
-                {editingProduct ? "Ürün Düzenle" : "Yeni Ürün"}
-              </DialogTitle>
-            </DialogHeader>
-            <ProductDialog 
-              product={editingProduct} 
-              onClose={() => {
-                setIsDialogOpen(false);
-                setEditingProduct(undefined);
-              }}
-            />
-          </DialogContent>
-        </Dialog>
+        <Button onClick={() => navigate("/admin/products/new")}>
+          <PlusIcon className="h-4 w-4 mr-2" />
+          Yeni Ürün
+        </Button>
       </div>
 
       <Card>
@@ -432,10 +416,7 @@ function ProductsContent() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => {
-                        setEditingProduct(product);
-                        setIsDialogOpen(true);
-                      }}
+                      onClick={() => navigate(`/admin/products/${product._id}`)}
                     >
                       <EditIcon className="h-4 w-4" />
                     </Button>

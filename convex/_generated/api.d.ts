@@ -9,11 +9,13 @@
  */
 
 import type * as admin_categories from "../admin/categories.js";
+import type * as admin_media from "../admin/media.js";
 import type * as admin_orders from "../admin/orders.js";
 import type * as admin_products from "../admin/products.js";
 import type * as admin_settings from "../admin/settings.js";
 import type * as admin_shipping from "../admin/shipping.js";
 import type * as admin_siteConfig from "../admin/siteConfig.js";
+import type * as admin_stripeConfig from "../admin/stripeConfig.js";
 import type * as admin_users from "../admin/users.js";
 import type * as cart from "../cart.js";
 import type * as categories from "../categories.js";
@@ -33,11 +35,13 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   "admin/categories": typeof admin_categories;
+  "admin/media": typeof admin_media;
   "admin/orders": typeof admin_orders;
   "admin/products": typeof admin_products;
   "admin/settings": typeof admin_settings;
   "admin/shipping": typeof admin_shipping;
   "admin/siteConfig": typeof admin_siteConfig;
+  "admin/stripeConfig": typeof admin_stripeConfig;
   "admin/users": typeof admin_users;
   cart: typeof cart;
   categories: typeof categories;

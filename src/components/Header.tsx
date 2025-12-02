@@ -15,11 +15,32 @@ import {
 import { useAuth } from "@/hooks/use-auth.ts";
 import { useState, useEffect } from "react";
 
+type SiteConfigWithUrls = {
+  siteName: string;
+  siteDescription: string;
+  primaryColor: string;
+  secondaryColor: string;
+  socialLinks: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+  };
+  contactInfo: {
+    email: string;
+    phone: string;
+    address: string;
+  };
+  footerText: string;
+  logoUrl: string | null;
+  faviconUrl: string | null;
+};
+
 export default function Header() {
   const categories = useQuery(api.categories.list, {});
   const currentUser = useQuery(api.users.getCurrentUser, {});
   const isAdmin = useQuery(api.users.isAdmin, {});
-  const siteConfig = useQuery(api.admin.siteConfig.get, {});
+  const siteConfig = useQuery(api.admin.siteConfig.get, {}) as SiteConfigWithUrls | null | undefined;
   const { signoutRedirect } = useAuth();
   
   // Generate or retrieve session ID for guest users
@@ -46,7 +67,7 @@ export default function Header() {
         <div className="flex h-24 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            {siteConfig?.logoUrl ? (
+            {siteConfig && 'logoUrl' in siteConfig && siteConfig.logoUrl ? (
               <img 
                 src={siteConfig.logoUrl} 
                 alt={siteConfig.siteName}
