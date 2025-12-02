@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getCurrentUser } from "./helpers";
 
+// Shopping cart queries and mutations
 export const get = query({
   args: {},
   handler: async (ctx) => {
