@@ -14,7 +14,8 @@ import {
   GlobeIcon,
   ImageIcon,
   CreditCardIcon,
-  SearchIcon
+  SearchIcon,
+  BarChart3Icon
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -34,7 +35,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { path: "/admin/media", label: "Medya", icon: ImageIcon },
     { path: "/admin/seo", label: "SEO Ayarları", icon: SearchIcon },
     { path: "/admin/site-config", label: "Site Yapılandırması", icon: GlobeIcon },
-    { path: "/admin/stripe-config", label: "Stripe", icon: CreditCardIcon },
+    { path: "/admin/stripe-dashboard", label: "Stripe Dashboard", icon: BarChart3Icon },
+    { path: "/admin/stripe-config", label: "Stripe Ayarları", icon: CreditCardIcon },
     { path: "/admin/settings", label: "Genel Ayarlar", icon: SettingsIcon },
   ];
 

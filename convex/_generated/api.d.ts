@@ -17,6 +17,7 @@ import type * as admin_settings from "../admin/settings.js";
 import type * as admin_shipping from "../admin/shipping.js";
 import type * as admin_siteConfig from "../admin/siteConfig.js";
 import type * as admin_stripeConfig from "../admin/stripeConfig.js";
+import type * as admin_stripeDashboard from "../admin/stripeDashboard.js";
 import type * as admin_users from "../admin/users.js";
 import type * as cart from "../cart.js";
 import type * as categories from "../categories.js";
@@ -44,6 +45,7 @@ declare const fullApi: ApiFromModules<{
   "admin/shipping": typeof admin_shipping;
   "admin/siteConfig": typeof admin_siteConfig;
   "admin/stripeConfig": typeof admin_stripeConfig;
+  "admin/stripeDashboard": typeof admin_stripeDashboard;
   "admin/users": typeof admin_users;
   cart: typeof cart;
   categories: typeof categories;
