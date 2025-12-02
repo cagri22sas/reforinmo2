@@ -3,9 +3,7 @@ import { query } from "./_generated/server";
 export const list = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db
-      .query("categories")
-      .order("asc")
-      .collect();
+    const categories = await ctx.db.query("categories").collect();
+    return categories.sort((a, b) => a.order - b.order);
   },
 });
