@@ -15,15 +15,62 @@ export const create = mutation({
       phone: v.string(),
     }),
     notes: v.optional(v.string()),
+    guestEmail: v.optional(v.string()),
+    sessionId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const user = await getCurrentUser(ctx);
+    const identity = await ctx.auth.getUserIdentity();
+    
+    let userId = undefined;
+    let guestEmail = undefined;
+    let sessionId = undefined;
+    
+    if (identity) {
+      // Authenticated user
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_token", (q) =>
+          q.eq("tokenIdentifier", identity.tokenIdentifier),
+        )
+        .unique();
+      
+      if (!user) {
+        throw new ConvexError({
+          message: "User not found",
+          code: "NOT_FOUND",
+        });
+      }
+      userId = user._id;
+    } else {
+      // Guest user
+      if (!args.guestEmail) {
+        throw new ConvexError({
+          message: "Email required for guest checkout",
+          code: "BAD_REQUEST",
+        });
+      }
+      guestEmail = args.guestEmail;
+      sessionId = args.sessionId;
+    }
 
     // Get cart items
-    const cartItems = await ctx.db
-      .query("cart")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
-      .collect();
+    let cartItems;
+    if (userId) {
+      cartItems = await ctx.db
+        .query("cart")
+        .withIndex("by_user", (q) => q.eq("userId", userId))
+        .collect();
+    } else if (sessionId) {
+      cartItems = await ctx.db
+        .query("cart")
+        .withIndex("by_session", (q) => q.eq("sessionId", sessionId))
+        .collect();
+    } else {
+      throw new ConvexError({
+        message: "No cart found",
+        code: "NOT_FOUND",
+      });
+    }
 
     if (cartItems.length === 0) {
       throw new Error("Cart is empty");
@@ -150,7 +197,7 @@ export const getOrderForCheckout = internalQuery({
       .collect();
 
     const shippingMethod = await ctx.db.get(order.shippingMethodId);
-    const user = await ctx.db.get(order.userId);
+    const user = order.userId ? await ctx.db.get(order.userId) : null;
 
     return {
       ...order,

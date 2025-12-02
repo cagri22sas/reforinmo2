@@ -32,7 +32,7 @@ export const list = query({
 
     return await Promise.all(
       orders.map(async (order) => {
-        const customer = await ctx.db.get(order.userId);
+        const customer = order.userId ? await ctx.db.get(order.userId) : null;
         const items = await ctx.db
           .query("orderItems")
           .withIndex("by_order", (q) => q.eq("orderId", order._id))
@@ -62,7 +62,7 @@ export const get = query({
       });
     }
 
-    const customer = await ctx.db.get(order.userId);
+    const customer = order.userId ? await ctx.db.get(order.userId) : null;
     const items = await ctx.db
       .query("orderItems")
       .withIndex("by_order", (q) => q.eq("orderId", args.orderId))

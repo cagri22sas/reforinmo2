@@ -43,14 +43,17 @@ export default defineSchema({
     .index("by_featured", ["featured"]),
 
   cart: defineTable({
-    userId: v.id("users"),
+    userId: v.optional(v.id("users")),
+    sessionId: v.optional(v.string()),
     productId: v.id("products"),
     quantity: v.number(),
   }).index("by_user", ["userId"])
+    .index("by_session", ["sessionId"])
     .index("by_user_and_product", ["userId", "productId"]),
 
   orders: defineTable({
-    userId: v.id("users"),
+    userId: v.optional(v.id("users")),
+    guestEmail: v.optional(v.string()),
     orderNumber: v.string(),
     status: v.union(
       v.literal("pending"),
