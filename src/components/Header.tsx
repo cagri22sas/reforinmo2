@@ -7,9 +7,9 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 
 export default function Header() {
-  const categories = useQuery(api.categories.list);
-  const currentUser = useQuery(api.users.getCurrentUser);
-  const isAdmin = useQuery(api.users.isAdmin);
+  const categories = useQuery(api.categories.list, {});
+  const currentUser = useQuery(api.users.getCurrentUser, {});
+  const isAdmin = useQuery(api.users.isAdmin, {});
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">

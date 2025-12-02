@@ -10,7 +10,7 @@ import { ArrowRightIcon, ShipIcon, CreditCardIcon, TruckIcon } from "lucide-reac
 
 export default function Index() {
   const featuredProducts = useQuery(api.products.list, { featured: true });
-  const categories = useQuery(api.categories.list);
+  const categories = useQuery(api.categories.list, {});
 
   return (
     <div className="min-h-screen flex flex-col">
