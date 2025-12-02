@@ -12,6 +12,7 @@ import type * as admin_categories from "../admin/categories.js";
 import type * as admin_media from "../admin/media.js";
 import type * as admin_orders from "../admin/orders.js";
 import type * as admin_products from "../admin/products.js";
+import type * as admin_seoSettings from "../admin/seoSettings.js";
 import type * as admin_settings from "../admin/settings.js";
 import type * as admin_shipping from "../admin/shipping.js";
 import type * as admin_siteConfig from "../admin/siteConfig.js";
@@ -38,6 +39,7 @@ declare const fullApi: ApiFromModules<{
   "admin/media": typeof admin_media;
   "admin/orders": typeof admin_orders;
   "admin/products": typeof admin_products;
+  "admin/seoSettings": typeof admin_seoSettings;
   "admin/settings": typeof admin_settings;
   "admin/shipping": typeof admin_shipping;
   "admin/siteConfig": typeof admin_siteConfig;

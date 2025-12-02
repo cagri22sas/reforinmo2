@@ -2,6 +2,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
+import SEO from "@/components/SEO.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { useParams, Link, useNavigate } from "react-router-dom";
@@ -97,8 +98,39 @@ export default function ProductDetailPage() {
     if (quantity < product.stock) setQuantity(quantity + 1);
   };
 
+  // SEO and structured data
+  const seoTitle = product.seoTitle || `${product.name} - Buy Online`;
+  const seoDescription = product.seoDescription || product.description;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.images,
+    offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: "EUR",
+      availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      url: window.location.href,
+    },
+    brand: {
+      "@type": "Brand",
+      name: product.category?.name || "Shop",
+    },
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title={seoTitle}
+        description={seoDescription}
+        keywords={product.seoKeywords}
+        ogImage={product.images[0]}
+        ogType="product"
+        canonicalUrl={window.location.href}
+        structuredData={structuredData}
+      />
       <Header />
       
       <div className="flex-1">

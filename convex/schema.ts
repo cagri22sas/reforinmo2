@@ -160,4 +160,15 @@ export default defineSchema({
     }),
     footerText: v.string(),
   }),
+
+  seoSettings: defineTable({
+    defaultTitle: v.string(),
+    defaultDescription: v.string(),
+    defaultKeywords: v.optional(v.string()),
+    ogImage: v.optional(v.string()),
+    twitterHandle: v.optional(v.string()),
+    googleAnalyticsId: v.optional(v.string()),
+    googleTagManagerId: v.optional(v.string()),
+    facebookPixelId: v.optional(v.string()),
+  }),
 });

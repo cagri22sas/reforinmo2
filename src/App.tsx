@@ -22,6 +22,7 @@ import AdminSettingsPage from "./pages/admin/settings/page.tsx";
 import AdminSiteConfigPage from "./pages/admin/site-config/page.tsx";
 import AdminStripeConfigPage from "./pages/admin/stripe-config/page.tsx";
 import AdminMediaPage from "./pages/admin/media/page.tsx";
+import AdminSEOPage from "./pages/admin/seo/page.tsx";
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/admin/site-config" element={<AdminSiteConfigPage />} />
           <Route path="/admin/stripe-config" element={<AdminStripeConfigPage />} />
           <Route path="/admin/media" element={<AdminMediaPage />} />
+          <Route path="/admin/seo" element={<AdminSEOPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

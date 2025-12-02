@@ -2,6 +2,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
+import SEO from "@/components/SEO.tsx";
 import ProductCard from "@/components/ProductCard.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
@@ -11,9 +12,27 @@ import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon } fr
 export default function Index() {
   const featuredProducts = useQuery(api.products.list, { featured: true });
   const categories = useQuery(api.categories.list, {});
+  const seoSettings = useQuery(api.admin.seoSettings.get);
+
+  // Create structured data for organization
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: seoSettings?.defaultTitle || "Luxury Marine Shop",
+    description: seoSettings?.defaultDescription || "Premium marine platforms and accessories",
+    url: window.location.origin,
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-background to-accent/5">
+      <SEO
+        title={seoSettings?.defaultTitle}
+        description={seoSettings?.defaultDescription}
+        keywords={seoSettings?.defaultKeywords}
+        ogImage={seoSettings?.ogImage}
+        canonicalUrl={window.location.origin}
+        structuredData={structuredData}
+      />
       <Header />
       
       {/* Hero Section */}
