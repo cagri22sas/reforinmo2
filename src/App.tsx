@@ -14,7 +14,6 @@ import OrderDetailPage from "./pages/orders/[id]/page.tsx";
 import ProfilePage from "./pages/profile/page.tsx";
 import AdminDashboard from "./pages/admin/page.tsx";
 import AdminProductsPage from "./pages/admin/products/page.tsx";
-import AdminProductEditPage from "./pages/admin/products/edit/page.tsx";
 import AdminCategoriesPage from "./pages/admin/categories/page.tsx";
 import AdminOrdersPage from "./pages/admin/orders/page.tsx";
 import AdminShippingPage from "./pages/admin/shipping/page.tsx";
