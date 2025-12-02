@@ -17,6 +17,14 @@ export default function CartPage() {
   const removeItem = useMutation(api.cart.remove);
   const clearCart = useMutation(api.cart.clear);
 
+  const subtotal = cartItems?.reduce((total, item) => {
+    return total + (item.product.price * item.quantity);
+  }, 0) || 0;
+
+  const shippingInfo = useQuery(api.shipping.calculateShipping, {
+    subtotal,
+  });
+
   const handleUpdateQuantity = async (cartItemId: Id<"cart">, newQuantity: number) => {
     try {
       await updateQuantity({ cartItemId, quantity: newQuantity });
@@ -42,10 +50,6 @@ export default function CartPage() {
       toast.error("Sepet temizlenemedi");
     }
   };
-
-  const subtotal = cartItems?.reduce((total, item) => {
-    return total + (item.product.price * item.quantity);
-  }, 0) || 0;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -213,13 +217,39 @@ export default function CartPage() {
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Kargo</span>
                         <span className="text-muted-foreground">
-                          {subtotal >= 500 ? "ÜCRETSİZ" : "Sonraki adımda hesaplanacak"}
+                          {shippingInfo?.isFreeShipping ? "ÜCRETSİZ" : "Sonraki adımda hesaplanacak"}
                         </span>
                       </div>
-                      {subtotal < 500 && (
-                        <p className="text-xs text-muted-foreground">
-                          500₺ üzeri siparişlerde kargo ücretsiz!
-                        </p>
+                      
+                      {/* Free Shipping Progress */}
+                      {shippingInfo && shippingInfo.threshold > 0 && !shippingInfo.isFreeShipping && (
+                        <div className="pt-2">
+                          <div className="mb-2">
+                            <div className="flex justify-between text-xs mb-1">
+                              <span className="text-muted-foreground">Ücretsiz kargo için</span>
+                              <span className="font-medium text-primary">
+                                ₺{shippingInfo.amountToFreeShipping.toFixed(2)} kaldı
+                              </span>
+                            </div>
+                            <div className="w-full bg-muted rounded-full h-2">
+                              <div
+                                className="bg-primary h-2 rounded-full transition-all"
+                                style={{
+                                  width: `${Math.min(100, (subtotal / shippingInfo.threshold) * 100)}%`,
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            ₺{shippingInfo.threshold.toFixed(2)} üzeri siparişlerde kargo ücretsiz!
+                          </p>
+                        </div>
+                      )}
+
+                      {shippingInfo?.isFreeShipping && (
+                        <div className="bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-200 px-3 py-2 rounded-md text-sm font-medium">
+                          🎉 Ücretsiz kargo kazandınız!
+                        </div>
                       )}
                     </div>
 

@@ -9,7 +9,8 @@ import {
   FolderIcon,
   ShoppingCartIcon,
   TruckIcon,
-  UsersIcon
+  UsersIcon,
+  SettingsIcon
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -26,6 +27,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { path: "/admin/orders", label: "Siparişler", icon: ShoppingCartIcon },
     { path: "/admin/shipping", label: "Kargo", icon: TruckIcon },
     { path: "/admin/users", label: "Kullanıcılar", icon: UsersIcon },
+    { path: "/admin/settings", label: "Ayarlar", icon: SettingsIcon },
   ];
 
   return (

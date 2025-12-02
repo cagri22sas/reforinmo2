@@ -33,7 +33,7 @@ interface CheckoutForm {
 export default function CheckoutPage() {
   const navigate = useNavigate();
   const cartItems = useQuery(api.cart.get, {});
-  const shippingMethods = useQuery(api.shipping.listActiveMethods, {}) as Array<{
+  const shippingMethods = useQuery(api.shipping.getActiveMethods, {}) as Array<{
     _id: Id<"shippingMethods">;
     name: string;
     description: string;
