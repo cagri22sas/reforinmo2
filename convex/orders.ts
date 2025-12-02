@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 import { mutation, query, internalMutation, internalQuery } from "./_generated/server";
 import { getCurrentUser } from "./helpers";
 
@@ -114,7 +114,8 @@ export const create = mutation({
 
     // Create order
     const orderId = await ctx.db.insert("orders", {
-      userId: user._id,
+      userId,
+      guestEmail,
       orderNumber,
       status: "pending",
       subtotal,
