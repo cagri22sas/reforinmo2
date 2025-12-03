@@ -336,7 +336,9 @@ export default function ProductDetailPage() {
                 {/* Description */}
                 <div>
                   <h3 className="font-semibold text-lg mb-3">Description</h3>
-                  <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {product.description.split('.').slice(0, 2).join('.') + (product.description.split('.').length > 2 ? '.' : '')}
+                  </p>
                 </div>
 
                 <Separator />
@@ -439,190 +441,184 @@ export default function ProductDetailPage() {
           {/* Related Products Section */}
           <RelatedProducts productId={product._id} />
 
-          {/* Reviews Section */}
-          <div className="mt-20">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-3xl font-bold mb-2">Customer Reviews</h2>
-                {reviewStats && reviewStats.totalReviews > 0 && (
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <StarRating rating={reviewStats.averageRating} size="md" />
-                      <span className="text-2xl font-bold">{reviewStats.averageRating.toFixed(1)}</span>
+          {/* Reviews Section - Only show if there are reviews */}
+          {reviews !== undefined && reviews.length > 0 && (
+            <div className="mt-20">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h2 className="text-3xl font-bold mb-2">Customer Reviews</h2>
+                  {reviewStats && reviewStats.totalReviews > 0 && (
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <StarRating rating={reviewStats.averageRating} size="md" />
+                        <span className="text-2xl font-bold">{reviewStats.averageRating.toFixed(1)}</span>
+                      </div>
+                      <span className="text-muted-foreground">
+                        Based on {reviewStats.totalReviews} review{reviewStats.totalReviews !== 1 ? "s" : ""}
+                      </span>
                     </div>
-                    <span className="text-muted-foreground">
-                      Based on {reviewStats.totalReviews} review{reviewStats.totalReviews !== 1 ? "s" : ""}
-                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Rating Distribution */}
+              {reviewStats && reviewStats.totalReviews > 0 && (
+                <Card className="mb-8">
+                  <CardContent className="pt-6">
+                    <div className="space-y-3">
+                      {[5, 4, 3, 2, 1].map((rating) => {
+                        const count = reviewStats.ratingDistribution[rating as 1 | 2 | 3 | 4 | 5];
+                        const percentage = reviewStats.totalReviews > 0 
+                          ? (count / reviewStats.totalReviews) * 100 
+                          : 0;
+                        return (
+                          <div key={rating} className="flex items-center gap-3">
+                            <span className="text-sm font-medium w-12">{rating} stars</span>
+                            <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-yellow-400 transition-all"
+                                style={{ width: `${percentage}%` }}
+                              />
+                            </div>
+                            <span className="text-sm text-muted-foreground w-12 text-right">{count}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Write a Review */}
+              <Card className="mb-8">
+                <CardHeader>
+                  <CardTitle>Write a Review</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Authenticated>
+                    <form onSubmit={handleSubmitReview} className="space-y-6">
+                      <div>
+                        <Label className="text-base mb-3 block">Rating</Label>
+                        <StarRating
+                          rating={reviewRating}
+                          size="lg"
+                          interactive
+                          onRatingChange={setReviewRating}
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="reviewTitle" className="text-base mb-2">Review Title</Label>
+                        <Input
+                          id="reviewTitle"
+                          value={reviewTitle}
+                          onChange={(e) => setReviewTitle(e.target.value)}
+                          placeholder="Sum up your experience"
+                          required
+                          className="h-12"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="reviewComment" className="text-base mb-2">Your Review</Label>
+                        <Textarea
+                          id="reviewComment"
+                          value={reviewComment}
+                          onChange={(e) => setReviewComment(e.target.value)}
+                          placeholder="Share your thoughts about this product"
+                          required
+                          className="min-h-[150px] resize-none"
+                        />
+                      </div>
+
+                      <Button
+                        type="submit"
+                        size="lg"
+                        disabled={isSubmittingReview}
+                        className="w-full sm:w-auto"
+                      >
+                        {isSubmittingReview ? "Submitting..." : "Submit Review"}
+                      </Button>
+                    </form>
+                  </Authenticated>
+                  <Unauthenticated>
+                    <div className="text-center py-8">
+                      <MessageSquareIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <p className="text-muted-foreground mb-4">
+                        Sign in to write a review
+                      </p>
+                      <SignInButton />
+                    </div>
+                  </Unauthenticated>
+                </CardContent>
+              </Card>
+
+              {/* Reviews List */}
+              <div className="space-y-6">
+                {reviews === undefined ? (
+                  <div className="space-y-4">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <Skeleton key={i} className="h-48 w-full" />
+                    ))}
                   </div>
+                ) : (
+                  reviews.map((review) => (
+                    <Card key={review._id}>
+                      <CardContent className="pt-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="flex items-center gap-2">
+                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                  <span className="text-sm font-bold text-primary">
+                                    {review.userName.charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-semibold">{review.userName}</span>
+                                    {review.verifiedPurchase && (
+                                      <Badge variant="secondary" className="gap-1">
+                                        <VerifiedIcon className="h-3 w-3" />
+                                        Verified
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <StarRating rating={review.rating} size="sm" />
+                                </div>
+                              </div>
+                            </div>
+                            <h4 className="font-semibold text-lg mb-2">{review.title}</h4>
+                            <p className="text-muted-foreground leading-relaxed mb-4">
+                              {review.comment}
+                            </p>
+                            <div className="flex items-center gap-4 text-sm">
+                              <span className="text-muted-foreground">
+                                {new Date(review._creationTime).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                })}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleMarkHelpful(review._id)}
+                                className="gap-2"
+                              >
+                                <ThumbsUpIcon className="h-4 w-4" />
+                                Helpful ({review.helpfulCount})
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
                 )}
               </div>
             </div>
-
-            {/* Rating Distribution */}
-            {reviewStats && reviewStats.totalReviews > 0 && (
-              <Card className="mb-8">
-                <CardContent className="pt-6">
-                  <div className="space-y-3">
-                    {[5, 4, 3, 2, 1].map((rating) => {
-                      const count = reviewStats.ratingDistribution[rating as 1 | 2 | 3 | 4 | 5];
-                      const percentage = reviewStats.totalReviews > 0 
-                        ? (count / reviewStats.totalReviews) * 100 
-                        : 0;
-                      return (
-                        <div key={rating} className="flex items-center gap-3">
-                          <span className="text-sm font-medium w-12">{rating} stars</span>
-                          <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-yellow-400 transition-all"
-                              style={{ width: `${percentage}%` }}
-                            />
-                          </div>
-                          <span className="text-sm text-muted-foreground w-12 text-right">{count}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Write a Review */}
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>Write a Review</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Authenticated>
-                  <form onSubmit={handleSubmitReview} className="space-y-6">
-                    <div>
-                      <Label className="text-base mb-3 block">Rating</Label>
-                      <StarRating
-                        rating={reviewRating}
-                        size="lg"
-                        interactive
-                        onRatingChange={setReviewRating}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="reviewTitle" className="text-base mb-2">Review Title</Label>
-                      <Input
-                        id="reviewTitle"
-                        value={reviewTitle}
-                        onChange={(e) => setReviewTitle(e.target.value)}
-                        placeholder="Sum up your experience"
-                        required
-                        className="h-12"
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="reviewComment" className="text-base mb-2">Your Review</Label>
-                      <Textarea
-                        id="reviewComment"
-                        value={reviewComment}
-                        onChange={(e) => setReviewComment(e.target.value)}
-                        placeholder="Share your thoughts about this product"
-                        required
-                        className="min-h-[150px] resize-none"
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={isSubmittingReview}
-                      className="w-full sm:w-auto"
-                    >
-                      {isSubmittingReview ? "Submitting..." : "Submit Review"}
-                    </Button>
-                  </form>
-                </Authenticated>
-                <Unauthenticated>
-                  <div className="text-center py-8">
-                    <MessageSquareIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                    <p className="text-muted-foreground mb-4">
-                      Sign in to write a review
-                    </p>
-                    <SignInButton />
-                  </div>
-                </Unauthenticated>
-              </CardContent>
-            </Card>
-
-            {/* Reviews List */}
-            <div className="space-y-6">
-              {reviews === undefined ? (
-                <div className="space-y-4">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <Skeleton key={i} className="h-48 w-full" />
-                  ))}
-                </div>
-              ) : reviews.length === 0 ? (
-                <Card>
-                  <CardContent className="py-12 text-center">
-                    <MessageSquareIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                    <p className="text-lg font-medium mb-2">No reviews yet</p>
-                    <p className="text-muted-foreground">Be the first to review this product!</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                reviews.map((review) => (
-                  <Card key={review._id}>
-                    <CardContent className="pt-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span className="text-sm font-bold text-primary">
-                                  {review.userName.charAt(0).toUpperCase()}
-                                </span>
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-semibold">{review.userName}</span>
-                                  {review.verifiedPurchase && (
-                                    <Badge variant="secondary" className="gap-1">
-                                      <VerifiedIcon className="h-3 w-3" />
-                                      Verified
-                                    </Badge>
-                                  )}
-                                </div>
-                                <StarRating rating={review.rating} size="sm" />
-                              </div>
-                            </div>
-                          </div>
-                          <h4 className="font-semibold text-lg mb-2">{review.title}</h4>
-                          <p className="text-muted-foreground leading-relaxed mb-4">
-                            {review.comment}
-                          </p>
-                          <div className="flex items-center gap-4 text-sm">
-                            <span className="text-muted-foreground">
-                              {new Date(review._creationTime).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleMarkHelpful(review._id)}
-                              className="gap-2"
-                            >
-                              <ThumbsUpIcon className="h-4 w-4" />
-                              Helpful ({review.helpfulCount})
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))
-              )}
-            </div>
-          </div>
+          )}
         </div>
       </div>
 

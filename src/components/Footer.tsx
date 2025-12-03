@@ -87,9 +87,39 @@ export default function Footer() {
               whileHover={{ scale: 1.05 }}
               className="inline-block"
             >
-              <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 bg-clip-text text-transparent drop-shadow-sm">
-                {siteConfig?.siteName || "YachtBeach"}
-              </div>
+              {siteConfig && 'logoUrl' in siteConfig && siteConfig.logoUrl ? (
+                <img 
+                  src={siteConfig.logoUrl} 
+                  alt={siteConfig.siteName}
+                  className="h-12 w-auto object-contain"
+                />
+              ) : (
+                <>
+                  {/* 3D Marine Icon with Multiple Layers */}
+                  <div className="relative">
+                    {/* Background glow */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-3xl blur-lg opacity-40 transition-opacity duration-300" />
+                    
+                    {/* Main icon container */}
+                    <div className="relative bg-gradient-to-br from-primary via-primary/95 to-accent p-3 rounded-3xl shadow-2xl transition-all duration-300">
+                      {/* Layered marine elements */}
+                      <div className="relative">
+                        {/* Background waves */}
+                        <WavesIcon className="absolute inset-0 h-7 w-7 text-primary-foreground/20 translate-y-2 translate-x-1" />
+                        {/* Main anchor icon */}
+                        <svg className="h-7 w-7 text-primary-foreground relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="5" r="3"/>
+                          <line x1="12" y1="22" x2="12" y2="8"/>
+                          <path d="M5 12H2a10 10 0 0 0 20 0h-3"/>
+                        </svg>
+                      </div>
+                      
+                      {/* Decorative corner accent */}
+                      <div className="absolute top-0 right-0 w-3 h-3 bg-gradient-to-br from-primary-foreground/30 to-transparent rounded-full" />
+                    </div>
+                  </div>
+                </>
+              )}
             </motion.div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {siteConfig?.siteDescription || "Premium products for your luxury lifestyle"}
