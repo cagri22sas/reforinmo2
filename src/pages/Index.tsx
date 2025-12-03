@@ -4,6 +4,7 @@ import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
 import SEO from "@/components/SEO.tsx";
 import ProductCard from "@/components/ProductCard.tsx";
+import Testimonials from "@/components/Testimonials.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link } from "react-router-dom";
@@ -449,6 +450,9 @@ export default function Index() {
           </motion.div>
         </div>
       </section>
+
+      {/* Customer Testimonials */}
+      <Testimonials />
 
       {/* CTA Section - Centered with Stunning Yacht Design */}
       <section className="py-16 lg:py-24 relative overflow-hidden">

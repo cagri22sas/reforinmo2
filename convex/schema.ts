@@ -197,4 +197,16 @@ export default defineSchema({
     productId: v.id("products"),
   }).index("by_user", ["userId"])
     .index("by_user_and_product", ["userId", "productId"]),
+
+  testimonials: defineTable({
+    customerName: v.string(),
+    customerRole: v.optional(v.string()),
+    customerImage: v.optional(v.string()),
+    rating: v.number(),
+    testimonial: v.string(),
+    featured: v.boolean(),
+    active: v.boolean(),
+    order: v.number(),
+  }).index("by_featured", ["featured"])
+    .index("by_active", ["active"]),
 });
