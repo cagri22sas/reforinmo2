@@ -60,6 +60,26 @@ export default defineSchema({
     .index("by_category", ["categoryId"])
     .index("by_featured", ["featured"]),
 
+  reviews: defineTable({
+    productId: v.id("products"),
+    userId: v.optional(v.id("users")),
+    userName: v.string(),
+    userEmail: v.string(),
+    rating: v.number(),
+    title: v.string(),
+    comment: v.string(),
+    verifiedPurchase: v.boolean(),
+    helpfulCount: v.number(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("rejected")
+    ),
+  }).index("by_product", ["productId"])
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"])
+    .index("by_product_and_status", ["productId", "status"]),
+
   cart: defineTable({
     userId: v.optional(v.id("users")),
     sessionId: v.optional(v.string()),
