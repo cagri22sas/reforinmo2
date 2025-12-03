@@ -144,7 +144,7 @@ export default function CartPage() {
                           </h3>
                         </Link>
                         <p className="text-lg font-bold mt-2">
-                          ₺{item.product.price.toFixed(2)}
+                          €{item.product.price.toFixed(2)}
                         </p>
 
                         {/* Quantity Controls */}
@@ -197,7 +197,7 @@ export default function CartPage() {
                       {/* Subtotal */}
                       <div className="text-right">
                         <p className="font-bold text-lg">
-                          ₺{(item.product.price * item.quantity).toFixed(2)}
+                          €{(item.product.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>

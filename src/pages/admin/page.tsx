@@ -44,9 +44,9 @@ function AdminDashboardContent() {
         <Card className="max-w-md">
           <CardContent className="pt-6 text-center">
             <AlertTriangleIcon className="h-12 w-12 text-destructive mx-auto mb-4" />
-            <h2 className="text-xl font-bold mb-2">Erişim Reddedildi</h2>
+            <h2 className="text-xl font-bold mb-2">Access Denied</h2>
             <p className="text-muted-foreground">
-              Bu sayfaya erişim için admin yetkisine sahip olmalısınız.
+              You must have admin privileges to access this page.
             </p>
           </CardContent>
         </Card>
@@ -68,7 +68,7 @@ function AdminDashboardContent() {
     );
   }
 
-  const formatPrice = (price: number) => `₺${price.toFixed(2)}`;
+  const formatPrice = (price: number) => `€${price.toFixed(2)}`;
   const formatTrend = (trend: number) => {
     const isPositive = trend >= 0;
     const TrendIcon = isPositive ? ArrowUpIcon : ArrowDownIcon;
@@ -82,18 +82,18 @@ function AdminDashboardContent() {
 
   const statCards = [
     {
-      title: "Toplam Gelir",
+      title: "Total Revenue",
       value: formatPrice(stats.totalRevenue),
-      subtitle: `Son 30 gün: ${formatPrice(stats.recentRevenue)}`,
+      subtitle: `Last 30 days: ${formatPrice(stats.recentRevenue)}`,
       trend: stats.revenueTrend,
       icon: DollarSignIcon,
       iconBg: "bg-green-100 dark:bg-green-900/30",
       iconColor: "text-green-600 dark:text-green-400",
     },
     {
-      title: "Son 30 Gün Siparişler",
+      title: "Last 30 Days Orders",
       value: stats.recentOrders.toString(),
-      subtitle: `Toplam: ${stats.totalOrders}`,
+      subtitle: `Total: ${stats.totalOrders}`,
       trend: stats.ordersTrend,
       icon: ShoppingCartIcon,
       iconBg: "bg-blue-100 dark:bg-blue-900/30",
@@ -101,18 +101,18 @@ function AdminDashboardContent() {
       link: "/admin/orders",
     },
     {
-      title: "Bekleyen Siparişler",
+      title: "Pending Orders",
       value: stats.pendingOrders.toString(),
-      subtitle: "İşlem bekliyor",
+      subtitle: "Awaiting processing",
       icon: PackageIcon,
       iconBg: "bg-orange-100 dark:bg-orange-900/30",
       iconColor: "text-orange-600 dark:text-orange-400",
       link: "/admin/orders",
     },
     {
-      title: "Toplam Müşteri",
+      title: "Total Customers",
       value: stats.totalCustomers.toString(),
-      subtitle: `${stats.totalProducts} ürün`,
+      subtitle: `${stats.totalProducts} products`,
       icon: UsersIcon,
       iconBg: "bg-purple-100 dark:bg-purple-900/30",
       iconColor: "text-purple-600 dark:text-purple-400",
@@ -122,11 +122,11 @@ function AdminDashboardContent() {
 
   // Prepare order status data for chart
   const statusData = [
-    { name: "Bekliyor", value: chartData.statusCounts.pending, fill: "#f59e0b" },
-    { name: "İşleniyor", value: chartData.statusCounts.processing, fill: "#3b82f6" },
-    { name: "Kargoda", value: chartData.statusCounts.shipped, fill: "#8b5cf6" },
-    { name: "Teslim Edildi", value: chartData.statusCounts.delivered, fill: "#10b981" },
-    { name: "İptal Edildi", value: chartData.statusCounts.cancelled, fill: "#ef4444" },
+    { name: "Pending", value: chartData.statusCounts.pending, fill: "#f59e0b" },
+    { name: "Processing", value: chartData.statusCounts.processing, fill: "#3b82f6" },
+    { name: "Shipped", value: chartData.statusCounts.shipped, fill: "#8b5cf6" },
+    { name: "Delivered", value: chartData.statusCounts.delivered, fill: "#10b981" },
+    { name: "Cancelled", value: chartData.statusCounts.cancelled, fill: "#ef4444" },
   ];
 
   return (
@@ -136,7 +136,7 @@ function AdminDashboardContent() {
         <div>
           <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
           <p className="text-muted-foreground">
-            E-ticaret performansınızı takip edin
+            Track your e-commerce performance
           </p>
         </div>
       </div>
@@ -182,8 +182,8 @@ function AdminDashboardContent() {
         {/* Revenue Chart */}
         <Card>
           <CardHeader>
-            <CardTitle>Son 7 Gün Gelir Trendi</CardTitle>
-            <CardDescription>Günlük gelir ve sipariş sayıları</CardDescription>
+            <CardTitle>Last 7 Days Revenue Trend</CardTitle>
+            <CardDescription>Daily revenue and order counts</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -206,11 +206,11 @@ function AdminDashboardContent() {
                   }}
                   formatter={(value: number, name: string) => [
                     name === 'revenue' ? formatPrice(value) : value,
-                    name === 'revenue' ? 'Gelir' : 'Sipariş'
+                    name === 'revenue' ? 'Revenue' : 'Orders'
                   ]}
                 />
                 <Legend 
-                  formatter={(value: string) => value === 'revenue' ? 'Gelir (TL)' : 'Sipariş Sayısı'}
+                  formatter={(value: string) => value === 'revenue' ? 'Revenue (€)' : 'Order Count'}
                 />
                 <Line 
                   type="monotone" 
@@ -235,8 +235,8 @@ function AdminDashboardContent() {
         {/* Order Status Chart */}
         <Card>
           <CardHeader>
-            <CardTitle>Sipariş Durumu Dağılımı</CardTitle>
-            <CardDescription>Mevcut sipariş durumlarının özeti</CardDescription>
+            <CardTitle>Order Status Distribution</CardTitle>
+            <CardDescription>Summary of current order statuses</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -257,7 +257,7 @@ function AdminDashboardContent() {
                     border: '1px solid hsl(var(--border))',
                     borderRadius: '8px'
                   }}
-                  formatter={(value: number) => [`${value} sipariş`, 'Toplam']}
+                  formatter={(value: number) => [`${value} orders`, 'Total']}
                 />
                 <Bar dataKey="value" radius={[8, 8, 0, 0]} />
               </BarChart>
@@ -268,7 +268,7 @@ function AdminDashboardContent() {
 
       {/* Quick Action Cards */}
       <div>
-        <h2 className="text-xl font-bold mb-4">Hızlı Erişim</h2>
+        <h2 className="text-xl font-bold mb-4">Quick Access</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Link to="/admin/products">
             <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02] border-l-4 border-l-blue-500">
@@ -278,8 +278,8 @@ function AdminDashboardContent() {
                     <PackageIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">Ürünler</p>
-                    <p className="text-sm text-muted-foreground">{stats.totalProducts} ürün</p>
+                    <p className="font-semibold">Products</p>
+                    <p className="text-sm text-muted-foreground">{stats.totalProducts} products</p>
                   </div>
                 </div>
               </CardContent>
@@ -294,8 +294,8 @@ function AdminDashboardContent() {
                     <FolderIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">Kategoriler</p>
-                    <p className="text-sm text-muted-foreground">Yönet</p>
+                    <p className="font-semibold">Categories</p>
+                    <p className="text-sm text-muted-foreground">Manage</p>
                   </div>
                 </div>
               </CardContent>
@@ -310,8 +310,8 @@ function AdminDashboardContent() {
                     <ShoppingCartIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">Siparişler</p>
-                    <p className="text-sm text-muted-foreground">{stats.pendingOrders} bekliyor</p>
+                    <p className="font-semibold">Orders</p>
+                    <p className="text-sm text-muted-foreground">{stats.pendingOrders} pending</p>
                   </div>
                 </div>
               </CardContent>
@@ -326,8 +326,8 @@ function AdminDashboardContent() {
                     <TruckIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">Kargo</p>
-                    <p className="text-sm text-muted-foreground">Ayarlar</p>
+                    <p className="font-semibold">Shipping</p>
+                    <p className="text-sm text-muted-foreground">Settings</p>
                   </div>
                 </div>
               </CardContent>
@@ -343,11 +343,11 @@ function AdminDashboardContent() {
             <div className="flex items-center gap-4">
               <AlertTriangleIcon className="h-6 w-6 text-orange-600" />
               <div>
-                <p className="font-semibold">Düşük Stok Uyarısı</p>
+                <p className="font-semibold">Low Stock Alert</p>
                 <p className="text-sm text-muted-foreground">
-                  {stats.lowStockProducts} ürün stok seviyesi düşük. 
+                  {stats.lowStockProducts} products have low stock levels. 
                   <Link to="/admin/products" className="ml-1 underline hover:text-primary">
-                    Ürünleri görüntüle
+                    View products
                   </Link>
                 </p>
               </div>
@@ -370,7 +370,7 @@ export default function AdminDashboard() {
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
                 <p className="text-muted-foreground">
-                  Admin paneline erişmek için giriş yapmalısınız
+                  You must be signed in to access the admin panel
                 </p>
                 <SignInButton />
               </div>

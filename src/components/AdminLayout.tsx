@@ -29,35 +29,35 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const navSections = [
     {
-      label: "Ana Menü",
+      label: "Main Menu",
       items: [
         { path: "/admin", label: "Dashboard", icon: LayoutDashboardIcon },
       ]
     },
     {
-      label: "Ürün Yönetimi",
+      label: "Product Management",
       items: [
-        { path: "/admin/products", label: "Ürünler", icon: PackageIcon },
-        { path: "/admin/categories", label: "Kategoriler", icon: FolderIcon },
-        { path: "/admin/media", label: "Medya Kütüphanesi", icon: ImageIcon },
+        { path: "/admin/products", label: "Products", icon: PackageIcon },
+        { path: "/admin/categories", label: "Categories", icon: FolderIcon },
+        { path: "/admin/media", label: "Media Library", icon: ImageIcon },
       ]
     },
     {
-      label: "Satışlar",
+      label: "Sales",
       items: [
-        { path: "/admin/orders", label: "Siparişler", icon: ShoppingCartIcon },
-        { path: "/admin/shipping", label: "Kargo Ayarları", icon: TruckIcon },
-        { path: "/admin/stripe-dashboard", label: "Stripe Panel", icon: BarChart3Icon },
+        { path: "/admin/orders", label: "Orders", icon: ShoppingCartIcon },
+        { path: "/admin/shipping", label: "Shipping Settings", icon: TruckIcon },
+        { path: "/admin/stripe-dashboard", label: "Stripe Dashboard", icon: BarChart3Icon },
       ]
     },
     {
-      label: "Site Ayarları",
+      label: "Site Settings",
       items: [
-        { path: "/admin/users", label: "Kullanıcılar", icon: UsersIcon },
-        { path: "/admin/seo", label: "SEO Ayarları", icon: SearchIcon },
-        { path: "/admin/site-config", label: "Site Yapılandırması", icon: GlobeIcon },
-        { path: "/admin/stripe-config", label: "Ödeme Ayarları", icon: CreditCardIcon },
-        { path: "/admin/settings", label: "Genel Ayarlar", icon: SettingsIcon },
+        { path: "/admin/users", label: "Users", icon: UsersIcon },
+        { path: "/admin/seo", label: "SEO Settings", icon: SearchIcon },
+        { path: "/admin/site-config", label: "Site Configuration", icon: GlobeIcon },
+        { path: "/admin/stripe-config", label: "Payment Settings", icon: CreditCardIcon },
+        { path: "/admin/settings", label: "General Settings", icon: SettingsIcon },
       ]
     },
   ];
@@ -78,7 +78,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 </div>
                 <div>
                   <h2 className="font-bold text-lg">Admin Panel</h2>
-                  <p className="text-xs text-muted-foreground">Yönetim Merkezi</p>
+                  <p className="text-xs text-muted-foreground">Management Center</p>
                 </div>
               </div>
             </div>
@@ -127,9 +127,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {/* Sidebar Footer */}
             <div className="p-4 border-t bg-muted/30">
               <div className="flex items-center justify-between px-3 py-2">
-                <span className="text-sm text-muted-foreground">Durum</span>
+                <span className="text-sm text-muted-foreground">Status</span>
                 <Badge variant="default" className="bg-green-500">
-                  <span className="mr-1">●</span> Çevrimiçi
+                  <span className="mr-1">●</span> Online
                 </Badge>
               </div>
             </div>

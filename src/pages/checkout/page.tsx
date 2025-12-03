@@ -54,7 +54,7 @@ export default function CheckoutPage() {
     formState: { errors },
   } = useForm<CheckoutForm>({
     defaultValues: {
-      country: "Turkey",
+      country: "United States",
     },
   });
 
