@@ -247,6 +247,8 @@ export default function Footer() {
               {[
                 { to: "/privacy", label: "Privacy Policy" },
                 { to: "/terms", label: "Terms of Service" },
+                { to: "/imprint", label: "Imprint" },
+                { to: "/warranty", label: "Warranty" },
               ].map((link, i) => (
                 <motion.li
                   key={link.to}

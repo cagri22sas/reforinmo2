@@ -20,6 +20,8 @@ import ReturnsPage from "./pages/returns/page.tsx";
 import FAQPage from "./pages/faq/page.tsx";
 import PrivacyPage from "./pages/privacy/page.tsx";
 import TermsPage from "./pages/terms/page.tsx";
+import ImprintPage from "./pages/imprint/page.tsx";
+import WarrantyPage from "./pages/warranty/page.tsx";
 import AdminDashboard from "./pages/admin/page.tsx";
 import AdminProductsPage from "./pages/admin/products/page.tsx";
 import AdminCategoriesPage from "./pages/admin/categories/page.tsx";
@@ -63,6 +65,8 @@ export default function App() {
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/imprint" element={<ImprintPage />} />
+          <Route path="/warranty" element={<WarrantyPage />} />
           <Route path="/stores" element={<StoresPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProductsPage />} />

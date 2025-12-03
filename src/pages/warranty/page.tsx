@@ -5,10 +5,10 @@ import SEO from "@/components/SEO.tsx";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
-import { ShieldIcon } from "lucide-react";
+import { ShieldCheckIcon } from "lucide-react";
 
-export default function PrivacyPage() {
-  const page = useQuery(api.pages.getBySlug, { slug: "privacy" });
+export default function WarrantyPage() {
+  const page = useQuery(api.pages.getBySlug, { slug: "warranty" });
 
   if (page === undefined) {
     return (
@@ -27,8 +27,8 @@ export default function PrivacyPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <SEO
-          title="Privacy Policy"
-          description="Learn how we collect, use, and protect your personal information."
+          title="Warranty Information"
+          description="Learn about our product warranty and guarantee policies."
         />
         <Header />
         
@@ -76,11 +76,11 @@ export default function PrivacyPage() {
                   transition={{ duration: 0.5 }}
                   className="inline-flex items-center justify-center p-4 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 mb-6"
                 >
-                  <ShieldIcon className="w-12 h-12 text-primary" />
+                  <ShieldCheckIcon className="w-12 h-12 text-primary" />
                 </motion.div>
                 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-                  Privacy Policy
+                  Warranty Information
                 </h1>
                 <p className="text-xl text-muted-foreground leading-relaxed">
                   This page is currently being updated in the admin panel. Please check back soon.
@@ -99,7 +99,7 @@ export default function PrivacyPage() {
     <div className="min-h-screen flex flex-col">
       <SEO
         title={page.title}
-        description={page.metaDescription || "Privacy Policy"}
+        description={page.metaDescription || "Learn about our product warranty and guarantee policies"}
       />
       <Header />
       
@@ -147,7 +147,7 @@ export default function PrivacyPage() {
                 transition={{ duration: 0.5 }}
                 className="inline-flex items-center justify-center p-4 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 mb-6"
               >
-                <ShieldIcon className="w-12 h-12 text-primary" />
+                <ShieldCheckIcon className="w-12 h-12 text-primary" />
               </motion.div>
               
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
