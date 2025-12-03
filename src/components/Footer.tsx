@@ -317,13 +317,12 @@ export default function Footer() {
                 className="group relative cursor-pointer"
               >
                 <div className="absolute inset-0 bg-blue-500/0 blur-xl rounded-lg group-hover:bg-blue-500/40 transition-all duration-300" />
-                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center bg-muted/50 group-hover:bg-[#006FCF] transition-all duration-300">
-                  <svg viewBox="0 0 32 32" className="w-11 h-auto opacity-40 group-hover:opacity-100 transition-all duration-300">
-                    <g fill="currentColor" className="text-muted-foreground group-hover:text-white">
-                      <rect width="32" height="32" rx="2" fill="currentColor" opacity="0" className="group-hover:opacity-100"/>
-                      <path d="M5.6 13.6h1.9l-.3.8h-1.6v.8h1.5v.8h-1.5v1h1.6l.3.8H5.6v-4.2zm3.9 2.6l.7-1.8.7 1.8h-1.4zm-1.8 1.6l1.5-4.2h1.2l1.5 4.2h-1l-.2-.7H9.3l-.2.7h-1.4zm5.1-4.2h1l.6 2.4.6-2.4h1l.6 2.4.6-2.4h1l-1 4.2h-1.2l-.6-2.3-.6 2.3h-1.2l-1-4.2zm6.9 0h1.9l-.3.8h-1.6v.8h1.5v.8h-1.5v1h1.6l.3.8h-2.7v-4.2zm3.6 0h1.6c.7 0 1.2.5 1.2 1.2 0 .4-.2.8-.5 1l.6 1.2h-1.1l-.5-1h-.4v1h-.9v-4.2zm.9 2.2h.6c.3 0 .5-.2.5-.5s-.2-.5-.5-.5h-.6v1zm2.7-2.2h1l1.5 2.2v-2.2h.9v4.2h-.9l-1.6-2.3v2.3h-.9v-4.2zM5.6 19.8h.9v1.5h1.2v-1.5h.9v4.2h-.9v-1.7H6.5v1.7h-.9v-4.2zm4.2 0h1.6c.7 0 1.2.5 1.2 1.2 0 .4-.2.8-.5 1l.6 1.2h-1.1l-.5-1h-.4v1h-.9v-4.2zm.9 2.2h.6c.3 0 .5-.2.5-.5s-.2-.5-.5-.5h-.6v1zm2.7-2.2h1.9l-.3.8h-1.6v.8h1.5v.8h-1.5v1h1.6l.3.8h-2.7v-4.2zm4.9 1.7c0 .3.2.5.5.5.2 0 .4-.1.5-.2v-1h-.6l-.2.8h-1.2v-1.3c0-.6.5-1.1 1.1-1.1h1v3.8h-.9v-.2c-.2.2-.5.3-.8.3-.7 0-1.2-.5-1.2-1.2v-.4h.8zm3.3-1.7h1l1.5 2.2v-2.2h.9v4.2h-.9l-1.6-2.3v2.3h-.9v-4.2zm3.9 0h2.7v.8h-.9v3.4h-.9v-3.4h-.9v-.8z"/>
-                    </g>
-                  </svg>
+                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="https://cdn.hercules.app/file_Z6GbPV94QjeHbH7lprqdiYP5" 
+                    alt="American Express" 
+                    className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 opacity-40 group-hover:opacity-100"
+                  />
                 </div>
               </motion.div>
             </div>
