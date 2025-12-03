@@ -6,8 +6,12 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 
+import { useLanguage, getPageSlug } from "@/hooks/use-language.ts";
+
 export default function ImprintPage() {
-  const page = useQuery(api.pages.getBySlug, { slug: "imprint" });
+  const { language } = useLanguage();
+  const slug = getPageSlug("imprint", language);
+  const page = useQuery(api.pages.getBySlug, { slug, language });
 
   if (page === undefined) {
     return (

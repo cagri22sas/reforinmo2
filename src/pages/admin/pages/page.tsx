@@ -12,6 +12,13 @@ import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select.tsx";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -37,6 +44,7 @@ interface PageFormData {
   title: string;
   metaDescription: string;
   published: boolean;
+  language: "en" | "es";
 }
 
 function PageDialog({ 
@@ -50,6 +58,7 @@ function PageDialog({
     content: string;
     metaDescription?: string;
     published: boolean;
+    language: "en" | "es";
   }; 
   onClose: () => void;
 }) {
@@ -61,6 +70,7 @@ function PageDialog({
     title: page?.title || "",
     metaDescription: page?.metaDescription || "",
     published: page?.published ?? true,
+    language: page?.language || "en",
   });
 
   const editor = useEditor({
@@ -93,6 +103,7 @@ function PageDialog({
         content: editor.getHTML(),
         metaDescription: formData.metaDescription?.trim() || undefined,
         published: formData.published,
+        language: formData.language,
       };
 
       if (page) {
@@ -161,6 +172,22 @@ function PageDialog({
           onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
           placeholder="Brief description for SEO"
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="language">Language *</Label>
+        <Select 
+          value={formData.language} 
+          onValueChange={(value) => setFormData({ ...formData, language: value as "en" | "es" })}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en">English</SelectItem>
+            <SelectItem value="es">Español</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">
@@ -249,10 +276,15 @@ type Page = {
   content: string;
   metaDescription?: string;
   published: boolean;
+  language: "en" | "es";
 };
 
 function PagesContent() {
-  const pages = useQuery(api.admin.pages.list, {});
+  const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "all">("all");
+  const pages = useQuery(
+    api.admin.pages.list, 
+    selectedLanguage === "all" ? {} : { language: selectedLanguage }
+  );
   const deletePage = useMutation(api.admin.pages.remove);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPage, setEditingPage] = useState<Page | undefined>(undefined);
@@ -301,13 +333,25 @@ function PagesContent() {
           </p>
         </div>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={openCreateDialog}>
-              <PlusIcon className="h-4 w-4 mr-2" />
-              New Page
-            </Button>
-          </DialogTrigger>
+        <div className="flex gap-3">
+          <Select value={selectedLanguage} onValueChange={(value) => setSelectedLanguage(value as "en" | "es" | "all")}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Languages</SelectItem>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="es">Español</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={openCreateDialog}>
+                <PlusIcon className="h-4 w-4 mr-2" />
+                New Page
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
@@ -316,7 +360,8 @@ function PagesContent() {
             </DialogHeader>
             <PageDialog page={editingPage} onClose={closeDialog} />
           </DialogContent>
-        </Dialog>
+          </Dialog>
+        </div>
       </div>
 
       <Card>
@@ -325,6 +370,7 @@ function PagesContent() {
             <TableRow>
               <TableHead>Title</TableHead>
               <TableHead>Slug</TableHead>
+              <TableHead>Language</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -344,6 +390,11 @@ function PagesContent() {
                   </TableCell>
                   <TableCell>
                     <code className="text-sm bg-muted px-2 py-1 rounded">/{page.slug}</code>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">
+                      {page.language === "en" ? "🇬🇧 EN" : "🇪🇸 ES"}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     {page.published ? (

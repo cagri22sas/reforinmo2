@@ -271,6 +271,9 @@ export default defineSchema({
     content: v.string(),
     metaDescription: v.optional(v.string()),
     published: v.boolean(),
+    language: v.union(v.literal("en"), v.literal("es")),
   }).index("by_slug", ["slug"])
-    .index("by_published", ["published"]),
+    .index("by_published", ["published"])
+    .index("by_language", ["language"])
+    .index("by_slug_and_language", ["slug", "language"]),
 });

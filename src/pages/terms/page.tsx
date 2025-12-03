@@ -7,8 +7,12 @@ import { api } from "@/convex/_generated/api.js";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { FileTextIcon } from "lucide-react";
 
+import { useLanguage, getPageSlug } from "@/hooks/use-language.ts";
+
 export default function TermsPage() {
-  const page = useQuery(api.pages.getBySlug, { slug: "terms" });
+  const { language } = useLanguage();
+  const slug = getPageSlug("terms", language);
+  const page = useQuery(api.pages.getBySlug, { slug, language });
 
   if (page === undefined) {
     return (

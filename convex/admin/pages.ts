@@ -5,14 +5,22 @@ import { ConvexError } from "convex/values";
 
 // Get all pages
 export const list = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { language: v.optional(v.union(v.literal("en"), v.literal("es"))) },
+  handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);
     if (user.role !== "admin") {
       throw new ConvexError({
         message: "Unauthorized",
         code: "FORBIDDEN",
       });
+    }
+
+    if (args.language) {
+      return await ctx.db
+        .query("pages")
+        .withIndex("by_language", (q) => q.eq("language", args.language as "en" | "es"))
+        .order("desc")
+        .collect();
     }
 
     return await ctx.db.query("pages").order("desc").collect();
@@ -43,6 +51,7 @@ export const create = mutation({
     content: v.string(),
     metaDescription: v.optional(v.string()),
     published: v.boolean(),
+    language: v.union(v.literal("en"), v.literal("es")),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);
@@ -53,15 +62,17 @@ export const create = mutation({
       });
     }
 
-    // Check if slug already exists
+    // Check if slug and language combination already exists
     const existing = await ctx.db
       .query("pages")
-      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .withIndex("by_slug_and_language", (q) => 
+        q.eq("slug", args.slug).eq("language", args.language)
+      )
       .unique();
 
     if (existing) {
       throw new ConvexError({
-        message: "A page with this slug already exists",
+        message: "A page with this slug and language already exists",
         code: "CONFLICT",
       });
     }
@@ -79,6 +90,7 @@ export const update = mutation({
     content: v.string(),
     metaDescription: v.optional(v.string()),
     published: v.boolean(),
+    language: v.union(v.literal("en"), v.literal("es")),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);
@@ -91,15 +103,17 @@ export const update = mutation({
 
     const { id, ...data } = args;
 
-    // Check if slug is being changed and if it conflicts
+    // Check if slug and language combination is being changed and if it conflicts
     const existing = await ctx.db
       .query("pages")
-      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .withIndex("by_slug_and_language", (q) => 
+        q.eq("slug", args.slug).eq("language", args.language)
+      )
       .unique();
 
     if (existing && existing._id !== id) {
       throw new ConvexError({
-        message: "A page with this slug already exists",
+        message: "A page with this slug and language already exists",
         code: "CONFLICT",
       });
     }

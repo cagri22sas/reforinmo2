@@ -4,6 +4,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import NewsletterSubscribe from "@/components/NewsletterSubscribe.tsx";
 import { motion } from "motion/react";
+import { useLanguage, getPageSlug } from "@/hooks/use-language.ts";
 
 type SiteConfigWithUrls = {
   siteName: string;
@@ -29,6 +30,7 @@ type SiteConfigWithUrls = {
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const siteConfig = useQuery(api.admin.siteConfig.get, {}) as SiteConfigWithUrls | null | undefined;
+  const { language } = useLanguage();
 
   return (
     <footer className="relative bg-gradient-to-br from-muted/30 via-background to-muted/20 border-t overflow-hidden">
@@ -245,13 +247,13 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 text-sm">
               {[
-                { to: "/privacy", label: "Privacy Policy" },
-                { to: "/terms", label: "Terms of Service" },
-                { to: "/imprint", label: "Imprint" },
-                { to: "/warranty", label: "Warranty" },
+                { basePath: "privacy", labelEn: "Privacy Policy", labelEs: "Política de Privacidad" },
+                { basePath: "terms", labelEn: "Terms of Service", labelEs: "Términos de Servicio" },
+                { basePath: "imprint", labelEn: "Imprint", labelEs: "Aviso Legal" },
+                { basePath: "warranty", labelEn: "Warranty", labelEs: "Garantía" },
               ].map((link, i) => (
                 <motion.li
-                  key={link.to}
+                  key={link.basePath}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -259,11 +261,11 @@ export default function Footer() {
                   whileHover={{ x: 4 }}
                 >
                   <Link
-                    to={link.to}
+                    to={`/${getPageSlug(link.basePath, language)}`}
                     className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
-                    {link.label}
+                    {language === "en" ? link.labelEn : link.labelEs}
                   </Link>
                 </motion.li>
               ))}

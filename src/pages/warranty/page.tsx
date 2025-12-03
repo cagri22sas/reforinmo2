@@ -7,8 +7,12 @@ import { api } from "@/convex/_generated/api.js";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { ShieldCheckIcon } from "lucide-react";
 
+import { useLanguage, getPageSlug } from "@/hooks/use-language.ts";
+
 export default function WarrantyPage() {
-  const page = useQuery(api.pages.getBySlug, { slug: "warranty" });
+  const { language } = useLanguage();
+  const slug = getPageSlug("warranty", language);
+  const page = useQuery(api.pages.getBySlug, { slug, language });
 
   if (page === undefined) {
     return (

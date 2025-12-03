@@ -7,8 +7,12 @@ import { api } from "@/convex/_generated/api.js";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { ShieldIcon } from "lucide-react";
 
+import { useLanguage, getPageSlug } from "@/hooks/use-language.ts";
+
 export default function PrivacyPage() {
-  const page = useQuery(api.pages.getBySlug, { slug: "privacy" });
+  const { language } = useLanguage();
+  const slug = getPageSlug("privacy", language);
+  const page = useQuery(api.pages.getBySlug, { slug, language });
 
   if (page === undefined) {
     return (

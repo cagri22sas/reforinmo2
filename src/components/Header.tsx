@@ -1,6 +1,6 @@
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart } from "lucide-react";
+import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart, Languages } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useQuery } from "convex/react";
@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { useAuth } from "@/hooks/use-auth.ts";
+import { useLanguage } from "@/hooks/use-language.ts";
 import { useState, useEffect } from "react";
 
 type SiteConfigWithUrls = {
@@ -42,6 +43,7 @@ export default function Header() {
   const isAdmin = useQuery(api.users.isAdmin, {});
   const siteConfig = useQuery(api.admin.siteConfig.get, {}) as SiteConfigWithUrls | null | undefined;
   const { signoutRedirect } = useAuth();
+  const { language, setLanguage } = useLanguage();
   
   // Generate or retrieve session ID for guest users
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -159,6 +161,29 @@ export default function Header() {
                 )}
               </Button>
             </Link>
+
+            {/* Language Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="hover:bg-primary/10">
+                  <Languages className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40 shadow-xl border-border/50">
+                <DropdownMenuItem 
+                  onClick={() => setLanguage("en")}
+                  className={`cursor-pointer ${language === "en" ? "bg-primary/10 font-semibold" : ""}`}
+                >
+                  🇬🇧 English
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setLanguage("es")}
+                  className={`cursor-pointer ${language === "es" ? "bg-primary/10 font-semibold" : ""}`}
+                >
+                  🇪🇸 Español
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             <Authenticated>
               {isAdmin && (
