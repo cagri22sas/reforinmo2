@@ -4,6 +4,19 @@ import Footer from "@/components/Footer.tsx";
 import SEO from "@/components/SEO.tsx";
 import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card.tsx";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { useState } from "react";
+
+// Fix default marker icon
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
 
 type Store = {
   name: string;
@@ -14,6 +27,8 @@ type Store = {
   email: string;
   hours: string;
   region: string;
+  lat: number;
+  lng: number;
 };
 
 const stores: Store[] = [
@@ -25,7 +40,9 @@ const stores: Store[] = [
     phone: "+377 97 97 77 77",
     email: "monaco@yachtbeach.com",
     hours: "Mon-Sat: 9:00 - 19:00, Sun: 10:00 - 18:00",
-    region: "Mediterranean"
+    region: "Mediterranean",
+    lat: 43.7347,
+    lng: 7.4236,
   },
   {
     name: "YachtBeach Porto Cervo",
@@ -35,7 +52,9 @@ const stores: Store[] = [
     phone: "+39 0789 92288",
     email: "portocervo@yachtbeach.com",
     hours: "Mon-Sat: 9:00 - 20:00, Sun: 10:00 - 19:00",
-    region: "Mediterranean"
+    region: "Mediterranean",
+    lat: 41.1354,
+    lng: 9.5346,
   },
   {
     name: "YachtBeach Miami Beach",
@@ -45,7 +64,9 @@ const stores: Store[] = [
     phone: "+1 (305) 673-7300",
     email: "miami@yachtbeach.com",
     hours: "Mon-Sun: 9:00 - 21:00",
-    region: "Americas"
+    region: "Americas",
+    lat: 25.7753,
+    lng: -80.1900,
   },
   {
     name: "YachtBeach St. Tropez",
@@ -55,7 +76,9 @@ const stores: Store[] = [
     phone: "+33 4 94 97 00 11",
     email: "sttropez@yachtbeach.com",
     hours: "Mon-Sat: 10:00 - 19:00, Sun: 11:00 - 18:00",
-    region: "Mediterranean"
+    region: "Mediterranean",
+    lat: 43.2677,
+    lng: 6.6407,
   },
   {
     name: "YachtBeach Nassau",
@@ -65,7 +88,9 @@ const stores: Store[] = [
     phone: "+1 (242) 302-2000",
     email: "nassau@yachtbeach.com",
     hours: "Mon-Sat: 9:00 - 19:00, Sun: 10:00 - 17:00",
-    region: "Caribbean"
+    region: "Caribbean",
+    lat: 25.0659,
+    lng: -77.3450,
   },
   {
     name: "YachtBeach Dubai Marina",
@@ -75,7 +100,9 @@ const stores: Store[] = [
     phone: "+971 4 399 4000",
     email: "dubai@yachtbeach.com",
     hours: "Mon-Sun: 10:00 - 22:00",
-    region: "Middle East"
+    region: "Middle East",
+    lat: 25.0810,
+    lng: 55.1400,
   },
   {
     name: "YachtBeach Marbella",
@@ -85,7 +112,9 @@ const stores: Store[] = [
     phone: "+34 952 90 98 00",
     email: "marbella@yachtbeach.com",
     hours: "Mon-Sat: 10:00 - 20:00, Sun: 11:00 - 19:00",
-    region: "Mediterranean"
+    region: "Mediterranean",
+    lat: 36.4843,
+    lng: -4.9532,
   },
   {
     name: "YachtBeach Antibes",
@@ -95,13 +124,15 @@ const stores: Store[] = [
     phone: "+33 4 93 34 56 78",
     email: "antibes@yachtbeach.com",
     hours: "Tue-Sat: 9:30 - 19:00, Sun-Mon: Closed",
-    region: "Mediterranean"
+    region: "Mediterranean",
+    lat: 43.5847,
+    lng: 7.1250,
   }
 ];
 
-const regions = ["All", "Mediterranean", "Caribbean", "Americas", "Middle East"];
-
 export default function StoresPage() {
+  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+
   return (
     <>
       <SEO 
@@ -169,9 +200,75 @@ export default function StoresPage() {
             </div>
           </section>
 
+          {/* Map Section */}
+          <section className="py-8 relative">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-primary/20"
+              >
+                <MapContainer
+                  center={[35, 10]}
+                  zoom={2}
+                  className="h-[500px] w-full z-0"
+                  scrollWheelZoom={true}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  />
+                  {stores.map((store) => (
+                    <Marker
+                      key={store.name}
+                      position={[store.lat, store.lng]}
+                      eventHandlers={{
+                        click: () => {
+                          setSelectedStore(store);
+                        },
+                      }}
+                    >
+                      <Popup>
+                        <div className="text-sm">
+                          <h3 className="font-bold text-base mb-2">{store.name}</h3>
+                          <p className="text-muted-foreground mb-1">
+                            {store.address}
+                          </p>
+                          <p className="text-muted-foreground mb-2">
+                            {store.city}, {store.country}
+                          </p>
+                          <p className="text-xs text-primary font-medium">
+                            Click for details
+                          </p>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  ))}
+                </MapContainer>
+              </motion.div>
+            </div>
+          </section>
+
           {/* Stores Grid */}
           <section className="py-16 relative">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-12"
+              >
+                <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
+                  All Store Locations
+                </h2>
+                <p className="text-muted-foreground">
+                  {selectedStore 
+                    ? `Showing details for ${selectedStore.name}`
+                    : "Click on a map marker or select a store below"}
+                </p>
+              </motion.div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {stores.map((store, index) => (
                   <motion.div
@@ -179,8 +276,15 @@ export default function StoresPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
+                    onClick={() => setSelectedStore(store)}
                   >
-                    <Card className="group hover:shadow-2xl transition-all duration-500 h-full border-2 hover:border-primary/50 relative overflow-hidden">
+                    <Card 
+                      className={`group hover:shadow-2xl transition-all duration-500 h-full border-2 relative overflow-hidden cursor-pointer ${
+                        selectedStore?.name === store.name 
+                          ? "border-primary/80 shadow-xl" 
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
                       {/* Gradient overlay on hover */}
                       <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-accent/0 group-hover:from-primary/10 group-hover:to-accent/10 transition-all duration-500 pointer-events-none" />
                       
@@ -222,6 +326,7 @@ export default function StoresPage() {
                             href={`tel:${store.phone}`}
                             className="flex items-center gap-3 group/item text-sm text-muted-foreground hover:text-primary transition-colors"
                             whileHover={{ x: 4 }}
+                            onClick={(e) => e.stopPropagation()}
                           >
                             <div className="p-2 rounded-lg bg-primary/10 group-hover/item:bg-primary/20 transition-colors shrink-0">
                               <PhoneIcon className="w-4 h-4 text-primary" />
@@ -234,6 +339,7 @@ export default function StoresPage() {
                             href={`mailto:${store.email}`}
                             className="flex items-center gap-3 group/item text-sm text-muted-foreground hover:text-primary transition-colors"
                             whileHover={{ x: 4 }}
+                            onClick={(e) => e.stopPropagation()}
                           >
                             <div className="p-2 rounded-lg bg-primary/10 group-hover/item:bg-primary/20 transition-colors shrink-0">
                               <MailIcon className="w-4 h-4 text-primary" />
