@@ -317,9 +317,12 @@ export default function Footer() {
                 className="group relative cursor-pointer"
               >
                 <div className="absolute inset-0 bg-blue-500/0 blur-xl rounded-lg group-hover:bg-blue-500/40 transition-all duration-300" />
-                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center">
-                  <svg viewBox="0 0 48 16" className="w-12 h-auto grayscale group-hover:grayscale-0 transition-all duration-300">
-                    <path d="M4.5 6.8l-.9 2.1h1.8l-.9-2.1zm14.8 0l-.9 2.1h1.8l-.9-2.1zM1.8 4l-1.8 8h2.4l.3-.8h2.6l.3.8h2.6l-1.8-8H4.2l-.3.8h-.9L2.7 4H1.8zm8.9 0v8h3.7c1.5 0 2.4-.9 2.4-2.3 0-.9-.5-1.6-1.3-1.9.6-.3.9-.9.9-1.6 0-1.3-.9-2.2-2.2-2.2h-3.5zm8.7 0l-1.8 8h2.4l.3-.8h2.6l.3.8h2.6l-1.8-8h-2.2l-.3.8h-.9L21.3 4h-.9zm9 0v8h2.1V9.7h1.1l1.3 2.3h2.4l-1.5-2.5c.8-.3 1.3-1 1.3-2 0-1.3-.9-2.2-2.2-2.2h-4.5v.7zm2.1 1.6h1.9c.5 0 .8.3.8.8s-.3.8-.8.8h-1.9V5.6z" fill="#006FCF" className="group-hover:fill-[#006FCF]"/>
+                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center bg-muted/50 group-hover:bg-[#006FCF] transition-all duration-300">
+                  <svg viewBox="0 0 32 32" className="w-11 h-auto opacity-40 group-hover:opacity-100 transition-all duration-300">
+                    <g fill="currentColor" className="text-muted-foreground group-hover:text-white">
+                      <rect width="32" height="32" rx="2" fill="currentColor" opacity="0" className="group-hover:opacity-100"/>
+                      <path d="M5.6 13.6h1.9l-.3.8h-1.6v.8h1.5v.8h-1.5v1h1.6l.3.8H5.6v-4.2zm3.9 2.6l.7-1.8.7 1.8h-1.4zm-1.8 1.6l1.5-4.2h1.2l1.5 4.2h-1l-.2-.7H9.3l-.2.7h-1.4zm5.1-4.2h1l.6 2.4.6-2.4h1l.6 2.4.6-2.4h1l-1 4.2h-1.2l-.6-2.3-.6 2.3h-1.2l-1-4.2zm6.9 0h1.9l-.3.8h-1.6v.8h1.5v.8h-1.5v1h1.6l.3.8h-2.7v-4.2zm3.6 0h1.6c.7 0 1.2.5 1.2 1.2 0 .4-.2.8-.5 1l.6 1.2h-1.1l-.5-1h-.4v1h-.9v-4.2zm.9 2.2h.6c.3 0 .5-.2.5-.5s-.2-.5-.5-.5h-.6v1zm2.7-2.2h1l1.5 2.2v-2.2h.9v4.2h-.9l-1.6-2.3v2.3h-.9v-4.2zM5.6 19.8h.9v1.5h1.2v-1.5h.9v4.2h-.9v-1.7H6.5v1.7h-.9v-4.2zm4.2 0h1.6c.7 0 1.2.5 1.2 1.2 0 .4-.2.8-.5 1l.6 1.2h-1.1l-.5-1h-.4v1h-.9v-4.2zm.9 2.2h.6c.3 0 .5-.2.5-.5s-.2-.5-.5-.5h-.6v1zm2.7-2.2h1.9l-.3.8h-1.6v.8h1.5v.8h-1.5v1h1.6l.3.8h-2.7v-4.2zm4.9 1.7c0 .3.2.5.5.5.2 0 .4-.1.5-.2v-1h-.6l-.2.8h-1.2v-1.3c0-.6.5-1.1 1.1-1.1h1v3.8h-.9v-.2c-.2.2-.5.3-.8.3-.7 0-1.2-.5-1.2-1.2v-.4h.8zm3.3-1.7h1l1.5 2.2v-2.2h.9v4.2h-.9l-1.6-2.3v2.3h-.9v-4.2zm3.9 0h2.7v.8h-.9v3.4h-.9v-3.4h-.9v-.8z"/>
+                    </g>
                   </svg>
                 </div>
               </motion.div>
