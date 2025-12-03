@@ -298,33 +298,21 @@ export default function ProductDetailPage() {
 
               {/* Trust Badges Below Images */}
               <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="group relative flex flex-col items-center text-center p-5 bg-gradient-to-br from-background to-muted/30 rounded-2xl hover:shadow-lg transition-all duration-300 border border-border/50">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
-                  <div className="relative bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-3 rounded-xl mb-3 group-hover:scale-110 transition-transform">
-                    <ShieldCheckIcon className="h-7 w-7 text-green-600 dark:text-green-400" />
-                  </div>
-                  <span className="text-xs font-semibold relative">Secure Payment</span>
+                <div className="flex flex-col items-center text-center p-4 rounded-lg hover:bg-muted/30 transition-colors">
+                  <ShieldCheckIcon className="h-6 w-6 text-muted-foreground mb-2" />
+                  <span className="text-xs font-medium text-muted-foreground">Secure Payment</span>
                 </div>
-                <div className="group relative flex flex-col items-center text-center p-5 bg-gradient-to-br from-background to-muted/30 rounded-2xl hover:shadow-lg transition-all duration-300 border border-border/50">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
-                  <div className="relative bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-3 rounded-xl mb-3 group-hover:scale-110 transition-transform">
-                    <TruckIcon className="h-7 w-7 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <span className="text-xs font-semibold relative">Fast Shipping</span>
+                <div className="flex flex-col items-center text-center p-4 rounded-lg hover:bg-muted/30 transition-colors">
+                  <TruckIcon className="h-6 w-6 text-muted-foreground mb-2" />
+                  <span className="text-xs font-medium text-muted-foreground">Fast Shipping</span>
                 </div>
-                <div className="group relative flex flex-col items-center text-center p-5 bg-gradient-to-br from-background to-muted/30 rounded-2xl hover:shadow-lg transition-all duration-300 border border-border/50">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
-                  <div className="relative bg-gradient-to-br from-orange-500/10 to-amber-500/10 p-3 rounded-xl mb-3 group-hover:scale-110 transition-transform">
-                    <RotateCcwIcon className="h-7 w-7 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <span className="text-xs font-semibold relative">Easy Returns</span>
+                <div className="flex flex-col items-center text-center p-4 rounded-lg hover:bg-muted/30 transition-colors">
+                  <RotateCcwIcon className="h-6 w-6 text-muted-foreground mb-2" />
+                  <span className="text-xs font-medium text-muted-foreground">Easy Returns</span>
                 </div>
-                <div className="group relative flex flex-col items-center text-center p-5 bg-gradient-to-br from-background to-muted/30 rounded-2xl hover:shadow-lg transition-all duration-300 border border-border/50">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
-                  <div className="relative bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-3 rounded-xl mb-3 group-hover:scale-110 transition-transform">
-                    <PackageCheckIcon className="h-7 w-7 text-purple-600 dark:text-purple-400" />
-                  </div>
-                  <span className="text-xs font-semibold relative">Quality Guaranteed</span>
+                <div className="flex flex-col items-center text-center p-4 rounded-lg hover:bg-muted/30 transition-colors">
+                  <PackageCheckIcon className="h-6 w-6 text-muted-foreground mb-2" />
+                  <span className="text-xs font-medium text-muted-foreground">Quality Guaranteed</span>
                 </div>
               </div>
             </div>
@@ -356,24 +344,22 @@ export default function ProductDetailPage() {
                 </div>
 
                 {/* Price */}
-                <Card className="bg-muted/30 border-2">
-                  <CardContent className="pt-6">
-                    <div className="flex items-baseline gap-3 mb-2">
-                      <span className="text-5xl font-bold text-primary">€{product.price.toFixed(2)}</span>
-                      {hasDiscount && (
-                        <div className="flex flex-col">
-                          <span className="text-xl text-muted-foreground line-through">
-                            €{product.compareAtPrice!.toFixed(2)}
-                          </span>
-                          <span className="text-sm text-green-600 font-medium">
-                            You save €{(product.compareAtPrice! - product.price).toFixed(2)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground">Tax included. Shipping calculated at checkout.</p>
-                  </CardContent>
-                </Card>
+                <div className="space-y-2">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-3xl font-bold">€{product.price.toFixed(2)}</span>
+                    {hasDiscount && (
+                      <>
+                        <span className="text-lg text-muted-foreground line-through">
+                          €{product.compareAtPrice!.toFixed(2)}
+                        </span>
+                        <Badge variant="secondary" className="bg-green-500/10 text-green-700 border-green-200">
+                          Save {discountPercentage}%
+                        </Badge>
+                      </>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Tax included · Free shipping over €500</p>
+                </div>
 
                 {/* Description */}
                 <div>
