@@ -280,11 +280,7 @@ type Page = {
 };
 
 function PagesContent() {
-  const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "all">("all");
-  const pages = useQuery(
-    api.admin.pages.list, 
-    selectedLanguage === "all" ? {} : { language: selectedLanguage }
-  );
+  const pages = useQuery(api.admin.pages.list, {});
   const deletePage = useMutation(api.admin.pages.remove);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPage, setEditingPage] = useState<Page | undefined>(undefined);
@@ -333,25 +329,13 @@ function PagesContent() {
           </p>
         </div>
 
-        <div className="flex gap-3">
-          <Select value={selectedLanguage} onValueChange={(value) => setSelectedLanguage(value as "en" | "es" | "all")}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by language" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Languages</SelectItem>
-              <SelectItem value="en">English</SelectItem>
-              <SelectItem value="es">Español</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={openCreateDialog}>
-                <PlusIcon className="h-4 w-4 mr-2" />
-                New Page
-              </Button>
-            </DialogTrigger>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={openCreateDialog}>
+              <PlusIcon className="h-4 w-4 mr-2" />
+              New Page
+            </Button>
+          </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
@@ -360,8 +344,7 @@ function PagesContent() {
             </DialogHeader>
             <PageDialog page={editingPage} onClose={closeDialog} />
           </DialogContent>
-          </Dialog>
-        </div>
+        </Dialog>
       </div>
 
       <Card>
@@ -378,7 +361,7 @@ function PagesContent() {
           <TableBody>
             {pages.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
+                <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
                   No pages yet. Create your first page!
                 </TableCell>
               </TableRow>
