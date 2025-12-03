@@ -12,6 +12,13 @@ import CheckoutCancelPage from "./pages/checkout/cancel/page.tsx";
 import OrdersPage from "./pages/orders/page.tsx";
 import OrderDetailPage from "./pages/orders/[id]/page.tsx";
 import ProfilePage from "./pages/profile/page.tsx";
+import AboutPage from "./pages/about/page.tsx";
+import ContactPage from "./pages/contact/page.tsx";
+import ShippingPage from "./pages/shipping/page.tsx";
+import ReturnsPage from "./pages/returns/page.tsx";
+import FAQPage from "./pages/faq/page.tsx";
+import PrivacyPage from "./pages/privacy/page.tsx";
+import TermsPage from "./pages/terms/page.tsx";
 import AdminDashboard from "./pages/admin/page.tsx";
 import AdminProductsPage from "./pages/admin/products/page.tsx";
 import AdminCategoriesPage from "./pages/admin/categories/page.tsx";
@@ -41,6 +48,13 @@ export default function App() {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/shipping" element={<ShippingPage />} />
+          <Route path="/returns" element={<ReturnsPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProductsPage />} />
           <Route path="/admin/categories" element={<AdminCategoriesPage />} />

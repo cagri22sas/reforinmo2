@@ -31,7 +31,7 @@ export default function Footer() {
   return (
     <footer className="bg-muted/50 border-t">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
@@ -102,8 +102,25 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Social Media */}
+          {/* Legal */}
           <div>
+            <h3 className="font-semibold mb-4">Legal</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link to="/privacy" className="hover:text-primary transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="hover:text-primary transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Media */}
+          <div className="md:col-span-2 lg:col-span-1">
             <h3 className="font-semibold mb-4">Follow Us</h3>
             <div className="flex space-x-4">
               {siteConfig?.socialLinks?.facebook && (
@@ -150,8 +167,18 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>{siteConfig?.footerText || `© ${currentYear} YachtBeach. All rights reserved.`}</p>
+        <div className="mt-8 pt-8 border-t">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+            <p>{siteConfig?.footerText || `© ${currentYear} YachtBeach. All rights reserved.`}</p>
+            <div className="flex gap-4">
+              <Link to="/privacy" className="hover:text-primary transition-colors">
+                Privacy
+              </Link>
+              <Link to="/terms" className="hover:text-primary transition-colors">
+                Terms
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
