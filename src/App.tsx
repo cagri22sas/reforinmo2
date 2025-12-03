@@ -37,6 +37,7 @@ import AdminCouponsPage from "./pages/admin/coupons/page.tsx";
 import AdminPagesPage from "./pages/admin/pages/page.tsx";
 import AdminUpdateImagesPage from "./pages/admin/update-images.tsx";
 import WishlistPage from "./pages/wishlist/page.tsx";
+import StoresPage from "./pages/stores/page.tsx";
 
 export default function App() {
   return (
@@ -62,6 +63,7 @@ export default function App() {
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/stores" element={<StoresPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProductsPage />} />
           <Route path="/admin/categories" element={<AdminCategoriesPage />} />
