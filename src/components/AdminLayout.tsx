@@ -17,7 +17,8 @@ import {
   CreditCardIcon,
   SearchIcon,
   BarChart3Icon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  MessageCircleIcon
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -48,6 +49,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         { path: "/admin/orders", label: "Orders", icon: ShoppingCartIcon },
         { path: "/admin/shipping", label: "Shipping Settings", icon: TruckIcon },
         { path: "/admin/stripe-dashboard", label: "Stripe Dashboard", icon: BarChart3Icon },
+      ]
+    },
+    {
+      label: "Support",
+      items: [
+        { path: "/admin/chat", label: "Live Chat", icon: MessageCircleIcon },
       ]
     },
     {

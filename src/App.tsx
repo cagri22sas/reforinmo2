@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DefaultProviders } from "./components/providers/default.tsx";
+import LiveChatWidget from "./components/LiveChatWidget.tsx";
 import AuthCallback from "./pages/auth/Callback.tsx";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -31,6 +32,7 @@ import AdminStripeConfigPage from "./pages/admin/stripe-config/page.tsx";
 import AdminStripeDashboardPage from "./pages/admin/stripe-dashboard/page.tsx";
 import AdminMediaPage from "./pages/admin/media/page.tsx";
 import AdminSEOPage from "./pages/admin/seo/page.tsx";
+import AdminChatPage from "./pages/admin/chat/page.tsx";
 import WishlistPage from "./pages/wishlist/page.tsx";
 
 export default function App() {
@@ -69,9 +71,11 @@ export default function App() {
           <Route path="/admin/stripe-dashboard" element={<AdminStripeDashboardPage />} />
           <Route path="/admin/media" element={<AdminMediaPage />} />
           <Route path="/admin/seo" element={<AdminSEOPage />} />
+          <Route path="/admin/chat" element={<AdminChatPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <LiveChatWidget />
       </BrowserRouter>
     </DefaultProviders>
   );

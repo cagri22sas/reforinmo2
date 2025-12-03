@@ -209,4 +209,27 @@ export default defineSchema({
     order: v.number(),
   }).index("by_featured", ["featured"])
     .index("by_active", ["active"]),
+
+  chatConversations: defineTable({
+    userId: v.optional(v.id("users")),
+    guestEmail: v.optional(v.string()),
+    guestName: v.optional(v.string()),
+    status: v.union(
+      v.literal("active"),
+      v.literal("resolved"),
+      v.literal("closed")
+    ),
+    assignedToId: v.optional(v.id("users")),
+    lastMessageAt: v.number(),
+  }).index("by_user", ["userId"])
+    .index("by_status", ["status"])
+    .index("by_assigned", ["assignedToId"]),
+
+  chatMessages: defineTable({
+    conversationId: v.id("chatConversations"),
+    senderId: v.optional(v.id("users")),
+    senderName: v.string(),
+    message: v.string(),
+    isAdmin: v.boolean(),
+  }).index("by_conversation", ["conversationId"]),
 });
