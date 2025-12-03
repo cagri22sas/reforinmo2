@@ -36,6 +36,7 @@ import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
 import ProductCard from "@/components/ProductCard.tsx";
+import ProductImageGallery from "@/components/ui/product-image-gallery.tsx";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
 
 function RelatedProducts({ productId }: { productId: Id<"products"> }) {
@@ -71,7 +72,6 @@ export default function ProductDetailPage() {
   const createReview = useMutation(api.reviews.create);
   const markHelpful = useMutation(api.reviews.markHelpful);
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(0);
   const [sessionId, setSessionId] = useState<string>("");
   
   // Review form state
@@ -249,52 +249,24 @@ export default function ProductDetailPage() {
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
             {/* Product Images */}
             <div className="lg:col-span-7">
-              <div className="overflow-hidden rounded-3xl shadow-2xl shadow-primary/10">
-                <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-muted via-background to-accent/10">
-                  {product.images[selectedImage] ? (
-                    <img
-                      src={product.images[selectedImage]}
-                      alt={product.name}
-                      className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                      No Image
-                    </div>
-                  )}
-                  {hasDiscount && (
-                    <div className="absolute top-4 right-4 bg-gradient-to-r from-destructive to-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-in zoom-in-50">
+              <ProductImageGallery
+                images={product.images}
+                productName={product.name}
+                discountBadge={
+                  hasDiscount ? (
+                    <div className="bg-gradient-to-r from-destructive to-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-in zoom-in-50">
                       SAVE {discountPercentage}%
                     </div>
-                  )}
-                  {product.stock > 0 && product.stock < 10 && (
-                    <div className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-amber-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+                  ) : undefined
+                }
+                stockBadge={
+                  product.stock > 0 && product.stock < 10 ? (
+                    <div className="bg-gradient-to-r from-orange-500 to-amber-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
                       Only {product.stock} left!
                     </div>
-                  )}
-                </div>
-              </div>
-              
-              {/* Thumbnail Images */}
-              {product.images.length > 1 && (
-                <div className="grid grid-cols-5 gap-3 mt-4">
-                  {product.images.map((image, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImage(index)}
-                      className={`aspect-square relative overflow-hidden rounded-lg bg-muted border-3 transition-all hover:scale-105 ${
-                        selectedImage === index ? "border-primary ring-2 ring-primary ring-offset-2" : "border-transparent"
-                      }`}
-                    >
-                      <img
-                        src={image}
-                        alt={`${product.name} ${index + 1}`}
-                        className="object-cover w-full h-full"
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+                  ) : undefined
+                }
+              />
 
               {/* Trust Badges Below Images */}
               <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
