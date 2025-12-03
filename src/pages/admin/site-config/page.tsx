@@ -92,12 +92,12 @@ function SiteConfigContent() {
         },
         footerText: formData.footerText,
       });
-      toast.success("Site ayarları kaydedildi");
+      toast.success("Site settings saved");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("Bir hata oluştu");
+        toast.error("An error occurred");
       }
     } finally {
       setIsLoading(false);
@@ -118,13 +118,13 @@ function SiteConfigContent() {
       });
       const { storageId } = await response.json();
       await updateLogo({ storageId: storageId as Id<"_storage"> });
-      toast.success("Logo yüklendi");
+      toast.success("Logo uploaded");
       window.location.reload();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("Logo yüklenirken bir hata oluştu");
+        toast.error("An error occurred while uploading logo");
       }
     } finally {
       setUploadingLogo(false);
@@ -145,13 +145,13 @@ function SiteConfigContent() {
       });
       const { storageId } = await response.json();
       await updateFavicon({ storageId: storageId as Id<"_storage"> });
-      toast.success("Favicon yüklendi");
+      toast.success("Favicon uploaded");
       window.location.reload();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("Favicon yüklenirken bir hata oluştu");
+        toast.error("An error occurred while uploading favicon");
       }
     } finally {
       setUploadingFavicon(false);
@@ -161,9 +161,9 @@ function SiteConfigContent() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Site Yapılandırması</h1>
+        <h1 className="text-3xl font-bold">Site Configuration</h1>
         <p className="text-muted-foreground">
-          Sitenizin genel ayarlarını, logosunu ve renklerini yönetin
+          Manage your site's general settings, logo and colors
         </p>
       </div>
 
@@ -171,19 +171,19 @@ function SiteConfigContent() {
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="general">
             <GlobeIcon className="h-4 w-4 mr-2" />
-            Genel
+            General
           </TabsTrigger>
           <TabsTrigger value="branding">
             <ImageIcon className="h-4 w-4 mr-2" />
-            Marka
+            Branding
           </TabsTrigger>
           <TabsTrigger value="colors">
             <PaletteIcon className="h-4 w-4 mr-2" />
-            Renkler
+            Colors
           </TabsTrigger>
           <TabsTrigger value="contact">
             <MailIcon className="h-4 w-4 mr-2" />
-            İletişim
+            Contact
           </TabsTrigger>
         </TabsList>
 
@@ -192,14 +192,14 @@ function SiteConfigContent() {
           <TabsContent value="general" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Site Bilgileri</CardTitle>
+                <CardTitle>Site Information</CardTitle>
                 <CardDescription>
-                  Sitenizin temel bilgilerini girin
+                  Enter your site's basic information
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="siteName">Site Adı</Label>
+                  <Label htmlFor="siteName">Site Name</Label>
                   <Input
                     id="siteName"
                     value={formData.siteName}
@@ -212,33 +212,33 @@ function SiteConfigContent() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="siteDescription">Site Açıklaması</Label>
+                  <Label htmlFor="siteDescription">Site Description</Label>
                   <Textarea
                     id="siteDescription"
                     value={formData.siteDescription}
                     onChange={(e) =>
                       setFormData({ ...formData, siteDescription: e.target.value })
                     }
-                    placeholder="Premium deniz yaşam ürünleri..."
+                    placeholder="Premium marine lifestyle products..."
                     rows={4}
                     required
                   />
                   <p className="text-sm text-muted-foreground">
-                    SEO için kullanılacak site açıklaması
+                    Site description for SEO purposes
                   </p>
                 </div>
 
                 <Separator />
 
                 <div className="space-y-2">
-                  <Label htmlFor="footerText">Alt Bilgi Metni</Label>
+                  <Label htmlFor="footerText">Footer Text</Label>
                   <Input
                     id="footerText"
                     value={formData.footerText}
                     onChange={(e) =>
                       setFormData({ ...formData, footerText: e.target.value })
                     }
-                    placeholder="© 2024 YachtBeach. Tüm hakları saklıdır."
+                    placeholder="© 2024 YachtBeach. All rights reserved."
                     required
                   />
                 </div>
@@ -359,7 +359,7 @@ function SiteConfigContent() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="secondaryColor">İkincil Renk</Label>
+                    <Label htmlFor="secondaryColor">Secondary Color</Label>
                     <div className="flex gap-2">
                       <Input
                         type="color"
@@ -408,7 +408,7 @@ function SiteConfigContent() {
           <TabsContent value="contact" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>İletişim Bilgileri</CardTitle>
+                <CardTitle>Contact Information</CardTitle>
                 <CardDescription>
                   Sitenizde görünecek iletişim bilgilerini girin
                 </CardDescription>
@@ -468,7 +468,7 @@ function SiteConfigContent() {
                 <Separator />
 
                 <div className="space-y-4">
-                  <Label>Sosyal Medya Bağlantıları</Label>
+                  <Label>Social Media Links</Label>
                   
                   <div className="space-y-2">
                     <Label htmlFor="facebook" className="text-sm text-muted-foreground">
@@ -533,7 +533,7 @@ function SiteConfigContent() {
           <div className="flex justify-end">
             <Button type="submit" size="lg" disabled={isLoading}>
               <SaveIcon className="h-4 w-4 mr-2" />
-              {isLoading ? "Kaydediliyor..." : "Ayarları Kaydet"}
+              {isLoading ? "Saving..." : "Save Settings"}
             </Button>
           </div>
         </form>

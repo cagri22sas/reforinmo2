@@ -82,10 +82,10 @@ function ShippingDialog({
 
       if (method) {
         await updateMethod({ id: method._id, ...data });
-        toast.success("Kargo yöntemi güncellendi");
+        toast.success("Shipping method updated");
       } else {
         await createMethod(data);
-        toast.success("Kargo yöntemi oluşturuldu");
+        toast.success("Shipping method created");
       }
 
       onClose();
@@ -93,7 +93,7 @@ function ShippingDialog({
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("Bir hata oluştu");
+        toast.error("An error occurred");
       }
     }
   };
@@ -101,7 +101,7 @@ function ShippingDialog({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Kargo Adı *</Label>
+        <Label htmlFor="name">Method Name *</Label>
         <Input
           id="name"
           value={formData.name}
@@ -111,7 +111,7 @@ function ShippingDialog({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Açıklama *</Label>
+        <Label htmlFor="description">Description *</Label>
         <Textarea
           id="description"
           value={formData.description}
@@ -135,19 +135,19 @@ function ShippingDialog({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="estimatedDays">Tahmini Süre *</Label>
+          <Label htmlFor="estimatedDays">Estimated Time *</Label>
           <Input
             id="estimatedDays"
             value={formData.estimatedDays}
             onChange={(e) => setFormData({ ...formData, estimatedDays: e.target.value })}
-            placeholder="1-3 iş günü"
+            placeholder="1-3 business days"
             required
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="order">Sıra *</Label>
+        <Label htmlFor="order">Order *</Label>
         <Input
           id="order"
           type="number"
@@ -163,15 +163,15 @@ function ShippingDialog({
           checked={formData.active}
           onCheckedChange={(checked) => setFormData({ ...formData, active: checked })}
         />
-        <Label htmlFor="active">Aktif</Label>
+        <Label htmlFor="active">Active</Label>
       </div>
 
       <div className="flex justify-end gap-2 pt-4">
         <Button type="button" variant="outline" onClick={onClose}>
-          İptal
+          Cancel
         </Button>
         <Button type="submit">
-          {method ? "Güncelle" : "Oluştur"}
+          {method ? "Update" : "Create"}
         </Button>
       </div>
     </form>
@@ -200,15 +200,15 @@ function ShippingContent() {
   }
 
   const handleDelete = async (id: Id<"shippingMethods">) => {
-    if (confirm("Bu kargo yöntemini silmek istediğinizden emin misiniz?")) {
+    if (confirm("Are you sure you want to delete this shipping method?")) {
       try {
         await deleteMethod({ id });
-        toast.success("Kargo yöntemi silindi");
+        toast.success("Shipping method deleted");
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
         } else {
-          toast.error("Bir hata oluştu");
+          toast.error("An error occurred");
         }
       }
     }
@@ -220,9 +220,9 @@ function ShippingContent() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Kargo Yöntemleri</h1>
+          <h1 className="text-3xl font-bold">Shipping Methods</h1>
           <p className="text-muted-foreground">
-            {methods.length} kargo yöntemi bulundu
+            {methods.length} shipping methods found
           </p>
         </div>
 
@@ -230,13 +230,13 @@ function ShippingContent() {
           <DialogTrigger asChild>
             <Button onClick={() => setEditingMethod(undefined)}>
               <PlusIcon className="h-4 w-4 mr-2" />
-              Yeni Kargo Yöntemi
+              New Shipping Method
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {editingMethod ? "Kargo Yöntemi Düzenle" : "Yeni Kargo Yöntemi"}
+                {editingMethod ? "Edit Shipping Method" : "New Shipping Method"}
               </DialogTitle>
             </DialogHeader>
             <ShippingDialog 
@@ -254,13 +254,13 @@ function ShippingContent() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Kargo Yöntemi</TableHead>
-              <TableHead>Açıklama</TableHead>
-              <TableHead>Fiyat</TableHead>
-              <TableHead>Tahmini Süre</TableHead>
-              <TableHead>Sıra</TableHead>
-              <TableHead>Durum</TableHead>
-              <TableHead className="text-right">İşlemler</TableHead>
+              <TableHead>Shipping Method</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Estimated Time</TableHead>
+              <TableHead>Order</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -273,9 +273,9 @@ function ShippingContent() {
                 <TableCell>{method.order}</TableCell>
                 <TableCell>
                   {method.active ? (
-                    <Badge>Aktif</Badge>
+                    <Badge>Active</Badge>
                   ) : (
-                    <Badge variant="secondary">Pasif</Badge>
+                    <Badge variant="secondary">Inactive</Badge>
                   )}
                 </TableCell>
                 <TableCell className="text-right">
@@ -316,7 +316,7 @@ export default function AdminShippingPage() {
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
               <p className="text-muted-foreground">
-                Bu sayfaya erişmek için giriş yapmalısınız
+                You must sign in to access this page
               </p>
               <SignInButton />
             </div>
