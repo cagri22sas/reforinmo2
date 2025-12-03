@@ -68,8 +68,8 @@ export default function Header() {
     <header className="border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-24 items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          {/* Logo with 3D Marine Design */}
+          <Link to="/" className="flex items-center space-x-3 group relative">
             {siteConfig && 'logoUrl' in siteConfig && siteConfig.logoUrl ? (
               <img 
                 src={siteConfig.logoUrl} 
@@ -78,11 +78,38 @@ export default function Header() {
               />
             ) : (
               <>
-                <div className="bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-2.5 rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <WavesIcon className="h-6 w-6 text-primary-foreground" />
+                {/* 3D Marine Icon with Multiple Layers */}
+                <div className="relative">
+                  {/* Background glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-3xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-300" />
+                  
+                  {/* Main icon container */}
+                  <div className="relative bg-gradient-to-br from-primary via-primary/95 to-accent p-3 rounded-3xl shadow-2xl group-hover:shadow-primary/50 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
+                    {/* Layered marine elements */}
+                    <div className="relative">
+                      {/* Background waves */}
+                      <WavesIcon className="absolute inset-0 h-7 w-7 text-primary-foreground/20 translate-y-2 translate-x-1" />
+                      {/* Main anchor icon */}
+                      <svg className="h-7 w-7 text-primary-foreground relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="5" r="3"/>
+                        <line x1="12" y1="22" x2="12" y2="8"/>
+                        <path d="M5 12H2a10 10 0 0 0 20 0h-3"/>
+                      </svg>
+                    </div>
+                    
+                    {/* Decorative corner accent */}
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full shadow-lg" />
+                  </div>
                 </div>
-                <div className="text-2xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent tracking-tight">
-                  {siteConfig?.siteName || "YachtBeach"}
+                
+                {/* Brand text with gradient */}
+                <div className="flex flex-col">
+                  <div className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent tracking-tight leading-none group-hover:tracking-wide transition-all duration-300">
+                    {siteConfig?.siteName || "YachtBeach"}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground/80 tracking-widest uppercase font-medium">
+                    Marine Excellence
+                  </div>
                 </div>
               </>
             )}

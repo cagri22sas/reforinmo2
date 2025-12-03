@@ -34,6 +34,7 @@ import AdminMediaPage from "./pages/admin/media/page.tsx";
 import AdminSEOPage from "./pages/admin/seo/page.tsx";
 import AdminChatPage from "./pages/admin/chat/page.tsx";
 import AdminCouponsPage from "./pages/admin/coupons/page.tsx";
+import AdminPagesPage from "./pages/admin/pages/page.tsx";
 import WishlistPage from "./pages/wishlist/page.tsx";
 
 export default function App() {
@@ -74,6 +75,7 @@ export default function App() {
           <Route path="/admin/seo" element={<AdminSEOPage />} />
           <Route path="/admin/chat" element={<AdminChatPage />} />
           <Route path="/admin/coupons" element={<AdminCouponsPage />} />
+          <Route path="/admin/pages" element={<AdminPagesPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

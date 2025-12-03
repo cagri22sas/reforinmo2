@@ -263,4 +263,13 @@ export default defineSchema({
     active: v.boolean(),
   }).index("by_code", ["code"])
     .index("by_active", ["active"]),
+
+  pages: defineTable({
+    slug: v.string(),
+    title: v.string(),
+    content: v.string(),
+    metaDescription: v.optional(v.string()),
+    published: v.boolean(),
+  }).index("by_slug", ["slug"])
+    .index("by_published", ["published"]),
 });
