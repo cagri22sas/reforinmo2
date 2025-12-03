@@ -4,8 +4,66 @@ import SEO from "@/components/SEO.tsx";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { ShipIcon, ShieldCheckIcon, HeartIcon, TrophyIcon, AnchorIcon, CompassIcon, WavesIcon } from "lucide-react";
 import { motion } from "motion/react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api.js";
+import { Skeleton } from "@/components/ui/skeleton.tsx";
 
 export default function AboutPage() {
+  const page = useQuery(api.pages.getBySlug, { slug: "about" });
+
+  if (page === undefined) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <div className="flex-1 container mx-auto px-4 py-16">
+          <Skeleton className="h-12 w-64 mb-8 mx-auto" />
+          <Skeleton className="h-96 w-full max-w-4xl mx-auto" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // If page exists in database, show custom content
+  if (page) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <SEO
+          title={page.title}
+          description={page.metaDescription || "About Us"}
+        />
+        <Header />
+        
+        <div className="flex-1">
+          {/* Hero Section */}
+          <div className="bg-gradient-to-br from-primary/10 via-background to-accent/5 border-b">
+            <div className="container mx-auto px-4 py-16 md:py-24">
+              <div className="max-w-3xl mx-auto text-center">
+                <h1 className="text-4xl md:text-5xl font-bold mb-6">{page.title}</h1>
+                {page.metaDescription && (
+                  <p className="text-xl text-muted-foreground leading-relaxed">
+                    {page.metaDescription}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Page Content */}
+          <div className="container mx-auto px-4 py-16">
+            <div 
+              className="max-w-4xl mx-auto prose prose-lg dark:prose-invert"
+              dangerouslySetInnerHTML={{ __html: page.content }}
+            />
+          </div>
+        </div>
+
+        <Footer />
+      </div>
+    );
+  }
+
+  // Default About page with 3D design (fallback if no custom page)
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-background to-muted/20">
       <SEO

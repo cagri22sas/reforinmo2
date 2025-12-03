@@ -164,24 +164,7 @@ export default function Index() {
               </Link>
             </motion.div>
 
-            {/* Trust indicators - Compact */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 flex flex-wrap justify-center gap-6"
-            >
-              {features.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center gap-2 bg-card/30 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-border/30"
-                >
-                  <feature.icon className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-medium">{feature.title}</span>
-                </motion.div>
-              ))}
-            </motion.div>
+
           </div>
         </motion.div>
         
