@@ -232,4 +232,15 @@ export default defineSchema({
     message: v.string(),
     isAdmin: v.boolean(),
   }).index("by_conversation", ["conversationId"]),
+
+  newsletterSubscribers: defineTable({
+    email: v.string(),
+    name: v.optional(v.string()),
+    status: v.union(
+      v.literal("active"),
+      v.literal("unsubscribed")
+    ),
+    source: v.optional(v.string()),
+  }).index("by_email", ["email"])
+    .index("by_status", ["status"]),
 });

@@ -11,6 +11,7 @@
 import type * as admin_categories from "../admin/categories.js";
 import type * as admin_chat from "../admin/chat.js";
 import type * as admin_media from "../admin/media.js";
+import type * as admin_newsletter from "../admin/newsletter.js";
 import type * as admin_orders from "../admin/orders.js";
 import type * as admin_products from "../admin/products.js";
 import type * as admin_reviews from "../admin/reviews.js";
@@ -27,6 +28,7 @@ import type * as categories from "../categories.js";
 import type * as chat from "../chat.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
+import type * as newsletter from "../newsletter.js";
 import type * as orders from "../orders.js";
 import type * as products from "../products.js";
 import type * as reviews from "../reviews.js";
@@ -46,6 +48,7 @@ declare const fullApi: ApiFromModules<{
   "admin/categories": typeof admin_categories;
   "admin/chat": typeof admin_chat;
   "admin/media": typeof admin_media;
+  "admin/newsletter": typeof admin_newsletter;
   "admin/orders": typeof admin_orders;
   "admin/products": typeof admin_products;
   "admin/reviews": typeof admin_reviews;
@@ -62,6 +65,7 @@ declare const fullApi: ApiFromModules<{
   chat: typeof chat;
   helpers: typeof helpers;
   http: typeof http;
+  newsletter: typeof newsletter;
   orders: typeof orders;
   products: typeof products;
   reviews: typeof reviews;

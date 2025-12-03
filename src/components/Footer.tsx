@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon, MailIcon, PhoneIcon, MapPinIcon } from "lucide-react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
+import NewsletterSubscribe from "@/components/NewsletterSubscribe.tsx";
 
 type SiteConfigWithUrls = {
   siteName: string;
@@ -119,50 +120,58 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Social Media */}
-          <div className="md:col-span-2 lg:col-span-1">
-            <h3 className="font-semibold mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
-              {siteConfig?.socialLinks?.facebook && (
-                <a 
-                  href={siteConfig.socialLinks.facebook} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <FacebookIcon className="h-5 w-5" />
-                </a>
-              )}
-              {siteConfig?.socialLinks?.instagram && (
-                <a 
-                  href={siteConfig.socialLinks.instagram} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <InstagramIcon className="h-5 w-5" />
-                </a>
-              )}
-              {siteConfig?.socialLinks?.twitter && (
-                <a 
-                  href={siteConfig.socialLinks.twitter} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <TwitterIcon className="h-5 w-5" />
-                </a>
-              )}
-              {siteConfig?.socialLinks?.youtube && (
-                <a 
-                  href={siteConfig.socialLinks.youtube} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <YoutubeIcon className="h-5 w-5" />
-                </a>
-              )}
+          {/* Newsletter */}
+          <div className="md:col-span-2 lg:col-span-2">
+            <h3 className="font-semibold mb-4">Stay Connected</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Subscribe to our newsletter for exclusive offers and updates
+            </p>
+            <NewsletterSubscribe variant="footer" />
+            
+            <div className="mt-6">
+              <h4 className="font-semibold text-sm mb-3">Follow Us</h4>
+              <div className="flex space-x-4">
+                {siteConfig?.socialLinks?.facebook && (
+                  <a 
+                    href={siteConfig.socialLinks.facebook} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <FacebookIcon className="h-5 w-5" />
+                  </a>
+                )}
+                {siteConfig?.socialLinks?.instagram && (
+                  <a 
+                    href={siteConfig.socialLinks.instagram} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <InstagramIcon className="h-5 w-5" />
+                  </a>
+                )}
+                {siteConfig?.socialLinks?.twitter && (
+                  <a 
+                    href={siteConfig.socialLinks.twitter} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <TwitterIcon className="h-5 w-5" />
+                  </a>
+                )}
+                {siteConfig?.socialLinks?.youtube && (
+                  <a 
+                    href={siteConfig.socialLinks.youtube} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <YoutubeIcon className="h-5 w-5" />
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>
