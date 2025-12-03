@@ -149,17 +149,12 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
+              className="flex justify-center"
             >
               <Link to="/products">
                 <Button size="lg" className="px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
                   Explore Collection
                   <ArrowRightIcon className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/products">
-                <Button size="lg" variant="outline" className="px-8 py-6 rounded-xl backdrop-blur-sm hover:bg-primary/10 transition-all">
-                  View Catalog
                 </Button>
               </Link>
             </motion.div>
