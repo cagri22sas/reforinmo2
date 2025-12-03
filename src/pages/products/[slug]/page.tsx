@@ -173,8 +173,8 @@ export default function ProductDetailPage() {
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
             {/* Product Images */}
             <div className="lg:col-span-7">
-              <Card className="overflow-hidden border-2">
-                <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-muted to-accent/10">
+              <div className="overflow-hidden rounded-3xl shadow-2xl shadow-primary/10">
+                <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-muted via-background to-accent/10">
                   {product.images[selectedImage] ? (
                     <img
                       src={product.images[selectedImage]}
@@ -187,17 +187,17 @@ export default function ProductDetailPage() {
                     </div>
                   )}
                   {hasDiscount && (
-                    <div className="absolute top-4 right-4 bg-destructive text-destructive-foreground px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-in zoom-in-50">
+                    <div className="absolute top-4 right-4 bg-gradient-to-r from-destructive to-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-in zoom-in-50">
                       SAVE {discountPercentage}%
                     </div>
                   )}
                   {product.stock > 0 && product.stock < 10 && (
-                    <div className="absolute top-4 left-4 bg-orange-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+                    <div className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-amber-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
                       Only {product.stock} left!
                     </div>
                   )}
                 </div>
-              </Card>
+              </div>
               
               {/* Thumbnail Images */}
               {product.images.length > 1 && (
@@ -221,22 +221,34 @@ export default function ProductDetailPage() {
               )}
 
               {/* Trust Badges Below Images */}
-              <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="flex flex-col items-center text-center p-3 bg-muted/50 rounded-lg">
-                  <ShieldCheckIcon className="h-8 w-8 text-primary mb-2" />
-                  <span className="text-xs font-medium">Secure Payment</span>
+              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="group relative flex flex-col items-center text-center p-5 bg-gradient-to-br from-background to-muted/30 rounded-2xl hover:shadow-lg transition-all duration-300 border border-border/50">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                  <div className="relative bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-3 rounded-xl mb-3 group-hover:scale-110 transition-transform">
+                    <ShieldCheckIcon className="h-7 w-7 text-green-600 dark:text-green-400" />
+                  </div>
+                  <span className="text-xs font-semibold relative">Secure Payment</span>
                 </div>
-                <div className="flex flex-col items-center text-center p-3 bg-muted/50 rounded-lg">
-                  <TruckIcon className="h-8 w-8 text-primary mb-2" />
-                  <span className="text-xs font-medium">Fast Shipping</span>
+                <div className="group relative flex flex-col items-center text-center p-5 bg-gradient-to-br from-background to-muted/30 rounded-2xl hover:shadow-lg transition-all duration-300 border border-border/50">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                  <div className="relative bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-3 rounded-xl mb-3 group-hover:scale-110 transition-transform">
+                    <TruckIcon className="h-7 w-7 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <span className="text-xs font-semibold relative">Fast Shipping</span>
                 </div>
-                <div className="flex flex-col items-center text-center p-3 bg-muted/50 rounded-lg">
-                  <RotateCcwIcon className="h-8 w-8 text-primary mb-2" />
-                  <span className="text-xs font-medium">Easy Returns</span>
+                <div className="group relative flex flex-col items-center text-center p-5 bg-gradient-to-br from-background to-muted/30 rounded-2xl hover:shadow-lg transition-all duration-300 border border-border/50">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                  <div className="relative bg-gradient-to-br from-orange-500/10 to-amber-500/10 p-3 rounded-xl mb-3 group-hover:scale-110 transition-transform">
+                    <RotateCcwIcon className="h-7 w-7 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <span className="text-xs font-semibold relative">Easy Returns</span>
                 </div>
-                <div className="flex flex-col items-center text-center p-3 bg-muted/50 rounded-lg">
-                  <PackageCheckIcon className="h-8 w-8 text-primary mb-2" />
-                  <span className="text-xs font-medium">Quality Guaranteed</span>
+                <div className="group relative flex flex-col items-center text-center p-5 bg-gradient-to-br from-background to-muted/30 rounded-2xl hover:shadow-lg transition-all duration-300 border border-border/50">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+                  <div className="relative bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-3 rounded-xl mb-3 group-hover:scale-110 transition-transform">
+                    <PackageCheckIcon className="h-7 w-7 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <span className="text-xs font-semibold relative">Quality Guaranteed</span>
                 </div>
               </div>
             </div>
@@ -349,29 +361,6 @@ export default function ProductDetailPage() {
                     Buy Now
                   </Button>
                 </div>
-
-                {/* Security & Payment Info */}
-                <Card className="bg-green-50/50 dark:bg-green-950/20 border-green-200 dark:border-green-800">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-3">
-                      <LockIcon className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <div className="space-y-2 flex-1">
-                        <p className="font-semibold text-sm text-green-900 dark:text-green-100">
-                          Secure Checkout Guaranteed
-                        </p>
-                        <p className="text-xs text-green-700 dark:text-green-300">
-                          Your payment information is processed securely. We do not store credit card details.
-                        </p>
-                        <div className="flex items-center gap-2 pt-2">
-                          <CreditCardIcon className="h-5 w-5 text-green-600" />
-                          <span className="text-xs font-medium text-green-800 dark:text-green-200">
-                            Powered by Stripe
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
 
                 {/* Benefits List */}
                 <div className="space-y-3 pt-2">
