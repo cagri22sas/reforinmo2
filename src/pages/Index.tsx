@@ -103,8 +103,8 @@ export default function Index() {
             scale,
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/85 to-background/70" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-transparent to-background/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/60 to-background/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-transparent to-background/70" />
         </motion.div>
         
         {/* 3D Floating yacht elements */}
@@ -138,15 +138,15 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/15 backdrop-blur-md border border-primary/30 mb-10 shadow-xl"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 backdrop-blur-md border border-primary/30 mb-6 shadow-xl"
             >
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
               >
-                <SparklesIcon className="h-5 w-5 text-primary" />
+                <SparklesIcon className="h-4 w-4 text-primary" />
               </motion.div>
-              <span className="text-sm font-bold text-primary tracking-wide">PREMIUM MARINE LIFESTYLE</span>
+              <span className="text-xs font-bold text-primary tracking-wide">PREMIUM MARINE LIFESTYLE</span>
             </motion.div>
 
             <motion.div
@@ -160,7 +160,7 @@ export default function Index() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="text-6xl sm:text-7xl lg:text-8xl xl:text-[10rem] font-bold text-balance mb-10 leading-[1] tracking-tighter"
+                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-balance mb-6 leading-tight tracking-tight"
               >
                 Where Luxury{" "}
                 <br className="hidden sm:block" />
@@ -169,7 +169,7 @@ export default function Index() {
                     Meets the Sea
                   </span>
                   <motion.div
-                    className="absolute -bottom-3 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-primary to-transparent blur-sm"
+                    className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent blur-sm"
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 1.2, delay: 1 }}
@@ -182,7 +182,7 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-xl sm:text-2xl lg:text-4xl text-foreground/80 mb-14 text-balance max-w-4xl mx-auto leading-relaxed font-light backdrop-blur-sm"
+              className="text-base sm:text-lg lg:text-xl text-foreground/80 mb-8 text-balance max-w-3xl mx-auto leading-relaxed font-light"
             >
               Experience the ultimate in floating luxury with our handcrafted marine platforms and accessories
             </motion.p>
@@ -195,21 +195,21 @@ export default function Index() {
             >
               <Link to="/products">
                 <motion.div
-                  whileHover={{ scale: 1.08, y: -4 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button size="lg" className="group text-lg px-14 py-8 rounded-2xl shadow-2xl hover:shadow-primary/40 transition-all duration-300 bg-gradient-to-r from-primary via-blue-600 to-primary hover:from-blue-600 hover:to-primary border-2 border-primary/20">
+                  <Button size="lg" className="group text-base px-8 py-6 rounded-xl shadow-2xl hover:shadow-primary/40 transition-all duration-300 bg-gradient-to-r from-primary via-blue-600 to-primary hover:from-blue-600 hover:to-primary border-2 border-primary/20">
                     Explore Collection
-                    <ArrowRightIcon className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
+                    <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
                   </Button>
                 </motion.div>
               </Link>
               <Link to="/products">
                 <motion.div
-                  whileHover={{ scale: 1.08, y: -4 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button size="lg" variant="outline" className="text-lg px-14 py-8 rounded-2xl border-2 backdrop-blur-md bg-background/60 hover:bg-background/90 hover:border-primary transition-all duration-300">
+                  <Button size="lg" variant="outline" className="text-base px-8 py-6 rounded-xl border-2 backdrop-blur-md bg-background/60 hover:bg-background/90 hover:border-primary transition-all duration-300">
                     View Catalog
                   </Button>
                 </motion.div>
@@ -303,14 +303,14 @@ export default function Index() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-center mb-20"
+              className="text-center mb-16"
             >
-              <h2 className="text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 tracking-tight">
                 <span className="bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
                   Shop by Category
                 </span>
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Discover our curated collections</p>
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto">Discover our curated collections</p>
             </motion.div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -392,14 +392,14 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-20"
+            className="text-center mb-16"
           >
-            <h2 className="text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4 tracking-tight">
               <span className="bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
                 Featured Collection
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Handpicked luxury pieces for the discerning water enthusiast
             </p>
           </motion.div>
@@ -534,15 +534,15 @@ export default function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-12 shadow-2xl"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-8 shadow-2xl"
             >
-              <ShipIcon className="h-5 w-5 text-white" />
-              <span className="text-sm font-bold text-white tracking-wider">EXCLUSIVE COLLECTION</span>
+              <ShipIcon className="h-4 w-4 text-white" />
+              <span className="text-xs font-bold text-white tracking-wider">EXCLUSIVE COLLECTION</span>
             </motion.div>
 
             {/* Main Heading */}
             <motion.h2
-              className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold mb-10 text-white tracking-tight drop-shadow-2xl"
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 text-white tracking-tight drop-shadow-2xl"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -557,7 +557,7 @@ export default function Index() {
 
             {/* Description */}
             <motion.p
-              className="text-2xl sm:text-3xl lg:text-4xl text-white/95 mb-16 max-w-4xl leading-relaxed font-light drop-shadow-lg"
+              className="text-base sm:text-lg lg:text-xl text-white/95 mb-10 max-w-3xl leading-relaxed font-light drop-shadow-lg"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -575,21 +575,21 @@ export default function Index() {
             >
               <Link to="/products">
                 <motion.div
-                  whileHover={{ scale: 1.1, y: -6 }}
+                  whileHover={{ scale: 1.05, y: -3 }}
                   whileTap={{ scale: 0.95 }}
                   className="group"
                 >
                   <Button 
                     size="lg" 
-                    className="text-xl px-16 py-10 rounded-3xl shadow-2xl hover:shadow-white/30 transition-all duration-500 font-bold bg-white text-primary hover:bg-white/90 border-4 border-white/50"
+                    className="text-base px-10 py-6 rounded-xl shadow-2xl hover:shadow-white/30 transition-all duration-500 font-bold bg-white text-primary hover:bg-white/90 border-2 border-white/50"
                   >
                     Shop Collection
                     <motion.div
-                      className="ml-3"
+                      className="ml-2"
                       animate={{ x: [0, 5, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
                     >
-                      <ArrowRightIcon className="h-7 w-7" />
+                      <ArrowRightIcon className="h-5 w-5" />
                     </motion.div>
                   </Button>
                 </motion.div>
@@ -602,18 +602,18 @@ export default function Index() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex items-center gap-8 mt-16 text-white/90 text-sm"
+              className="flex items-center gap-6 mt-10 text-white/90 text-xs sm:text-sm"
             >
               <div className="flex items-center gap-2">
-                <ShieldCheckIcon className="h-5 w-5" />
+                <ShieldCheckIcon className="h-4 w-4" />
                 <span className="font-semibold">Secure Checkout</span>
               </div>
               <div className="flex items-center gap-2">
-                <AwardIcon className="h-5 w-5" />
+                <AwardIcon className="h-4 w-4" />
                 <span className="font-semibold">Premium Quality</span>
               </div>
               <div className="flex items-center gap-2">
-                <ShipIcon className="h-5 w-5" />
+                <ShipIcon className="h-4 w-4" />
                 <span className="font-semibold">Free Shipping</span>
               </div>
             </motion.div>
