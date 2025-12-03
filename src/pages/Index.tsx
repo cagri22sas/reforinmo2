@@ -8,7 +8,7 @@ import Testimonials from "@/components/Testimonials.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link } from "react-router-dom";
-import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon } from "lucide-react";
+import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef } from "react";
 
@@ -60,10 +60,10 @@ export default function Index() {
   };
 
   const features = [
-    { icon: ShipIcon, title: "Free Shipping", description: "On all orders over €500" },
-    { icon: ShieldCheckIcon, title: "Secure Checkout", description: "Powered by Stripe" },
-    { icon: AwardIcon, title: "Premium Quality", description: "Handcrafted excellence" },
-    { icon: SparklesIcon, title: "Luxury Design", description: "Elegant & timeless" },
+    { icon: UsersIcon, title: "Expert Consultation", description: "Personalized guidance from marine specialists" },
+    { icon: ShieldCheckIcon, title: "Lifetime Warranty", description: "Protected investment in quality" },
+    { icon: LeafIcon, title: "Eco-Friendly", description: "Sustainable materials & practices" },
+    { icon: ClockIcon, title: "Fast Delivery", description: "Global shipping within 7-14 days" },
   ];
 
   return (

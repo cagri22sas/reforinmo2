@@ -131,9 +131,9 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-4">
-              <p>{siteConfig?.footerText || `© ${currentYear} YachtBeach. All rights reserved.`}</p>
+          <div className="flex flex-col items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <p className="text-center">{siteConfig?.footerText || `© ${currentYear} YachtBeach. All rights reserved.`}</p>
               <div className="flex items-center gap-2">
                 <div className="group relative">
                   <div className="w-10 h-7 rounded bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white text-[10px] font-bold shadow-md hover:shadow-lg transition-all hover:scale-110 hover:-rotate-3 cursor-pointer">
