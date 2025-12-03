@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import type { Doc } from "@/convex/_generated/dataModel.d.ts";
 import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 
 type Product = Doc<"products"> & {
   category: Doc<"categories"> | null;
@@ -21,6 +22,8 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const addToCart = useMutation(api.cart.add);
   const [sessionId, setSessionId] = useState<string>("");
+  const { language } = useLanguage();
+  const t = translations[language];
   
   useEffect(() => {
     let id = localStorage.getItem("guestSessionId");
@@ -41,9 +44,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
     try {
       await addToCart({ productId: product._id, quantity: 1, sessionId });
-      toast.success("Added to cart");
+      toast.success(t.addToCart);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to add item");
+      toast.error(error instanceof Error ? error.message : t.errorOccurred);
     }
   };
 
@@ -62,7 +65,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </>
           ) : (
             <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              No Image
+              {t.loading}
             </div>
           )}
           <div className="absolute top-4 left-4 z-10">
@@ -75,7 +78,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
           {product.stock === 0 && (
             <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex items-center justify-center">
-              <span className="text-lg font-bold">Out of Stock</span>
+              <span className="text-lg font-bold">{t.outOfStock}</span>
             </div>
           )}
         </div>

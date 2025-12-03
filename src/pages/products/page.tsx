@@ -17,10 +17,13 @@ import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
 import { useDebounce } from "@/hooks/use-debounce.ts";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 
 export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get("category") as Id<"categories"> | null;
+  const { language } = useLanguage();
+  const t = translations[language];
   
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Id<"categories"> | undefined>(initialCategory || undefined);
@@ -84,10 +87,10 @@ export default function ProductsPage() {
           {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2">
-              {selectedCategoryData ? selectedCategoryData.name : "All Products"}
+              {selectedCategoryData ? selectedCategoryData.name : t.allProducts}
             </h1>
             <p className="text-muted-foreground">
-              {selectedCategoryData ? selectedCategoryData.description : "Explore our complete premium collection"}
+              {selectedCategoryData ? selectedCategoryData.description : (language === 'en' ? 'Explore our complete premium collection' : 'Explora nuestra colección premium completa')}
             </p>
           </div>
 
@@ -99,7 +102,7 @@ export default function ProductsPage() {
                   <CardTitle className="flex items-center justify-between">
                     <span className="flex items-center gap-2">
                       <SlidersHorizontal className="h-5 w-5" />
-                      Filters
+                      {t.filters}
                     </span>
                     {hasActiveFilters && (
                       <Button
@@ -108,7 +111,7 @@ export default function ProductsPage() {
                         onClick={clearFilters}
                         className="h-8"
                       >
-                        Clear
+                        {language === 'en' ? 'Clear' : 'Limpiar'}
                       </Button>
                     )}
                   </CardTitle>
@@ -116,11 +119,11 @@ export default function ProductsPage() {
                 <CardContent className="space-y-6">
                   {/* Search */}
                   <div className="space-y-2">
-                    <Label>Search</Label>
+                    <Label>{t.search}</Label>
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search products..."
+                        placeholder={t.searchProducts}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-9"
@@ -130,7 +133,7 @@ export default function ProductsPage() {
 
                   {/* Categories */}
                   <div className="space-y-2">
-                    <Label>Category</Label>
+                    <Label>{t.category}</Label>
                     <div className="space-y-2">
                       <Button
                         variant={!selectedCategory ? "default" : "outline"}
@@ -138,7 +141,7 @@ export default function ProductsPage() {
                         className="w-full justify-start"
                         size="sm"
                       >
-                        All Categories
+                        {language === 'en' ? 'All Categories' : 'Todas las Categorías'}
                       </Button>
                       {categories?.map((category) => (
                         <Button
@@ -156,7 +159,7 @@ export default function ProductsPage() {
 
                   {/* Price Range */}
                   <div className="space-y-3">
-                    <Label>Price Range</Label>
+                    <Label>{t.priceRange}</Label>
                     <div className="px-2">
                       <Slider
                         min={0}
@@ -181,23 +184,23 @@ export default function ProductsPage() {
                       onCheckedChange={(checked) => setInStockOnly(checked as boolean)}
                     />
                     <Label htmlFor="inStock" className="cursor-pointer">
-                      In Stock Only
+                      {language === 'en' ? 'In Stock Only' : 'Solo en Stock'}
                     </Label>
                   </div>
 
                   {/* Sort By */}
                   <div className="space-y-2">
-                    <Label>Sort By</Label>
+                    <Label>{t.sortBy}</Label>
                     <Select value={sortBy} onValueChange={(value) => setSortBy(value as typeof sortBy)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="newest">Newest First</SelectItem>
-                        <SelectItem value="price_asc">Price: Low to High</SelectItem>
-                        <SelectItem value="price_desc">Price: High to Low</SelectItem>
-                        <SelectItem value="name_asc">Name: A to Z</SelectItem>
-                        <SelectItem value="name_desc">Name: Z to A</SelectItem>
+                        <SelectItem value="newest">{language === 'en' ? 'Newest First' : 'Más Reciente'}</SelectItem>
+                        <SelectItem value="price_asc">{language === 'en' ? 'Price: Low to High' : 'Precio: Menor a Mayor'}</SelectItem>
+                        <SelectItem value="price_desc">{language === 'en' ? 'Price: High to Low' : 'Precio: Mayor a Menor'}</SelectItem>
+                        <SelectItem value="name_asc">{language === 'en' ? 'Name: A to Z' : 'Nombre: A a Z'}</SelectItem>
+                        <SelectItem value="name_desc">{language === 'en' ? 'Name: Z to A' : 'Nombre: Z a A'}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -213,10 +216,10 @@ export default function ProductsPage() {
                 className="w-full mb-4"
               >
                 <SlidersHorizontal className="h-4 w-4 mr-2" />
-                Filters
+                {t.filters}
                 {hasActiveFilters && (
                   <Badge variant="secondary" className="ml-2">
-                    Active
+                    {language === 'en' ? 'Active' : 'Activo'}
                   </Badge>
                 )}
               </Button>
@@ -334,10 +337,10 @@ export default function ProductsPage() {
                 <p className="text-sm text-muted-foreground">
                   {products ? (
                     <>
-                      Showing <span className="font-semibold text-foreground">{products.length}</span> product{products.length !== 1 && "s"}
+                      {language === 'en' ? 'Showing' : 'Mostrando'} <span className="font-semibold text-foreground">{products.length}</span> {language === 'en' ? (products.length !== 1 ? 'products' : 'product') : (products.length !== 1 ? 'productos' : 'producto')}
                     </>
                   ) : (
-                    "Loading..."
+                    t.loading
                   )}
                 </p>
               </div>
@@ -353,13 +356,13 @@ export default function ProductsPage() {
                 <Card className="p-12">
                   <div className="text-center">
                     <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No products found</h3>
+                    <h3 className="text-lg font-semibold mb-2">{t.noResults}</h3>
                     <p className="text-muted-foreground mb-4">
-                      Try adjusting your filters or search terms
+                      {t.noResultsDesc}
                     </p>
                     {hasActiveFilters && (
                       <Button onClick={clearFilters}>
-                        Clear All Filters
+                        {t.clearFilters}
                       </Button>
                     )}
                   </div>

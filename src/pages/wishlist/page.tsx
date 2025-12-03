@@ -29,12 +29,15 @@ import { ConvexError } from "convex/values";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
 import SEO from "@/components/SEO.tsx";
 import { useState, useEffect } from "react";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 
 function WishlistContent() {
   const wishlistItems = useQuery(api.wishlist.getWishlist);
   const removeFromWishlist = useMutation(api.wishlist.removeFromWishlist);
   const addToCart = useMutation(api.cart.add);
   const [sessionId, setSessionId] = useState<string>("");
+  const { language } = useLanguage();
+  const t = translations[language];
 
   useEffect(() => {
     let id = localStorage.getItem("guestSessionId");
@@ -48,13 +51,13 @@ function WishlistContent() {
   const handleRemove = async (productId: Id<"products">) => {
     try {
       await removeFromWishlist({ productId });
-      toast.success("Removed from wishlist");
+      toast.success(t.removeFromWishlist);
     } catch (error) {
       if (error instanceof ConvexError) {
         const { message } = error.data as { code: string; message: string };
         toast.error(message);
       } else {
-        toast.error("Failed to remove from wishlist");
+        toast.error(t.errorOccurred);
       }
     }
   };
@@ -62,13 +65,13 @@ function WishlistContent() {
   const handleAddToCart = async (productId: Id<"products">) => {
     try {
       await addToCart({ productId, quantity: 1, sessionId });
-      toast.success("Added to cart");
+      toast.success(t.addToCart);
     } catch (error) {
       if (error instanceof ConvexError) {
         const { message } = error.data as { code: string; message: string };
         toast.error(message);
       } else {
-        toast.error("Failed to add to cart");
+        toast.error(t.errorOccurred);
       }
     }
   };
@@ -97,14 +100,14 @@ function WishlistContent() {
             <EmptyMedia variant="icon">
               <Heart />
             </EmptyMedia>
-            <EmptyTitle>Your wishlist is empty</EmptyTitle>
+            <EmptyTitle>{t.wishlistEmpty}</EmptyTitle>
             <EmptyDescription>
-              Start adding products you love to your wishlist
+              {t.wishlistEmptyDesc}
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <Button asChild>
-              <Link to="/products">Browse Products</Link>
+              <Link to="/products">{t.products}</Link>
             </Button>
           </EmptyContent>
         </Empty>
@@ -115,10 +118,10 @@ function WishlistContent() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">My Wishlist</h1>
+        <h1 className="text-4xl font-bold mb-2">{t.myWishlistTitle}</h1>
         <p className="text-muted-foreground">
-          {wishlistItems.length} {wishlistItems.length === 1 ? "item" : "items"}{" "}
-          saved
+          {wishlistItems.length} {wishlistItems.length === 1 ? (language === 'en' ? 'item' : 'artículo') : (language === 'en' ? 'items' : 'artículos')}{" "}
+          {language === 'en' ? 'saved' : 'guardados'}
         </p>
       </div>
 
@@ -191,7 +194,7 @@ function WishlistContent() {
                   disabled={product.stock === 0}
                 >
                   <ShoppingCart className="h-4 w-4 mr-2" />
-                  {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+                  {product.stock === 0 ? t.outOfStock : t.addToCart}
                 </Button>
               </CardFooter>
             </Card>
@@ -203,11 +206,14 @@ function WishlistContent() {
 }
 
 export default function WishlistPage() {
+  const { language } = useLanguage();
+  const t = translations[language];
+  
   return (
     <>
       <SEO
-        title="My Wishlist"
-        description="View and manage your favorite products"
+        title={t.myWishlistTitle}
+        description={language === 'en' ? 'View and manage your favorite products' : 'Ver y gestionar tus productos favoritos'}
       />
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -219,9 +225,9 @@ export default function WishlistPage() {
                   <EmptyMedia variant="icon">
                     <Heart />
                   </EmptyMedia>
-                  <EmptyTitle>Sign in to view your wishlist</EmptyTitle>
+                  <EmptyTitle>{language === 'en' ? 'Sign in to view your wishlist' : 'Inicia sesión para ver tu lista de deseos'}</EmptyTitle>
                   <EmptyDescription>
-                    Save your favorite products for later
+                    {language === 'en' ? 'Save your favorite products for later' : 'Guarda tus productos favoritos para más tarde'}
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>

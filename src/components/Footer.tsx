@@ -4,7 +4,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import NewsletterSubscribe from "@/components/NewsletterSubscribe.tsx";
 import { motion } from "motion/react";
-import { useLanguage, getPageSlug } from "@/hooks/use-language.ts";
+import { useLanguage, getPageSlug, translations } from "@/hooks/use-language.ts";
 
 type SiteConfigWithUrls = {
   siteName: string;
@@ -31,6 +31,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
   const siteConfig = useQuery(api.admin.siteConfig.get, {}) as SiteConfigWithUrls | null | undefined;
   const { language } = useLanguage();
+  const t = translations[language];
 
   return (
     <footer className="relative bg-gradient-to-br from-muted/30 via-background to-muted/20 border-t overflow-hidden">
@@ -168,14 +169,14 @@ export default function Footer() {
             className="lg:col-span-2"
           >
             <h3 className="font-bold text-lg mb-6 bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-              Quick Links
+              {t.quickLinks}
             </h3>
             <ul className="space-y-3 text-sm">
               {[
-                { to: "/products", label: "All Products" },
-                { to: "/stores", label: "Store Locator" },
-                { to: "/about", label: "About Us" },
-                { to: "/contact", label: "Contact" },
+                { to: "/products", label: t.products },
+                { to: "/stores", label: t.stores },
+                { to: "/about", label: t.about },
+                { to: "/contact", label: t.contact },
               ].map((link, i) => (
                 <motion.li
                   key={link.to}
@@ -206,13 +207,13 @@ export default function Footer() {
             className="lg:col-span-2"
           >
             <h3 className="font-bold text-lg mb-6 bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-              Customer Service
+              {t.customerService}
             </h3>
             <ul className="space-y-3 text-sm">
               {[
-                { to: "/shipping", label: "Shipping Info" },
-                { to: "/returns", label: "Return Policy" },
-                { to: "/faq", label: "FAQ" },
+                { to: "/shipping", label: t.shippingInfo },
+                { to: "/returns", label: t.returnPolicy },
+                { to: "/faq", label: t.faq },
               ].map((link, i) => (
                 <motion.li
                   key={link.to}
@@ -243,14 +244,14 @@ export default function Footer() {
             className="lg:col-span-2"
           >
             <h3 className="font-bold text-lg mb-6 bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-              Legal
+              {t.legal}
             </h3>
             <ul className="space-y-3 text-sm">
               {[
-                { basePath: "privacy", labelEn: "Privacy Policy", labelEs: "Política de Privacidad" },
-                { basePath: "terms", labelEn: "Terms of Service", labelEs: "Términos de Servicio" },
-                { basePath: "imprint", labelEn: "Imprint", labelEs: "Aviso Legal" },
-                { basePath: "warranty", labelEn: "Warranty", labelEs: "Garantía" },
+                { basePath: "privacy", label: t.privacy },
+                { basePath: "terms", label: t.terms },
+                { basePath: "imprint", label: t.imprint },
+                { basePath: "warranty", label: t.warranty },
               ].map((link, i) => (
                 <motion.li
                   key={link.basePath}
@@ -265,7 +266,7 @@ export default function Footer() {
                     className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
-                    {language === "en" ? link.labelEn : link.labelEs}
+                    {link.label}
                   </Link>
                 </motion.li>
               ))}
@@ -289,10 +290,10 @@ export default function Footer() {
               
               <div className="relative z-10">
                 <h3 className="font-bold text-lg mb-3 bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent">
-                  Stay Connected
+                  {t.stayConnected}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                  Subscribe to our newsletter for exclusive offers and updates
+                  {t.newsletterSubscribe}
                 </p>
                 <NewsletterSubscribe variant="footer" />
               </div>

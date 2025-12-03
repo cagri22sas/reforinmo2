@@ -11,11 +11,14 @@ import { Link } from "react-router-dom";
 import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef } from "react";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 
 export default function Index() {
   const featuredProducts = useQuery(api.products.list, { featured: true });
   const categories = useQuery(api.categories.list, {});
   const seoSettings = useQuery(api.admin.seoSettings.get);
+  const { language } = useLanguage();
+  const t = translations[language];
   
   const { scrollYProgress } = useScroll();
   const heroRef = useRef<HTMLDivElement>(null);
@@ -60,10 +63,10 @@ export default function Index() {
   };
 
   const features = [
-    { icon: UsersIcon, title: "Expert Consultation", description: "Personalized guidance from marine specialists" },
-    { icon: ShieldCheckIcon, title: "Lifetime Warranty", description: "Protected investment in quality" },
-    { icon: LeafIcon, title: "Eco-Friendly", description: "Sustainable materials & practices" },
-    { icon: ClockIcon, title: "Fast Delivery", description: "Global shipping within 7-14 days" },
+    { icon: UsersIcon, title: t.expertConsultation, description: t.expertConsultationDesc },
+    { icon: ShieldCheckIcon, title: t.lifetimeWarranty, description: t.lifetimeWarrantyDesc },
+    { icon: LeafIcon, title: t.ecoFriendly, description: t.ecoFriendlyDesc },
+    { icon: ClockIcon, title: t.fastDelivery, description: t.fastDeliveryDesc },
   ];
 
   return (
@@ -120,7 +123,7 @@ export default function Index() {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-6"
             >
               <SparklesIcon className="h-3.5 w-3.5 text-primary" />
-              <span className="text-xs font-semibold text-primary tracking-wide">PREMIUM MARINE LIFESTYLE</span>
+              <span className="text-xs font-semibold text-primary tracking-wide">{t.premiumMarineLifestyle}</span>
             </motion.div>
 
             <motion.h1
@@ -129,10 +132,10 @@ export default function Index() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-balance mb-6 leading-tight"
             >
-              Where Luxury{" "}
+              {t.heroTitle}{" "}
               <br className="hidden sm:block" />
               <span className="bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                Meets the Sea
+                {t.heroTitleHighlight}
               </span>
             </motion.h1>
 
@@ -142,7 +145,7 @@ export default function Index() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg text-foreground/80 mb-8 text-balance max-w-2xl mx-auto"
             >
-              Experience the ultimate in floating luxury with our handcrafted marine platforms and accessories
+              {t.heroDescription}
             </motion.p>
 
             <motion.div
@@ -153,7 +156,7 @@ export default function Index() {
             >
               <Link to="/products">
                 <Button size="lg" className="px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                  Explore Collection
+                  {t.exploreCollection}
                   <ArrowRightIcon className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -252,10 +255,10 @@ export default function Index() {
             >
               <h2 className="text-3xl lg:text-4xl font-bold mb-4 tracking-tight">
                 <span className="bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-                  Shop by Category
+                  {t.shopByCategory}
                 </span>
               </h2>
-              <p className="text-base text-muted-foreground max-w-2xl mx-auto">Discover our curated collections</p>
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto">{t.discoverCurated}</p>
             </motion.div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -316,7 +319,7 @@ export default function Index() {
                           whileHover={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.3 }}
                         >
-                          <span>Explore</span>
+                          <span>{t.explore}</span>
                           <ArrowRightIcon className="ml-1 h-4 w-4" />
                         </motion.div>
                       </div>
@@ -341,11 +344,11 @@ export default function Index() {
           >
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 tracking-tight">
               <span className="bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-                Featured Collection
+                {t.featuredCollection}
               </span>
             </h2>
             <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Handpicked luxury pieces for the discerning water enthusiast
+              {t.featuredDescription}
             </p>
           </motion.div>
           
@@ -357,7 +360,7 @@ export default function Index() {
             </div>
           ) : featuredProducts.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-lg text-muted-foreground">No featured products available yet.</p>
+              <p className="text-lg text-muted-foreground">{t.noFeaturedProducts}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -386,7 +389,7 @@ export default function Index() {
             <Link to="/products">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
                 <Button size="lg" variant="outline" className="text-base px-10 py-7 rounded-2xl border-2 backdrop-blur-sm bg-background/50 hover:bg-background/80 hover:border-primary/50 transition-all duration-300">
-                  View All Products
+                  {t.viewAllProducts}
                   <ArrowRightIcon className="ml-2 h-5 w-5" />
                 </Button>
               </motion.div>
@@ -485,7 +488,7 @@ export default function Index() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-8 shadow-2xl"
             >
               <ShipIcon className="h-4 w-4 text-white" />
-              <span className="text-xs font-bold text-white tracking-wider">EXCLUSIVE COLLECTION</span>
+              <span className="text-xs font-bold text-white tracking-wider">{t.exclusiveCollection}</span>
             </motion.div>
 
             {/* Main Heading */}
@@ -496,10 +499,10 @@ export default function Index() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              Begin Your
+              {t.ctaTitle}
               <br />
               <span className="bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent">
-                Journey
+                {t.ctaTitleHighlight}
               </span>
             </motion.h2>
 
@@ -511,7 +514,7 @@ export default function Index() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              Transform your aquatic experience with our exclusive collection of premium floating platforms
+              {t.ctaDescription}
             </motion.p>
 
             {/* CTA Button */}
@@ -531,7 +534,7 @@ export default function Index() {
                     size="lg" 
                     className="text-base px-10 py-6 rounded-xl shadow-2xl hover:shadow-white/30 transition-all duration-500 font-bold bg-white text-primary hover:bg-white/90 border-2 border-white/50"
                   >
-                    Shop Collection
+                    {t.shopCollection}
                     <motion.div
                       className="ml-2"
                       animate={{ x: [0, 5, 0] }}
@@ -554,15 +557,15 @@ export default function Index() {
             >
               <div className="flex items-center gap-2">
                 <ShieldCheckIcon className="h-4 w-4" />
-                <span className="font-semibold">Secure Checkout</span>
+                <span className="font-semibold">{t.secureCheckout}</span>
               </div>
               <div className="flex items-center gap-2">
                 <AwardIcon className="h-4 w-4" />
-                <span className="font-semibold">Premium Quality</span>
+                <span className="font-semibold">{t.premiumQuality}</span>
               </div>
               <div className="flex items-center gap-2">
                 <ShipIcon className="h-4 w-4" />
-                <span className="font-semibold">Free Shipping</span>
+                <span className="font-semibold">{t.freeShipping}</span>
               </div>
             </motion.div>
           </div>

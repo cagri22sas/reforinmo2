@@ -2,9 +2,12 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 
 export default function Testimonials() {
   const testimonials = useQuery(api.testimonials.getFeatured);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   if (!testimonials || testimonials.length === 0) {
     return null;
@@ -14,9 +17,9 @@ export default function Testimonials() {
     <section className="py-16 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-3">Customer Testimonials</h2>
+          <h2 className="text-3xl font-bold mb-3">{t.testimonialsTitle}</h2>
           <p className="text-muted-foreground text-lg">
-            Hear what our customers say about their experience
+            {t.testimonialsDesc}
           </p>
         </div>
         

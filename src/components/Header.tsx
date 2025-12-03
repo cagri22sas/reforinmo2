@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { useAuth } from "@/hooks/use-auth.ts";
-import { useLanguage } from "@/hooks/use-language.ts";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 import { useState, useEffect } from "react";
 
 type SiteConfigWithUrls = {
@@ -44,6 +44,7 @@ export default function Header() {
   const siteConfig = useQuery(api.admin.siteConfig.get, {}) as SiteConfigWithUrls | null | undefined;
   const { signoutRedirect } = useAuth();
   const { language, setLanguage } = useLanguage();
+  const t = translations[language];
   
   // Generate or retrieve session ID for guest users
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -110,7 +111,7 @@ export default function Header() {
                     {siteConfig?.siteName || "YachtBeach"}
                   </div>
                   <div className="text-[10px] text-muted-foreground/80 tracking-widest uppercase font-medium">
-                    Marine Excellence
+                    {t.marineExcellence}
                   </div>
                 </div>
               </>
@@ -121,7 +122,7 @@ export default function Header() {
           <nav className="hidden lg:flex items-center space-x-1">
             <Link to="/products">
               <Button variant="ghost" className="text-sm font-medium hover:text-primary transition-colors">
-                All Products
+                {t.allProducts}
               </Button>
             </Link>
             {categories?.slice(0, 3).map((category) => (
@@ -189,7 +190,7 @@ export default function Header() {
               {isAdmin && (
                 <Link to="/admin">
                   <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
-                    Admin
+                    {t.admin}
                   </Button>
                 </Link>
               )}
@@ -208,24 +209,24 @@ export default function Header() {
                   <DropdownMenuItem asChild>
                     <Link to="/orders" className="cursor-pointer">
                       <PackageIcon className="h-4 w-4 mr-2" />
-                      My Orders
+                      {t.myOrders}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="cursor-pointer">
                       <UserIcon className="h-4 w-4 mr-2" />
-                      My Profile
+                      {t.myProfile}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/wishlist" className="cursor-pointer">
                       <Heart className="h-4 w-4 mr-2" />
-                      My Wishlist
+                      {t.myWishlist}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => signoutRedirect()} className="cursor-pointer text-destructive focus:text-destructive">
-                    Sign Out
+                    {t.signOut}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
