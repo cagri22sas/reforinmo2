@@ -1,6 +1,6 @@
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon } from "lucide-react";
+import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useQuery } from "convex/react";
@@ -61,6 +61,9 @@ export default function Header() {
     sessionId ? { sessionId } : "skip"
   );
 
+  // Get wishlist count for authenticated users
+  const wishlistCount = useQuery(api.wishlist.getWishlistCount, {});
+
   return (
     <header className="border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,6 +109,19 @@ export default function Header() {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-2">
+            <Authenticated>
+              <Link to="/wishlist">
+                <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors">
+                  <Heart className="h-5 w-5" />
+                  {wishlistCount !== undefined && wishlistCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg animate-in zoom-in-50">
+                      {wishlistCount > 9 ? '9+' : wishlistCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
+            </Authenticated>
+            
             <Link to="/cart">
               <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors">
                 <ShoppingCartIcon className="h-5 w-5" />
@@ -147,6 +163,12 @@ export default function Header() {
                     <Link to="/profile" className="cursor-pointer">
                       <UserIcon className="h-4 w-4 mr-2" />
                       My Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/wishlist" className="cursor-pointer">
+                      <Heart className="h-4 w-4 mr-2" />
+                      My Wishlist
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

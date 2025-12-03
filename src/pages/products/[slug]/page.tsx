@@ -34,6 +34,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth.ts";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton } from "@/components/ui/signin.tsx";
+import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
@@ -402,15 +403,23 @@ export default function ProductDetailPage() {
                     <ShoppingCartIcon className="mr-3 h-6 w-6" />
                     Add to Cart
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                    className="w-full h-14 text-lg font-semibold"
-                    disabled={product.stock === 0}
-                    onClick={handleBuyNow}
-                  >
-                    Buy Now
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button
+                      size="lg"
+                      variant="secondary"
+                      className="flex-1 h-14 text-lg font-semibold"
+                      disabled={product.stock === 0}
+                      onClick={handleBuyNow}
+                    >
+                      Buy Now
+                    </Button>
+                    <WishlistButton
+                      productId={product._id}
+                      variant="text"
+                      size="lg"
+                      className="h-14 px-6"
+                    />
+                  </div>
                 </div>
 
                 {/* Benefits List */}

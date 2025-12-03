@@ -7,6 +7,7 @@ import { api } from "@/convex/_generated/api.js";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import type { Doc } from "@/convex/_generated/dataModel.d.ts";
+import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
 
 type Product = Doc<"products"> & {
   category: Doc<"categories"> | null;
@@ -63,6 +64,9 @@ export default function ProductCard({ product }: ProductCardProps) {
               No Image
             </div>
           )}
+          <div className="absolute top-4 left-4 z-10">
+            <WishlistButton productId={product._id} className="bg-background/80 backdrop-blur-sm hover:bg-background" />
+          </div>
           {hasDiscount && (
             <div className="absolute top-4 right-4 bg-destructive text-destructive-foreground px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
               {discountPercentage}% OFF

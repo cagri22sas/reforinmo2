@@ -31,6 +31,7 @@ import AdminStripeConfigPage from "./pages/admin/stripe-config/page.tsx";
 import AdminStripeDashboardPage from "./pages/admin/stripe-dashboard/page.tsx";
 import AdminMediaPage from "./pages/admin/media/page.tsx";
 import AdminSEOPage from "./pages/admin/seo/page.tsx";
+import WishlistPage from "./pages/wishlist/page.tsx";
 
 export default function App() {
   return (
@@ -48,6 +49,7 @@ export default function App() {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/shipping" element={<ShippingPage />} />
