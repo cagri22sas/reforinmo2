@@ -250,7 +250,7 @@ export default function Index() {
       </section>
 
       {/* Features with 3D cards */}
-      <section className="py-32 relative">
+      <section className="py-16 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {features.map((feature, index) => {
@@ -296,7 +296,7 @@ export default function Index() {
 
       {/* Categories with 3D depth */}
       {categories && categories.length > 0 && (
-        <section className="py-32 relative">
+        <section className="py-16 relative">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -385,7 +385,7 @@ export default function Index() {
       )}
 
       {/* Featured Products */}
-      <section className="py-32 relative">
+      <section className="py-16 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -451,7 +451,7 @@ export default function Index() {
       </section>
 
       {/* CTA Section - Centered with Stunning Yacht Design */}
-      <section className="py-32 lg:py-48 relative overflow-hidden">
+      <section className="py-16 lg:py-24 relative overflow-hidden">
         {/* 3D Yacht Background with Parallax */}
         <motion.div
           className="absolute inset-0"

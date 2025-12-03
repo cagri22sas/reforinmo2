@@ -53,3 +53,50 @@ export const get = query({
     return { ...product, category };
   },
 });
+
+export const getRelated = query({
+  args: { 
+    productId: v.id("products"),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const limit = args.limit ?? 4;
+    const product = await ctx.db.get(args.productId);
+    
+    if (!product) {
+      return [];
+    }
+
+    // First, check if product has manually set related products
+    if (product.relatedProducts && product.relatedProducts.length > 0) {
+      const relatedProducts = await Promise.all(
+        product.relatedProducts.slice(0, limit).map(async (id) => {
+          const relatedProduct = await ctx.db.get(id);
+          if (!relatedProduct || !relatedProduct.active) return null;
+          const category = await ctx.db.get(relatedProduct.categoryId);
+          return { ...relatedProduct, category };
+        })
+      );
+      return relatedProducts.filter((p) => p !== null);
+    }
+
+    // Otherwise, get products from the same category
+    const categoryProducts = await ctx.db
+      .query("products")
+      .withIndex("by_category", (q) => q.eq("categoryId", product.categoryId))
+      .filter((q) => 
+        q.and(
+          q.eq(q.field("active"), true),
+          q.neq(q.field("_id"), args.productId)
+        )
+      )
+      .take(limit);
+
+    return await Promise.all(
+      categoryProducts.map(async (p) => {
+        const category = await ctx.db.get(p.categoryId);
+        return { ...p, category };
+      })
+    );
+  },
+});

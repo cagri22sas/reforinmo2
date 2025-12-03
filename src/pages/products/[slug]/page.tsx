@@ -35,6 +35,30 @@ import { useAuth } from "@/hooks/use-auth.ts";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
+import ProductCard from "@/components/ProductCard.tsx";
+import type { Id } from "@/convex/_generated/dataModel.d.ts";
+
+function RelatedProducts({ productId }: { productId: Id<"products"> }) {
+  const relatedProducts = useQuery(api.products.getRelated, { productId, limit: 4 });
+
+  if (!relatedProducts || relatedProducts.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mt-20 border-t pt-20">
+      <div className="mb-12">
+        <h2 className="text-3xl font-bold mb-2">You May Also Like</h2>
+        <p className="text-muted-foreground">Discover similar products</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {relatedProducts.map((product) => (
+          <ProductCard key={product._id} product={product} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
@@ -453,6 +477,9 @@ export default function ProductDetailPage() {
               </div>
             </div>
           </div>
+
+          {/* Related Products Section */}
+          <RelatedProducts productId={product._id} />
 
           {/* Reviews Section */}
           <div className="mt-20">
