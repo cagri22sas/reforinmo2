@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useAction } from "convex/react";
+import { useQuery, useMutation, useAction, useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
@@ -10,12 +10,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeftIcon, Loader2Icon, ShoppingBagIcon, LockIcon, CreditCardIcon } from "lucide-react";
+import { ArrowLeftIcon, Loader2Icon, ShoppingBagIcon, LockIcon, CreditCardIcon, TagIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGuestSession } from "@/hooks/use-guest-session.ts";
 import { useAuth } from "@/hooks/use-auth.ts";
+import { ConvexError } from "convex/values";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
 
 const COUNTRIES = [
@@ -68,6 +69,19 @@ export default function CheckoutPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const sessionId = useGuestSession();
+  const convex = useConvex();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    _id: Id<"coupons">;
+    type: "percentage" | "fixed";
+    value: number;
+    description?: string;
+    discountAmount: number;
+  } | null>(null);
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+
   const cartItems = useQuery(api.cart.get, sessionId ? { sessionId } : "skip");
   const shippingMethods = useQuery(api.shipping.getActiveMethods, {}) as Array<{
     _id: Id<"shippingMethods">;
@@ -80,7 +94,6 @@ export default function CheckoutPage() {
   }> | undefined;
   const createOrder = useMutation(api.orders.create);
   const createCheckout = useAction(api.stripe.createCheckoutSession);
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const {
     register,
@@ -102,7 +115,51 @@ export default function CheckoutPage() {
     }, 0) || 0;
 
   const shippingCost = selectedShippingMethod?.price || 0;
-  const total = subtotal + shippingCost;
+  const discount = appliedCoupon?.discountAmount || 0;
+  const total = Math.max(0, subtotal + shippingCost - discount);
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      toast.error("Please enter a coupon code");
+      return;
+    }
+
+    setIsApplyingCoupon(true);
+
+    try {
+      const result = await convex.query(api.coupons.validate, {
+        code: couponCode.toUpperCase(),
+        orderAmount: subtotal,
+      });
+      
+      if (result && result.valid) {
+        setAppliedCoupon({
+          code: couponCode.toUpperCase(),
+          _id: result.coupon._id,
+          type: result.coupon.type,
+          value: result.coupon.value,
+          description: result.coupon.description,
+          discountAmount: result.discountAmount,
+        });
+        toast.success("Coupon applied successfully!");
+        setCouponCode("");
+      }
+    } catch (error) {
+      if (error instanceof ConvexError) {
+        const { message } = error.data as { code: string; message: string };
+        toast.error(message);
+      } else {
+        toast.error("Invalid coupon code");
+      }
+    } finally {
+      setIsApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    toast.info("Coupon removed");
+  };
 
   const onSubmit = async (data: CheckoutForm) => {
     if (!data.shippingMethodId) {
@@ -132,6 +189,9 @@ export default function CheckoutPage() {
         notes: data.notes,
         guestEmail: !user ? data.email : undefined,
         sessionId: sessionId,
+        couponCode: appliedCoupon?.code,
+        discount: appliedCoupon?.discountAmount,
+        couponId: appliedCoupon?._id,
       });
 
       const { url } = await createCheckout({ orderId });
@@ -455,6 +515,66 @@ export default function CheckoutPage() {
                         ))}
                       </div>
 
+                      {/* Coupon Code */}
+                      <div className="mb-6 pb-6 border-b">
+                        {appliedCoupon ? (
+                          <div className="flex items-center justify-between p-4 rounded-xl bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+                            <div className="flex items-center gap-3">
+                              <TagIcon className="h-5 w-5 text-green-600" />
+                              <div>
+                                <p className="font-semibold text-green-900 dark:text-green-100">
+                                  {appliedCoupon.code}
+                                </p>
+                                {appliedCoupon.description && (
+                                  <p className="text-sm text-green-700 dark:text-green-300">
+                                    {appliedCoupon.description}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={handleRemoveCoupon}
+                              className="text-green-700 hover:text-green-900 dark:text-green-300 dark:hover:text-green-100"
+                            >
+                              <XIcon className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <Label htmlFor="coupon" className="text-base">
+                              Coupon Code
+                            </Label>
+                            <div className="flex gap-2">
+                              <Input
+                                id="coupon"
+                                value={couponCode}
+                                onChange={(e) =>
+                                  setCouponCode(e.target.value.toUpperCase())
+                                }
+                                placeholder="Enter code"
+                                className="h-12 rounded-xl text-base uppercase"
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleApplyCoupon}
+                                disabled={isApplyingCoupon || !couponCode.trim()}
+                                className="px-6 h-12 rounded-xl"
+                              >
+                                {isApplyingCoupon ? (
+                                  <Loader2Icon className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  "Apply"
+                                )}
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
                       {/* Totals */}
                       <div className="space-y-4 mb-6">
                         <div className="flex justify-between text-base">
@@ -469,6 +589,14 @@ export default function CheckoutPage() {
                               : `€${shippingCost.toFixed(2)}`}
                           </span>
                         </div>
+                        {discount > 0 && (
+                          <div className="flex justify-between text-base">
+                            <span className="text-muted-foreground">Discount</span>
+                            <span className="font-semibold text-green-600">
+                              -€{discount.toFixed(2)}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       <div className="border-t pt-6 mb-6">

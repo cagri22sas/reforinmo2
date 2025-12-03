@@ -103,6 +103,8 @@ export default defineSchema({
     total: v.number(),
     subtotal: v.number(),
     shippingCost: v.number(),
+    discount: v.optional(v.number()),
+    couponCode: v.optional(v.string()),
     shippingMethodId: v.id("shippingMethods"),
     shippingAddress: v.object({
       name: v.string(),
@@ -243,4 +245,21 @@ export default defineSchema({
     source: v.optional(v.string()),
   }).index("by_email", ["email"])
     .index("by_status", ["status"]),
+
+  coupons: defineTable({
+    code: v.string(),
+    type: v.union(
+      v.literal("percentage"),
+      v.literal("fixed")
+    ),
+    value: v.number(),
+    description: v.optional(v.string()),
+    minOrderAmount: v.optional(v.number()),
+    maxDiscountAmount: v.optional(v.number()),
+    usageLimit: v.optional(v.number()),
+    usageCount: v.number(),
+    expiresAt: v.optional(v.number()),
+    active: v.boolean(),
+  }).index("by_code", ["code"])
+    .index("by_active", ["active"]),
 });

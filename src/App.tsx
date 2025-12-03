@@ -33,6 +33,7 @@ import AdminStripeDashboardPage from "./pages/admin/stripe-dashboard/page.tsx";
 import AdminMediaPage from "./pages/admin/media/page.tsx";
 import AdminSEOPage from "./pages/admin/seo/page.tsx";
 import AdminChatPage from "./pages/admin/chat/page.tsx";
+import AdminCouponsPage from "./pages/admin/coupons/page.tsx";
 import WishlistPage from "./pages/wishlist/page.tsx";
 
 export default function App() {
@@ -72,6 +73,7 @@ export default function App() {
           <Route path="/admin/media" element={<AdminMediaPage />} />
           <Route path="/admin/seo" element={<AdminSEOPage />} />
           <Route path="/admin/chat" element={<AdminChatPage />} />
+          <Route path="/admin/coupons" element={<AdminCouponsPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

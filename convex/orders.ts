@@ -17,6 +17,9 @@ export const create = mutation({
     notes: v.optional(v.string()),
     guestEmail: v.optional(v.string()),
     sessionId: v.optional(v.string()),
+    couponCode: v.optional(v.string()),
+    discount: v.optional(v.number()),
+    couponId: v.optional(v.id("coupons")),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -107,7 +110,8 @@ export const create = mutation({
     }
 
     const shippingCost = shippingMethod.price;
-    const total = subtotal + shippingCost;
+    const discount = args.discount || 0;
+    const total = subtotal + shippingCost - discount;
 
     // Generate order number
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(7).toUpperCase()}`;
@@ -120,11 +124,23 @@ export const create = mutation({
       status: "pending",
       subtotal,
       shippingCost,
+      discount: discount > 0 ? discount : undefined,
+      couponCode: args.couponCode,
       total,
       shippingMethodId: args.shippingMethodId,
       shippingAddress: args.shippingAddress,
       notes: args.notes,
     });
+
+    // Increment coupon usage if applied
+    if (args.couponId) {
+      const coupon = await ctx.db.get(args.couponId);
+      if (coupon) {
+        await ctx.db.patch(args.couponId, {
+          usageCount: coupon.usageCount + 1,
+        });
+      }
+    }
 
     // Create order items
     for (const item of items) {
