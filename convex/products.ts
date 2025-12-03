@@ -100,3 +100,93 @@ export const getRelated = query({
     );
   },
 });
+
+export const search = query({
+  args: {
+    searchQuery: v.optional(v.string()),
+    categoryId: v.optional(v.id("categories")),
+    minPrice: v.optional(v.number()),
+    maxPrice: v.optional(v.number()),
+    inStock: v.optional(v.boolean()),
+    sortBy: v.optional(v.union(
+      v.literal("price_asc"),
+      v.literal("price_desc"),
+      v.literal("name_asc"),
+      v.literal("name_desc"),
+      v.literal("newest")
+    )),
+  },
+  handler: async (ctx, args) => {
+    let products = await ctx.db
+      .query("products")
+      .filter((q) => q.eq(q.field("active"), true))
+      .collect();
+
+    // Filter by category
+    if (args.categoryId) {
+      products = products.filter((p) => p.categoryId === args.categoryId);
+    }
+
+    // Filter by search query
+    if (args.searchQuery && args.searchQuery.trim()) {
+      const query = args.searchQuery.toLowerCase();
+      products = products.filter((p) =>
+        p.name.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query) ||
+        p.sku?.toLowerCase().includes(query)
+      );
+    }
+
+    // Filter by price range
+    if (args.minPrice !== undefined) {
+      products = products.filter((p) => p.price >= args.minPrice!);
+    }
+    if (args.maxPrice !== undefined) {
+      products = products.filter((p) => p.price <= args.maxPrice!);
+    }
+
+    // Filter by stock
+    if (args.inStock) {
+      products = products.filter((p) => p.stock > 0);
+    }
+
+    // Sort products
+    if (args.sortBy === "price_asc") {
+      products.sort((a, b) => a.price - b.price);
+    } else if (args.sortBy === "price_desc") {
+      products.sort((a, b) => b.price - a.price);
+    } else if (args.sortBy === "name_asc") {
+      products.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (args.sortBy === "name_desc") {
+      products.sort((a, b) => b.name.localeCompare(a.name));
+    } else if (args.sortBy === "newest") {
+      products.sort((a, b) => b._creationTime - a._creationTime);
+    }
+
+    // Add category info
+    return await Promise.all(
+      products.map(async (product) => {
+        const category = await ctx.db.get(product.categoryId);
+        
+        // Get review stats
+        const reviews = await ctx.db
+          .query("reviews")
+          .withIndex("by_product_and_status", (q) =>
+            q.eq("productId", product._id).eq("status", "approved")
+          )
+          .collect();
+
+        const avgRating = reviews.length > 0
+          ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+          : 0;
+
+        return { 
+          ...product, 
+          category,
+          reviewCount: reviews.length,
+          averageRating: avgRating,
+        };
+      })
+    );
+  },
+});
