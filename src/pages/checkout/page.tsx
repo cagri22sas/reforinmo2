@@ -11,14 +11,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.t
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, Loader2Icon } from "lucide-react";
-import { Authenticated, Unauthenticated } from "convex/react";
-import { SignInButton } from "@/components/ui/signin.tsx";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useGuestSession } from "@/hooks/use-guest-session.ts";
+import { useAuth } from "@/hooks/use-auth.ts";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
 
 interface CheckoutForm {
+  email?: string;
   name: string;
   street: string;
   city: string;
@@ -32,7 +33,9 @@ interface CheckoutForm {
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
-  const cartItems = useQuery(api.cart.get, {});
+  const { user } = useAuth();
+  const sessionId = useGuestSession();
+  const cartItems = useQuery(api.cart.get, sessionId ? { sessionId } : "skip");
   const shippingMethods = useQuery(api.shipping.getActiveMethods, {}) as Array<{
     _id: Id<"shippingMethods">;
     name: string;
@@ -55,6 +58,7 @@ export default function CheckoutPage() {
   } = useForm<CheckoutForm>({
     defaultValues: {
       country: "United States",
+      email: user?.profile.email,
     },
   });
 
@@ -77,6 +81,12 @@ export default function CheckoutPage() {
       return;
     }
 
+    // For guest users, email is required
+    if (!user && !data.email) {
+      toast.error("Email is required");
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
@@ -93,6 +103,8 @@ export default function CheckoutPage() {
           phone: data.phone,
         },
         notes: data.notes,
+        guestEmail: !user ? data.email : undefined,
+        sessionId: sessionId,
       });
 
       // Create Stripe checkout session
@@ -126,59 +138,85 @@ export default function CheckoutPage() {
               Back to Cart
             </Link>
             <h1 className="text-4xl font-bold">Checkout</h1>
+            {!user && (
+              <p className="text-muted-foreground mt-2">
+                Checking out as a guest
+              </p>
+            )}
           </div>
 
-          <Unauthenticated>
-            <div className="text-center py-20">
-              <h2 className="text-2xl font-bold mb-4">
-                Sign in to checkout
-              </h2>
-              <p className="text-muted-foreground mb-8">
-                You need to be signed in to complete your order.
-              </p>
-              <SignInButton />
-            </div>
-          </Unauthenticated>
-
-          <Authenticated>
-            {!cartItems || !shippingMethods ? (
+          {!cartItems || !shippingMethods ? (
               <Skeleton className="h-96 w-full" />
-            ) : cartItems.length === 0 ? (
-              <div className="text-center py-20">
-                <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
-                <p className="text-muted-foreground mb-8">
-                  You need items in your cart to checkout.
-                </p>
-                <Link to="/products">
-                  <Button size="lg">Start Shopping</Button>
-                </Link>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="grid md:grid-cols-3 gap-8">
-                  {/* Checkout Form */}
-                  <div className="md:col-span-2 space-y-6">
-                    {/* Shipping Address */}
+          ) : cartItems.length === 0 ? (
+            <div className="text-center py-20">
+              <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
+              <p className="text-muted-foreground mb-8">
+                You need items in your cart to checkout.
+              </p>
+              <Link to="/products">
+                <Button size="lg">Start Shopping</Button>
+              </Link>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="grid md:grid-cols-3 gap-8">
+                {/* Checkout Form */}
+                <div className="md:col-span-2 space-y-6">
+                  {/* Guest Email */}
+                  {!user && (
                     <Card>
                       <CardHeader>
-                        <CardTitle>Shipping Address</CardTitle>
+                        <CardTitle>Contact Information</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-4">
+                      <CardContent>
                         <div>
-                          <Label htmlFor="name">Full Name</Label>
+                          <Label htmlFor="email">Email Address</Label>
                           <Input
-                            id="name"
-                            {...register("name", {
-                              required: "Full name is required",
+                            id="email"
+                            type="email"
+                            {...register("email", {
+                              required: !user ? "Email is required" : false,
+                              pattern: {
+                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                message: "Invalid email address",
+                              },
                             })}
-                            placeholder="John Doe"
+                            placeholder="your@email.com"
                           />
-                          {errors.name && (
+                          {errors.email && (
                             <p className="text-sm text-destructive mt-1">
-                              {errors.name.message}
+                              {errors.email.message}
                             </p>
                           )}
+                          <p className="text-xs text-muted-foreground mt-2">
+                            We'll send your order confirmation here
+                          </p>
                         </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                  
+                  {/* Shipping Address */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Shipping Address</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div>
+                        <Label htmlFor="name">Full Name</Label>
+                        <Input
+                          id="name"
+                          {...register("name", {
+                            required: "Full name is required",
+                          })}
+                          placeholder="John Doe"
+                        />
+                        {errors.name && (
+                          <p className="text-sm text-destructive mt-1">
+                            {errors.name.message}
+                          </p>
+                        )}
+                      </div>
 
                         <div>
                           <Label htmlFor="street">Street Address</Label>
@@ -422,13 +460,12 @@ export default function CheckoutPage() {
                         <div className="text-xs text-muted-foreground text-center">
                           Secured by Stripe payment processing
                         </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </form>
-            )}
-          </Authenticated>
+              </div>
+            </form>
+          )}
         </div>
       </div>
 

@@ -6,13 +6,15 @@ import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link } from "react-router-dom";
 import { MinusIcon, PlusIcon, TrashIcon, ArrowLeftIcon } from "lucide-react";
-import { Authenticated, Unauthenticated } from "convex/react";
-import { SignInButton } from "@/components/ui/signin.tsx";
 import { toast } from "sonner";
+import { useGuestSession } from "@/hooks/use-guest-session.ts";
+import { useAuth } from "@/hooks/use-auth.ts";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
 
 export default function CartPage() {
-  const cartItems = useQuery(api.cart.get, {});
+  const { user } = useAuth();
+  const sessionId = useGuestSession();
+  const cartItems = useQuery(api.cart.get, sessionId ? { sessionId } : "skip");
   const updateQuantity = useMutation(api.cart.updateQuantity);
   const removeItem = useMutation(api.cart.remove);
   const clearCart = useMutation(api.cart.clear);
@@ -27,7 +29,7 @@ export default function CartPage() {
 
   const handleUpdateQuantity = async (cartItemId: Id<"cart">, newQuantity: number) => {
     try {
-      await updateQuantity({ cartItemId, quantity: newQuantity });
+      await updateQuantity({ cartItemId, quantity: newQuantity, sessionId });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to update quantity");
     }
@@ -35,7 +37,7 @@ export default function CartPage() {
 
   const handleRemove = async (cartItemId: Id<"cart">) => {
     try {
-      await removeItem({ cartItemId });
+      await removeItem({ cartItemId, sessionId });
       toast.success("Item removed from cart");
     } catch (error) {
       toast.error("Failed to remove item");
@@ -44,7 +46,7 @@ export default function CartPage() {
 
   const handleClearCart = async () => {
     try {
-      await clearCart({});
+      await clearCart({ sessionId });
       toast.success("Cart cleared");
     } catch (error) {
       toast.error("Failed to clear cart");
@@ -65,16 +67,7 @@ export default function CartPage() {
             <h1 className="text-4xl font-bold">My Cart</h1>
           </div>
 
-          <Unauthenticated>
-            <div className="text-center py-20">
-              <h2 className="text-2xl font-bold mb-4">Sign in to view your cart</h2>
-              <p className="text-muted-foreground mb-8">You need to be signed in to shop with us.</p>
-              <SignInButton />
-            </div>
-          </Unauthenticated>
-
-          <Authenticated>
-            {!cartItems ? (
+          {!cartItems ? (
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="md:col-span-2 space-y-4">
                   {Array.from({ length: 3 }).map((_, i) => (
@@ -275,7 +268,6 @@ export default function CartPage() {
                 </div>
               </div>
             )}
-          </Authenticated>
         </div>
       </div>
 
