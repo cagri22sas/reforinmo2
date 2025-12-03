@@ -84,7 +84,7 @@ function SettingsContent() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="freeShippingThreshold">
-                Ücretsiz Kargo Eşiği (TL)
+                Free Shipping Threshold (EUR)
               </Label>
               <Input
                 id="freeShippingThreshold"

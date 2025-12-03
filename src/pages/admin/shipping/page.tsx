@@ -123,7 +123,7 @@ function ShippingDialog({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="price">Fiyat (TL) *</Label>
+          <Label htmlFor="price">Price (EUR) *</Label>
           <Input
             id="price"
             type="number"
@@ -214,7 +214,7 @@ function ShippingContent() {
     }
   };
 
-  const formatPrice = (price: number) => `${price.toFixed(2)} TL`;
+  const formatPrice = (price: number) => `€${price.toFixed(2)}`;
 
   return (
     <div className="space-y-6">

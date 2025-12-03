@@ -188,7 +188,7 @@ function ProductDialog({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="price">Fiyat (TL) *</Label>
+          <Label htmlFor="price">Price (EUR) *</Label>
           <Input
             id="price"
             type="number"
@@ -200,7 +200,7 @@ function ProductDialog({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="compareAtPrice">Karşılaştırma Fiyatı (TL)</Label>
+          <Label htmlFor="compareAtPrice">Compare At Price (EUR)</Label>
           <Input
             id="compareAtPrice"
             type="number"
@@ -347,7 +347,7 @@ function ProductsContent() {
     }
   };
 
-  const formatPrice = (price: number) => `${price.toFixed(2)} TL`;
+  const formatPrice = (price: number) => `€${price.toFixed(2)}`;
 
   const openCreateDialog = () => {
     setEditingProduct(undefined);

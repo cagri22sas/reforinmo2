@@ -88,7 +88,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
   };
 
   const formatPrice = (price: number) => {
-    return `${price.toFixed(2)} TL`;
+    return `€${price.toFixed(2)}`;
   };
 
   const statusInfo = getStatusInfo(order.status);

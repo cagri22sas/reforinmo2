@@ -55,13 +55,13 @@ function EditProfileDialog({
         name: formData.name || undefined,
         phone: formData.phone || undefined,
       });
-      toast.success("Profil güncellendi");
+      toast.success("Profile updated");
       onClose();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("Bir hata oluştu");
+        toast.error("An error occurred");
       }
     }
   };
@@ -69,39 +69,39 @@ function EditProfileDialog({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Ad Soyad</Label>
+        <Label htmlFor="name">Full Name</Label>
         <Input
           id="name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="Ad Soyad"
+          placeholder="Full Name"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="phone">Telefon</Label>
+        <Label htmlFor="phone">Phone</Label>
         <Input
           id="phone"
           type="tel"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          placeholder="+90 (555) 123 45 67"
+          placeholder="+1 (555) 123-4567"
         />
       </div>
 
       <div className="space-y-2">
-        <Label>E-posta</Label>
+        <Label>Email</Label>
         <Input value={currentUser.email || ""} disabled />
         <p className="text-xs text-muted-foreground">
-          E-posta adresi değiştirilemez
+          Email address cannot be changed
         </p>
       </div>
 
       <div className="flex justify-end gap-2 pt-4">
         <Button type="button" variant="outline" onClick={onClose}>
-          İptal
+          Cancel
         </Button>
-        <Button type="submit">Kaydet</Button>
+        <Button type="submit">Save</Button>
       </div>
     </form>
   );
@@ -126,7 +126,7 @@ function AddressDialog({
     city: address?.city || "",
     state: address?.state || "",
     zipCode: address?.zipCode || "",
-    country: address?.country || "Türkiye",
+    country: address?.country || "Turkey",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -134,13 +134,13 @@ function AddressDialog({
 
     try {
       await updateAddress(formData);
-      toast.success("Adres kaydedildi");
+      toast.success("Address saved");
       onClose();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("Bir hata oluştu");
+        toast.error("An error occurred");
       }
     }
   };
@@ -148,35 +148,35 @@ function AddressDialog({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="street">Adres *</Label>
+        <Label htmlFor="street">Street Address *</Label>
         <Input
           id="street"
           value={formData.street}
           onChange={(e) => setFormData({ ...formData, street: e.target.value })}
-          placeholder="Mahalle, Sokak, No"
+          placeholder="123 Main Street"
           required
         />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="city">Şehir *</Label>
+          <Label htmlFor="city">City *</Label>
           <Input
             id="city"
             value={formData.city}
             onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-            placeholder="İstanbul"
+            placeholder="Istanbul"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="state">İlçe *</Label>
+          <Label htmlFor="state">State/Region *</Label>
           <Input
             id="state"
             value={formData.state}
             onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-            placeholder="Beşiktaş"
+            placeholder="Marmara"
             required
           />
         </div>
@@ -184,7 +184,7 @@ function AddressDialog({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="zipCode">Posta Kodu *</Label>
+          <Label htmlFor="zipCode">Zip Code *</Label>
           <Input
             id="zipCode"
             value={formData.zipCode}
@@ -195,7 +195,7 @@ function AddressDialog({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="country">Ülke *</Label>
+          <Label htmlFor="country">Country *</Label>
           <Input
             id="country"
             value={formData.country}
@@ -207,9 +207,9 @@ function AddressDialog({
 
       <div className="flex justify-end gap-2 pt-4">
         <Button type="button" variant="outline" onClick={onClose}>
-          İptal
+          Cancel
         </Button>
-        <Button type="submit">Kaydet</Button>
+        <Button type="submit">Save</Button>
       </div>
     </form>
   );
@@ -240,19 +240,19 @@ function ProfileContent() {
   }
 
   const handleDeleteAddress = async () => {
-    if (confirm("Adresinizi silmek istediğinizden emin misiniz?")) {
+    if (confirm("Are you sure you want to delete your address?")) {
       try {
         await deleteAddress({});
-        toast.success("Adres silindi");
+        toast.success("Address deleted");
       } catch (error) {
-        toast.error("Adres silinemedi");
+        toast.error("Could not delete address");
       }
     }
   };
 
-  const formatPrice = (price: number) => `${price.toFixed(2)} TL`;
+  const formatPrice = (price: number) => `€${price.toFixed(2)}`;
   const formatDate = (timestamp: number) =>
-    new Date(timestamp).toLocaleDateString("tr-TR", {
+    new Date(timestamp).toLocaleDateString("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -269,10 +269,10 @@ function ProfileContent() {
                 <UserIcon className="h-8 w-8 text-primary" />
               </div>
               <div>
-                <CardTitle className="text-2xl">{currentUser.name || "Kullanıcı"}</CardTitle>
+                <CardTitle className="text-2xl">{currentUser.name || "User"}</CardTitle>
                 <p className="text-muted-foreground">{currentUser.email}</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Üyelik: {formatDate(stats.memberSince)}
+                  Member since: {formatDate(stats.memberSince)}
                 </p>
               </div>
             </div>
@@ -281,12 +281,12 @@ function ProfileContent() {
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm">
                   <EditIcon className="h-4 w-4 mr-2" />
-                  Profili Düzenle
+                  Edit Profile
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Profil Bilgilerini Düzenle</DialogTitle>
+                  <DialogTitle>Edit Profile Information</DialogTitle>
                 </DialogHeader>
                 <EditProfileDialog
                   currentUser={currentUser}
@@ -307,7 +307,7 @@ function ProfileContent() {
                 <ShoppingBagIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Toplam Sipariş</p>
+                <p className="text-sm text-muted-foreground">Total Orders</p>
                 <p className="text-2xl font-bold">{stats.totalOrders}</p>
               </div>
             </div>
@@ -321,7 +321,7 @@ function ProfileContent() {
                 <PackageIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Teslim Edildi</p>
+                <p className="text-sm text-muted-foreground">Delivered</p>
                 <p className="text-2xl font-bold">{stats.completedOrders}</p>
               </div>
             </div>
@@ -335,7 +335,7 @@ function ProfileContent() {
                 <UserIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Toplam Harcama</p>
+                <p className="text-sm text-muted-foreground">Total Spent</p>
                 <p className="text-2xl font-bold">{formatPrice(stats.totalSpent)}</p>
               </div>
             </div>
@@ -349,32 +349,32 @@ function ProfileContent() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <UserIcon className="h-5 w-5" />
-              Kişisel Bilgiler
+              Personal Information
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label className="text-sm text-muted-foreground">Ad Soyad</Label>
+              <Label className="text-sm text-muted-foreground">Full Name</Label>
               <p className="font-medium">{currentUser.name || "-"}</p>
             </div>
             <Separator />
             <div>
-              <Label className="text-sm text-muted-foreground">E-posta</Label>
+              <Label className="text-sm text-muted-foreground">Email</Label>
               <p className="font-medium">{currentUser.email || "-"}</p>
             </div>
             <Separator />
             <div>
-              <Label className="text-sm text-muted-foreground">Telefon</Label>
+              <Label className="text-sm text-muted-foreground">Phone</Label>
               <p className="font-medium">{currentUser.phone || "-"}</p>
             </div>
             <Separator />
             <div>
-              <Label className="text-sm text-muted-foreground">Rol</Label>
+              <Label className="text-sm text-muted-foreground">Role</Label>
               <div className="mt-1">
                 {currentUser.role === "admin" ? (
                   <Badge>Admin</Badge>
                 ) : (
-                  <Badge variant="secondary">Kullanıcı</Badge>
+                  <Badge variant="secondary">User</Badge>
                 )}
               </div>
             </div>
@@ -387,20 +387,20 @@ function ProfileContent() {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <MapPinIcon className="h-5 w-5" />
-                Varsayılan Adres
+                Default Address
               </CardTitle>
 
               <Dialog open={isEditAddressOpen} onOpenChange={setIsEditAddressOpen}>
                 <DialogTrigger asChild>
                   <Button variant="outline" size="sm">
                     <EditIcon className="h-4 w-4 mr-2" />
-                    {currentUser.address ? "Düzenle" : "Ekle"}
+                    {currentUser.address ? "Edit" : "Add"}
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>
-                      {currentUser.address ? "Adresi Düzenle" : "Adres Ekle"}
+                      {currentUser.address ? "Edit Address" : "Add Address"}
                     </DialogTitle>
                   </DialogHeader>
                   <AddressDialog
@@ -429,12 +429,12 @@ function ProfileContent() {
                   onClick={handleDeleteAddress}
                 >
                   <TrashIcon className="h-4 w-4 mr-2" />
-                  Adresi Sil
+                  Delete Address
                 </Button>
               </div>
             ) : (
               <p className="text-muted-foreground text-sm">
-                Henüz adres eklenmemiş
+                No address added yet
               </p>
             )}
           </CardContent>
@@ -445,18 +445,18 @@ function ProfileContent() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Son Siparişler</CardTitle>
+            <CardTitle>Recent Orders</CardTitle>
             <Link to="/orders">
               <Button variant="outline" size="sm">
-                Tümünü Gör
+                View All
               </Button>
             </Link>
           </div>
-          <CardDescription>Son 5 siparişiniz</CardDescription>
+          <CardDescription>Your last 5 orders</CardDescription>
         </CardHeader>
         <CardContent>
           {stats.recentOrders.length === 0 ? (
-            <p className="text-muted-foreground text-sm">Henüz sipariş yok</p>
+            <p className="text-muted-foreground text-sm">No orders yet</p>
           ) : (
             <div className="space-y-3">
               {stats.recentOrders.map((order) => (
@@ -481,14 +481,14 @@ function ProfileContent() {
                         className="text-xs"
                       >
                         {order.status === "pending"
-                          ? "Beklemede"
+                          ? "Pending"
                           : order.status === "processing"
-                          ? "İşleniyor"
+                          ? "Processing"
                           : order.status === "shipped"
-                          ? "Kargoda"
+                          ? "Shipped"
                           : order.status === "delivered"
-                          ? "Teslim Edildi"
-                          : "İptal Edildi"}
+                          ? "Delivered"
+                          : "Cancelled"}
                       </Badge>
                     </div>
                   </div>
@@ -509,9 +509,9 @@ export default function ProfilePage() {
 
       <div className="flex-1 container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Profilim</h1>
+          <h1 className="text-3xl font-bold mb-2">My Profile</h1>
           <p className="text-muted-foreground">
-            Hesap bilgilerinizi ve siparişlerinizi yönetin
+            Manage your account information and orders
           </p>
         </div>
 
@@ -520,7 +520,7 @@ export default function ProfilePage() {
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
                 <p className="text-muted-foreground">
-                  Profilinizi görüntülemek için giriş yapmalısınız
+                  You must sign in to view your profile
                 </p>
                 <SignInButton />
               </div>

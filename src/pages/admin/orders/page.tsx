@@ -73,7 +73,7 @@ function OrderDetailDialog({
     }
   };
 
-  const formatPrice = (price: number) => `${price.toFixed(2)} TL`;
+  const formatPrice = (price: number) => `€${price.toFixed(2)}`;
   const formatDate = (timestamp: number) =>
     new Date(timestamp).toLocaleDateString("tr-TR", {
       day: "numeric",
@@ -223,7 +223,7 @@ function OrdersContent() {
     return config[status as keyof typeof config] || config.pending;
   };
 
-  const formatPrice = (price: number) => `${price.toFixed(2)} TL`;
+  const formatPrice = (price: number) => `€${price.toFixed(2)}`;
   const formatDate = (timestamp: number) =>
     new Date(timestamp).toLocaleDateString("tr-TR", {
       day: "numeric",
