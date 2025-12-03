@@ -30,31 +30,51 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
       pending: { 
         label: "Beklemede", 
         variant: "secondary" as const,
-        description: "Siparişiniz ödeme bekliyor"
+        description: "Siparişiniz ödeme bekliyor",
+        icon: PackageIcon
       },
       processing: { 
         label: "İşleniyor", 
         variant: "default" as const,
-        description: "Siparişiniz hazırlanıyor"
+        description: "Siparişiniz hazırlanıyor",
+        icon: PackageIcon
       },
       shipped: { 
         label: "Kargoda", 
         variant: "default" as const,
-        description: "Siparişiniz kargoya verildi"
+        description: "Siparişiniz kargoya verildi",
+        icon: TruckIcon
       },
       delivered: { 
         label: "Teslim Edildi", 
         variant: "success" as const,
-        description: "Siparişiniz teslim edildi"
+        description: "Siparişiniz teslim edildi",
+        icon: MapPinIcon
       },
       cancelled: { 
         label: "İptal Edildi", 
         variant: "destructive" as const,
-        description: "Sipariş iptal edildi"
+        description: "Sipariş iptal edildi",
+        icon: PackageIcon
       },
     };
 
     return statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
+  };
+
+  const getOrderTimeline = () => {
+    const timeline = [
+      { status: 'pending', label: 'Sipariş Alındı', completed: true },
+      { status: 'processing', label: 'Hazırlanıyor', completed: order.status !== 'pending' },
+      { status: 'shipped', label: 'Kargoya Verildi', completed: order.status === 'shipped' || order.status === 'delivered' },
+      { status: 'delivered', label: 'Teslim Edildi', completed: order.status === 'delivered' },
+    ];
+    
+    if (order.status === 'cancelled') {
+      return [{ status: 'cancelled', label: 'İptal Edildi', completed: true }];
+    }
+    
+    return timeline;
   };
 
   const formatDate = (timestamp: number) => {
@@ -73,6 +93,9 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
 
   const statusInfo = getStatusInfo(order.status);
 
+  const timeline = getOrderTimeline();
+  const StatusIcon = statusInfo.icon;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -86,7 +109,8 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
               </p>
             </div>
             <div className="text-right">
-              <Badge variant={statusInfo.variant} className="mb-2">
+              <Badge variant={statusInfo.variant} className="mb-2 gap-1.5">
+                <StatusIcon className="h-3.5 w-3.5" />
                 {statusInfo.label}
               </Badge>
               <p className="text-sm text-muted-foreground">
@@ -95,6 +119,57 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
             </div>
           </div>
         </CardHeader>
+      </Card>
+
+      {/* Order Tracking Timeline */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TruckIcon className="h-5 w-5" />
+            Sipariş Takibi
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="relative">
+            {timeline.map((step, index) => {
+              const isLast = index === timeline.length - 1;
+              return (
+                <div key={step.status} className="relative pb-8 last:pb-0">
+                  <div className="flex items-start gap-4">
+                    <div className="relative flex flex-col items-center">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors ${
+                        step.completed 
+                          ? 'border-primary bg-primary text-primary-foreground' 
+                          : 'border-border bg-background text-muted-foreground'
+                      }`}>
+                        {step.completed ? (
+                          <div className="h-2.5 w-2.5 rounded-full bg-primary-foreground" />
+                        ) : (
+                          <div className="h-2.5 w-2.5 rounded-full border-2 border-current" />
+                        )}
+                      </div>
+                      {!isLast && (
+                        <div className={`absolute top-10 h-full w-0.5 transition-colors ${
+                          step.completed ? 'bg-primary' : 'bg-border'
+                        }`} />
+                      )}
+                    </div>
+                    <div className="flex-1 pt-1.5">
+                      <p className={`font-medium ${step.completed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        {step.label}
+                      </p>
+                      {step.completed && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {formatDate(order._creationTime)}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
       </Card>
 
       <div className="grid gap-6 md:grid-cols-3">
