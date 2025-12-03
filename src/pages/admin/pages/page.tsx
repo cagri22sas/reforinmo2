@@ -68,7 +68,7 @@ function PageDialog({
     content: page?.content || "<p>Start writing your page content...</p>",
     editorProps: {
       attributes: {
-        class: "prose prose-sm dark:prose-invert max-w-none min-h-[300px] focus:outline-none border rounded-md p-4",
+        class: "prose prose-sm dark:prose-invert max-w-none min-h-[300px] focus:outline-none border rounded-md p-4 bg-background",
       },
     },
   });
@@ -76,31 +76,40 @@ function PageDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!editor) return;
+    if (!editor) {
+      toast.error("Editor not ready");
+      return;
+    }
+
+    if (!formData.slug || !formData.title) {
+      toast.error("Title and slug are required");
+      return;
+    }
 
     try {
       const data = {
-        slug: formData.slug,
-        title: formData.title,
+        slug: formData.slug.trim(),
+        title: formData.title.trim(),
         content: editor.getHTML(),
-        metaDescription: formData.metaDescription || undefined,
+        metaDescription: formData.metaDescription?.trim() || undefined,
         published: formData.published,
       };
 
       if (page) {
         await updatePage({ id: page._id, ...data });
-        toast.success("Page updated");
+        toast.success("Page updated successfully");
       } else {
         await createPage(data);
-        toast.success("Page created");
+        toast.success("Page created successfully");
       }
 
+      editor.commands.clearContent();
       onClose();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("An error occurred");
+        toast.error("Failed to save page");
       }
     }
   };
@@ -132,15 +141,15 @@ function PageDialog({
             <Input
               id="slug"
               value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+              onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })}
               required
               placeholder="about-us"
             />
-            <Button type="button" onClick={generateSlug} variant="outline">
+            <Button type="button" onClick={generateSlug} variant="outline" size="sm">
               Generate
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground">URL: /pages/{formData.slug}</p>
+          <p className="text-xs text-muted-foreground">URL: /{formData.slug || "page-slug"}</p>
         </div>
       </div>
 
@@ -334,7 +343,7 @@ function PagesContent() {
                     <p className="font-medium">{page.title}</p>
                   </TableCell>
                   <TableCell>
-                    <code className="text-sm">/pages/{page.slug}</code>
+                    <code className="text-sm bg-muted px-2 py-1 rounded">/{page.slug}</code>
                   </TableCell>
                   <TableCell>
                     {page.published ? (

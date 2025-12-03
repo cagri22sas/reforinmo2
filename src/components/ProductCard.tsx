@@ -48,7 +48,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-xl transition-all duration-500 group border-border/50 bg-card rounded-3xl">
+    <Card className="overflow-hidden hover:shadow-xl transition-all duration-500 group border-border/50 bg-card rounded-3xl h-full flex flex-col">
       <Link to={`/products/${product.slug}`}>
         <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-muted to-accent/10">
           {product.images[0] ? (
@@ -80,10 +80,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
       </Link>
-      <CardContent className="p-6">
-        <div className="mb-4">
+      <CardContent className="p-6 flex-1 flex flex-col">
+        <div className="mb-4 flex-1">
           <Link to={`/products/${product.slug}`}>
-            <h3 className="font-bold text-lg line-clamp-2 hover:text-primary transition-colors mb-1">
+            <h3 className="font-bold text-lg line-clamp-2 hover:text-primary transition-colors mb-1 min-h-[3.5rem]">
               {product.name}
             </h3>
           </Link>
@@ -91,7 +91,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <p className="text-xs text-muted-foreground uppercase tracking-wider">{product.category.name}</p>
           )}
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-auto">
           <div className="space-y-1">
             <div className="text-2xl font-bold">€{product.price.toFixed(2)}</div>
             {hasDiscount && (
