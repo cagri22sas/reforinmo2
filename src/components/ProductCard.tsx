@@ -11,6 +11,7 @@ import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
 
 type Product = Doc<"products"> & {
   category: Doc<"categories"> | null;
+  images: string[];
 };
 
 interface ProductCardProps {

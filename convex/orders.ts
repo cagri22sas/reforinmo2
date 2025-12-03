@@ -99,11 +99,16 @@ export const create = mutation({
         throw new Error(`Not enough stock for: ${product.name}`);
       }
 
+      // Get first image URL
+      const imageUrl = product.imageStorageIds.length > 0 
+        ? await ctx.storage.getUrl(product.imageStorageIds[0])
+        : null;
+
       subtotal += product.price * cartItem.quantity;
       items.push({
         productId: product._id,
         productName: product.name,
-        productImage: product.images[0] || "",
+        productImage: imageUrl || "",
         quantity: cartItem.quantity,
         price: product.price,
       });

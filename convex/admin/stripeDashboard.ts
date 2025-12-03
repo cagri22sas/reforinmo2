@@ -110,7 +110,23 @@ export const getRecentCustomers = action({
   },
   handler: async (ctx, args) => {
     // Check if user is admin
-    await ctx.runQuery(internal.helpers.checkIsAdmin, {});
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError({
+        message: "Authentication required",
+        code: "UNAUTHENTICATED",
+      });
+    }
+
+    // Verify admin role via internal query
+    try {
+      await ctx.runQuery(internal.helpers.checkIsAdmin, {});
+    } catch (error) {
+      throw new ConvexError({
+        message: "Admin access required",
+        code: "FORBIDDEN",
+      });
+    }
 
     try {
       const stripe = getStripe();

@@ -37,15 +37,25 @@ export const getWishlist = query({
     const itemsWithProducts = await Promise.all(
       wishlistItems.map(async (item) => {
         const product = await ctx.db.get(item.productId);
+        if (!product) {
+          return null;
+        }
+        // Get image URLs
+        const imageUrls = await Promise.all(
+          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+        );
         return {
           _id: item._id,
           _creationTime: item._creationTime,
-          product,
+          product: {
+            ...product,
+            images: imageUrls.filter((url) => url !== null) as string[],
+          },
         };
       })
     );
 
-    return itemsWithProducts;
+    return itemsWithProducts.filter((item) => item !== null);
   },
 });
 

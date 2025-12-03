@@ -77,7 +77,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       
       <div className="flex-1 flex">
         {/* Enhanced Sidebar */}
-        <aside className="hidden lg:flex w-72 border-r bg-card shadow-sm">
+        <aside className="w-72 border-r bg-card shadow-sm flex flex-col">
           <div className="flex-1 flex flex-col">
             {/* Sidebar Header */}
             <div className="p-6 border-b">

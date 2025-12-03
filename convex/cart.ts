@@ -43,9 +43,16 @@ export const get = query({
         if (!product) {
           return null;
         }
+        // Get image URLs
+        const imageUrls = await Promise.all(
+          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+        );
         return {
           ...item,
-          product,
+          product: {
+            ...product,
+            images: imageUrls.filter((url) => url !== null) as string[],
+          },
         };
       }),
     );

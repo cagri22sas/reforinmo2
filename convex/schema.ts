@@ -33,7 +33,7 @@ export default defineSchema({
     price: v.number(),
     compareAtPrice: v.optional(v.number()),
     categoryId: v.id("categories"),
-    images: v.array(v.string()),
+    imageStorageIds: v.array(v.id("_storage")),
     stock: v.number(),
     sku: v.optional(v.string()),
     featured: v.boolean(),
@@ -58,7 +58,8 @@ export default defineSchema({
     relatedProducts: v.optional(v.array(v.id("products"))),
   }).index("by_slug", ["slug"])
     .index("by_category", ["categoryId"])
-    .index("by_featured", ["featured"]),
+    .index("by_featured", ["featured"])
+    .index("by_active", ["active"]),
 
   reviews: defineTable({
     productId: v.id("products"),

@@ -31,7 +31,10 @@ export const list = query({
     return await Promise.all(
       products.map(async (product) => {
         const category = await ctx.db.get(product.categoryId);
-        return { ...product, category };
+        const imageUrls = await Promise.all(
+          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+        );
+        return { ...product, category, images: imageUrls.filter((url) => url !== null) as string[] };
       }),
     );
   },
@@ -50,7 +53,10 @@ export const get = query({
     }
 
     const category = await ctx.db.get(product.categoryId);
-    return { ...product, category };
+    const imageUrls = await Promise.all(
+      product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+    );
+    return { ...product, category, images: imageUrls.filter((url) => url !== null) as string[] };
   },
 });
 
@@ -74,7 +80,10 @@ export const getRelated = query({
           const relatedProduct = await ctx.db.get(id);
           if (!relatedProduct || !relatedProduct.active) return null;
           const category = await ctx.db.get(relatedProduct.categoryId);
-          return { ...relatedProduct, category };
+          const imageUrls = await Promise.all(
+            relatedProduct.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+          );
+          return { ...relatedProduct, category, images: imageUrls.filter((url) => url !== null) as string[] };
         })
       );
       return relatedProducts.filter((p) => p !== null);
@@ -95,7 +104,10 @@ export const getRelated = query({
     return await Promise.all(
       categoryProducts.map(async (p) => {
         const category = await ctx.db.get(p.categoryId);
-        return { ...p, category };
+        const imageUrls = await Promise.all(
+          p.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+        );
+        return { ...p, category, images: imageUrls.filter((url) => url !== null) as string[] };
       })
     );
   },
@@ -180,11 +192,16 @@ export const search = query({
           ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
           : 0;
 
+        const imageUrls = await Promise.all(
+          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+        );
+
         return { 
           ...product, 
           category,
           reviewCount: reviews.length,
           averageRating: avgRating,
+          images: imageUrls.filter((url) => url !== null) as string[],
         };
       })
     );

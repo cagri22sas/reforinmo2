@@ -46,7 +46,6 @@ interface ProductFormData {
   price: string;
   compareAtPrice: string;
   categoryId: string;
-  images: string;
   stock: string;
   sku: string;
   featured: boolean;
@@ -65,6 +64,7 @@ function ProductDialog({
     price: number;
     compareAtPrice?: number;
     categoryId: Id<"categories">;
+    imageStorageIds: Id<"_storage">[];
     images: string[];
     stock: number;
     sku?: string;
@@ -76,6 +76,7 @@ function ProductDialog({
   const categories = useQuery(api.categories.list, {});
   const createProduct = useMutation(api.admin.products.create);
   const updateProduct = useMutation(api.admin.products.update);
+  const generateUploadUrl = useMutation(api.admin.products.generateUploadUrl);
 
   const [formData, setFormData] = useState<ProductFormData>({
     name: product?.name || "",
@@ -84,22 +85,53 @@ function ProductDialog({
     price: product?.price?.toString() || "",
     compareAtPrice: product?.compareAtPrice?.toString() || "",
     categoryId: product?.categoryId || "",
-    images: product?.images?.join("\n") || "",
     stock: product?.stock?.toString() || "0",
     sku: product?.sku || "",
     featured: product?.featured || false,
     active: product?.active ?? true,
   });
+  
+  const [uploadedImages, setUploadedImages] = useState<Id<"_storage">[]>(product?.imageStorageIds || []);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      const newStorageIds: Id<"_storage">[] = [];
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const uploadUrl = await generateUploadUrl();
+        const result = await fetch(uploadUrl, {
+          method: "POST",
+          headers: { "Content-Type": file.type },
+          body: file,
+        });
+        const { storageId } = await result.json();
+        newStorageIds.push(storageId);
+      }
+      
+      setUploadedImages([...uploadedImages, ...newStorageIds]);
+      toast.success(`${newStorageIds.length} image(s) uploaded`);
+    } catch (error) {
+      toast.error("Failed to upload images");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const imagesArray = formData.images
-        .split("\n")
-        .map(url => url.trim())
-        .filter(url => url.length > 0);
+    if (uploadedImages.length === 0) {
+      toast.error("Please upload at least one product image");
+      return;
+    }
 
+    try {
       const data = {
         name: formData.name,
         slug: formData.slug,
@@ -107,7 +139,7 @@ function ProductDialog({
         price: parseFloat(formData.price),
         compareAtPrice: formData.compareAtPrice ? parseFloat(formData.compareAtPrice) : undefined,
         categoryId: formData.categoryId as Id<"categories">,
-        images: imagesArray,
+        imageStorageIds: uploadedImages,
         stock: parseInt(formData.stock),
         sku: formData.sku || undefined,
         featured: formData.featured,
@@ -116,10 +148,10 @@ function ProductDialog({
 
       if (product) {
         await updateProduct({ id: product._id, ...data });
-        toast.success("Ürün güncellendi");
+        toast.success("Product updated");
       } else {
         await createProduct(data);
-        toast.success("Ürün oluşturuldu");
+        toast.success("Product created");
       }
 
       onClose();
@@ -127,7 +159,7 @@ function ProductDialog({
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("Bir hata oluştu");
+        toast.error("An error occurred");
       }
     }
   };
@@ -150,7 +182,7 @@ function ProductDialog({
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="name">Ürün Adı *</Label>
+          <Label htmlFor="name">Product Name *</Label>
           <Input
             id="name"
             value={formData.name}
@@ -169,14 +201,14 @@ function ProductDialog({
               required
             />
             <Button type="button" onClick={generateSlug} variant="outline">
-              Oluştur
+              Generate
             </Button>
           </div>
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Açıklama *</Label>
+        <Label htmlFor="description">Description *</Label>
         <Textarea
           id="description"
           value={formData.description}
@@ -213,14 +245,14 @@ function ProductDialog({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="category">Kategori *</Label>
+          <Label htmlFor="category">Category *</Label>
           <Select
             value={formData.categoryId}
             onValueChange={(value) => setFormData({ ...formData, categoryId: value })}
             required
           >
             <SelectTrigger>
-              <SelectValue placeholder="Kategori seçin" />
+              <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
               {categories?.map((cat) => (
@@ -233,7 +265,7 @@ function ProductDialog({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="stock">Stok *</Label>
+          <Label htmlFor="stock">Stock *</Label>
           <Input
             id="stock"
             type="number"
@@ -254,14 +286,31 @@ function ProductDialog({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="images">Resimler (Her satıra bir URL)</Label>
-        <Textarea
+        <Label htmlFor="images">Product Images *</Label>
+        <Input
           id="images"
-          value={formData.images}
-          onChange={(e) => setFormData({ ...formData, images: e.target.value })}
-          rows={3}
-          placeholder="https://example.com/image1.jpg"
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageUpload}
+          disabled={isUploading}
         />
+        {isUploading && <p className="text-sm text-muted-foreground">Uploading...</p>}
+        {uploadedImages.length > 0 && (
+          <div className="flex gap-2 flex-wrap mt-2">
+            {product?.images?.slice(0, uploadedImages.length).map((url, idx) => (
+              <img
+                key={idx}
+                src={url}
+                alt={`Product ${idx + 1}`}
+                className="h-20 w-20 object-cover rounded border"
+              />
+            ))}
+            <p className="text-sm text-muted-foreground self-center">
+              {uploadedImages.length} image(s) uploaded
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between">
@@ -271,7 +320,7 @@ function ProductDialog({
             checked={formData.featured}
             onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
           />
-          <Label htmlFor="featured">Öne Çıkan</Label>
+          <Label htmlFor="featured">Featured</Label>
         </div>
 
         <div className="flex items-center gap-2">
@@ -280,16 +329,16 @@ function ProductDialog({
             checked={formData.active}
             onCheckedChange={(checked) => setFormData({ ...formData, active: checked })}
           />
-          <Label htmlFor="active">Aktif</Label>
+          <Label htmlFor="active">Active</Label>
         </div>
       </div>
 
       <div className="flex justify-end gap-2 pt-4">
         <Button type="button" variant="outline" onClick={onClose}>
-          İptal
+          Cancel
         </Button>
-        <Button type="submit">
-          {product ? "Güncelle" : "Oluştur"}
+        <Button type="submit" disabled={isUploading}>
+          {product ? "Update" : "Create"}
         </Button>
       </div>
     </form>
@@ -305,6 +354,7 @@ type Product = {
   price: number;
   compareAtPrice?: number;
   categoryId: Id<"categories">;
+  imageStorageIds: Id<"_storage">[];
   images: string[];
   stock: number;
   sku?: string;
@@ -333,15 +383,15 @@ function ProductsContent() {
   }
 
   const handleDelete = async (id: Id<"products">) => {
-    if (confirm("Bu ürünü silmek istediğinizden emin misiniz?")) {
+    if (confirm("Are you sure you want to delete this product?")) {
       try {
         await deleteProduct({ id });
-        toast.success("Ürün silindi");
+        toast.success("Product deleted");
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
         } else {
-          toast.error("Bir hata oluştu");
+          toast.error("An error occurred");
         }
       }
     }
@@ -368,9 +418,9 @@ function ProductsContent() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Ürünler</h1>
+          <h1 className="text-3xl font-bold">Products</h1>
           <p className="text-muted-foreground">
-            {products.length} ürün bulundu
+            {products.length} products found
           </p>
         </div>
 
@@ -378,13 +428,13 @@ function ProductsContent() {
           <DialogTrigger asChild>
             <Button onClick={openCreateDialog}>
               <PlusIcon className="h-4 w-4 mr-2" />
-              Yeni Ürün
+              New Product
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {editingProduct ? "Ürünü Düzenle" : "Yeni Ürün Oluştur"}
+                {editingProduct ? "Edit Product" : "Create New Product"}
               </DialogTitle>
             </DialogHeader>
             <ProductDialog product={editingProduct} onClose={closeDialog} />
@@ -396,13 +446,13 @@ function ProductsContent() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Resim</TableHead>
-              <TableHead>Ürün</TableHead>
-              <TableHead>Kategori</TableHead>
-              <TableHead>Fiyat</TableHead>
-              <TableHead>Stok</TableHead>
-              <TableHead>Durum</TableHead>
-              <TableHead className="text-right">İşlemler</TableHead>
+              <TableHead>Image</TableHead>
+              <TableHead>Product</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Stock</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -431,11 +481,11 @@ function ProductsContent() {
                 <TableCell>
                   <div className="flex gap-2">
                     {product.active ? (
-                      <Badge>Aktif</Badge>
+                      <Badge>Active</Badge>
                     ) : (
-                      <Badge variant="secondary">Pasif</Badge>
+                      <Badge variant="secondary">Inactive</Badge>
                     )}
-                    {product.featured && <Badge variant="default">Öne Çıkan</Badge>}
+                    {product.featured && <Badge variant="default">Featured</Badge>}
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
@@ -473,7 +523,7 @@ export default function AdminProductsPage() {
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
               <p className="text-muted-foreground">
-                Bu sayfaya erişmek için giriş yapmalısınız
+                Please sign in to access this page
               </p>
               <SignInButton />
             </div>

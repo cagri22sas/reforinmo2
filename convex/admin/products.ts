@@ -19,7 +19,10 @@ export const list = query({
     return await Promise.all(
       products.map(async (product) => {
         const category = await ctx.db.get(product.categoryId);
-        return { ...product, category };
+        const imageUrls = await Promise.all(
+          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+        );
+        return { ...product, category, images: imageUrls.filter((url) => url !== null) as string[] };
       }),
     );
   },
@@ -46,7 +49,10 @@ export const get = query({
     }
 
     const category = await ctx.db.get(product.categoryId);
-    return { ...product, category };
+    const imageUrls = await Promise.all(
+      product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+    );
+    return { ...product, category, images: imageUrls.filter((url) => url !== null) as string[] };
   },
 });
 
@@ -74,7 +80,7 @@ export const create = mutation({
     price: v.number(),
     compareAtPrice: v.optional(v.number()),
     categoryId: v.id("categories"),
-    images: v.array(v.string()),
+    imageStorageIds: v.array(v.id("_storage")),
     stock: v.number(),
     sku: v.optional(v.string()),
     featured: v.boolean(),
@@ -123,7 +129,7 @@ export const update = mutation({
     price: v.number(),
     compareAtPrice: v.optional(v.number()),
     categoryId: v.id("categories"),
-    images: v.array(v.string()),
+    imageStorageIds: v.array(v.id("_storage")),
     stock: v.number(),
     sku: v.optional(v.string()),
     featured: v.boolean(),
