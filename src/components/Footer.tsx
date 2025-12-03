@@ -127,58 +127,31 @@ export default function Footer() {
               Subscribe to our newsletter for exclusive offers and updates
             </p>
             <NewsletterSubscribe variant="footer" />
-            
-            <div className="mt-6">
-              <h4 className="font-semibold text-sm mb-3">Follow Us</h4>
-              <div className="flex space-x-4">
-                {siteConfig?.socialLinks?.facebook && (
-                  <a 
-                    href={siteConfig.socialLinks.facebook} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    <FacebookIcon className="h-5 w-5" />
-                  </a>
-                )}
-                {siteConfig?.socialLinks?.instagram && (
-                  <a 
-                    href={siteConfig.socialLinks.instagram} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    <InstagramIcon className="h-5 w-5" />
-                  </a>
-                )}
-                {siteConfig?.socialLinks?.twitter && (
-                  <a 
-                    href={siteConfig.socialLinks.twitter} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    <TwitterIcon className="h-5 w-5" />
-                  </a>
-                )}
-                {siteConfig?.socialLinks?.youtube && (
-                  <a 
-                    href={siteConfig.socialLinks.youtube} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    <YoutubeIcon className="h-5 w-5" />
-                  </a>
-                )}
-              </div>
-            </div>
           </div>
         </div>
 
         <div className="mt-8 pt-8 border-t">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>{siteConfig?.footerText || `© ${currentYear} YachtBeach. All rights reserved.`}</p>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-4">
+              <p>{siteConfig?.footerText || `© ${currentYear} YachtBeach. All rights reserved.`}</p>
+              <div className="flex items-center gap-2">
+                <div className="group relative">
+                  <div className="w-10 h-7 rounded bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white text-[10px] font-bold shadow-md hover:shadow-lg transition-all hover:scale-110 hover:-rotate-3 cursor-pointer">
+                    VISA
+                  </div>
+                </div>
+                <div className="group relative">
+                  <div className="w-10 h-7 rounded bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white text-[10px] font-bold shadow-md hover:shadow-lg transition-all hover:scale-110 hover:rotate-3 cursor-pointer">
+                    MC
+                  </div>
+                </div>
+                <div className="group relative">
+                  <div className="w-10 h-7 rounded bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-[10px] font-bold shadow-md hover:shadow-lg transition-all hover:scale-110 hover:-rotate-3 cursor-pointer">
+                    AMEX
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="flex gap-4">
               <Link to="/privacy" className="hover:text-primary transition-colors">
                 Privacy

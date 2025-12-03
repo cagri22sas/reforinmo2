@@ -349,6 +349,21 @@ function ProductsContent() {
 
   const formatPrice = (price: number) => `${price.toFixed(2)} TL`;
 
+  const openCreateDialog = () => {
+    setEditingProduct(undefined);
+    setIsDialogOpen(true);
+  };
+
+  const openEditDialog = (product: Product) => {
+    setEditingProduct(product);
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setEditingProduct(undefined);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -359,10 +374,22 @@ function ProductsContent() {
           </p>
         </div>
 
-        <Button onClick={() => navigate("/admin/products/editor/new")}>
-          <PlusIcon className="h-4 w-4 mr-2" />
-          Yeni Ürün
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={openCreateDialog}>
+              <PlusIcon className="h-4 w-4 mr-2" />
+              Yeni Ürün
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>
+                {editingProduct ? "Ürünü Düzenle" : "Yeni Ürün Oluştur"}
+              </DialogTitle>
+            </DialogHeader>
+            <ProductDialog product={editingProduct} onClose={closeDialog} />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
@@ -416,7 +443,7 @@ function ProductsContent() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => navigate(`/admin/products/editor/${product._id}`)}
+                      onClick={() => openEditDialog(product)}
                     >
                       <EditIcon className="h-4 w-4" />
                     </Button>

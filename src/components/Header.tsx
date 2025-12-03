@@ -37,7 +37,7 @@ type SiteConfigWithUrls = {
 };
 
 export default function Header() {
-  const categories = useQuery(api.categories.list, {});
+  const categories = useQuery(api.categories.listWithProducts, {});
   const currentUser = useQuery(api.users.getCurrentUser, {});
   const isAdmin = useQuery(api.users.isAdmin, {});
   const siteConfig = useQuery(api.admin.siteConfig.get, {}) as SiteConfigWithUrls | null | undefined;

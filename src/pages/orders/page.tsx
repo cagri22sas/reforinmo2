@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty.tsx";
 import { PackageIcon, ChevronRightIcon } from "lucide-react";
+import Header from "@/components/Header.tsx";
+import Footer from "@/components/Footer.tsx";
 
 function OrdersContent() {
   const orders = useQuery(api.orders.list, {});
@@ -108,38 +110,44 @@ function OrdersContent() {
 
 export default function OrdersPage() {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">My Orders</h1>
-        <p className="text-muted-foreground">
-          View and track all your orders
-        </p>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <div className="flex-1 bg-gradient-to-b from-background to-muted/20">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold mb-2">My Orders</h1>
+            <p className="text-muted-foreground">
+              View and track all your orders
+            </p>
+          </div>
 
-      <Unauthenticated>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <p className="text-muted-foreground">
-                Please sign in to view your orders
-              </p>
-              <SignInButton />
+          <Unauthenticated>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="text-center space-y-4">
+                  <p className="text-muted-foreground">
+                    Please sign in to view your orders
+                  </p>
+                  <SignInButton />
+                </div>
+              </CardContent>
+            </Card>
+          </Unauthenticated>
+
+          <AuthLoading>
+            <div className="space-y-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-32 w-full" />
+              ))}
             </div>
-          </CardContent>
-        </Card>
-      </Unauthenticated>
+          </AuthLoading>
 
-      <AuthLoading>
-        <div className="space-y-4">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-32 w-full" />
-          ))}
+          <Authenticated>
+            <OrdersContent />
+          </Authenticated>
         </div>
-      </AuthLoading>
-
-      <Authenticated>
-        <OrdersContent />
-      </Authenticated>
+      </div>
+      <Footer />
     </div>
   );
 }

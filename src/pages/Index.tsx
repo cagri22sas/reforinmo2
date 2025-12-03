@@ -92,8 +92,8 @@ export default function Index() {
 
       <Header />
       
-      {/* Hero Section with 3D Yacht Design */}
-      <section ref={heroRef} className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
+      {/* Hero Section - Compact & Modern */}
+      <section ref={heroRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         {/* 3D Yacht Background Image */}
         <motion.div
           className="absolute inset-0"
@@ -108,82 +108,39 @@ export default function Index() {
           <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-transparent to-background/70" />
         </motion.div>
         
-        {/* 3D Floating yacht elements */}
-        <motion.div
-          className="absolute top-1/4 right-[10%] w-[500px] h-[300px] opacity-20 rounded-3xl shadow-2xl"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1541599955-d89bfc188927?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            rotateY: useTransform(smoothMouseX, [-20, 20], [-15, 15]),
-            rotateX: useTransform(smoothMouseY, [-20, 20], [15, -15]),
-            transformStyle: "preserve-3d",
-          }}
-          animate={{
-            y: [0, -20, 0],
-            x: [0, 10, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        
         <motion.div 
-          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20"
+          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-12"
           style={{ opacity }}
         >
-          <div className="max-w-6xl mx-auto text-center">
+          <div className="max-w-5xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 backdrop-blur-md border border-primary/30 mb-6 shadow-xl"
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-6"
             >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              >
-                <SparklesIcon className="h-4 w-4 text-primary" />
-              </motion.div>
-              <span className="text-xs font-bold text-primary tracking-wide">PREMIUM MARINE LIFESTYLE</span>
+              <SparklesIcon className="h-3.5 w-3.5 text-primary" />
+              <span className="text-xs font-semibold text-primary tracking-wide">PREMIUM MARINE LIFESTYLE</span>
             </motion.div>
 
-            <motion.div
-              style={{ 
-                rotateX: useTransform(smoothMouseY, [-20, 20], [3, -3]),
-                rotateY: useTransform(smoothMouseX, [-20, 20], [-3, 3]),
-                transformStyle: "preserve-3d",
-              }}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-balance mb-6 leading-tight"
             >
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-balance mb-6 leading-tight tracking-tight"
-              >
-                Where Luxury{" "}
-                <br className="hidden sm:block" />
-                <span className="relative inline-block">
-                  <span className="bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent drop-shadow-2xl">
-                    Meets the Sea
-                  </span>
-                  <motion.div
-                    className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent blur-sm"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 1.2, delay: 1 }}
-                  />
-                </span>
-              </motion.h1>
-            </motion.div>
+              Where Luxury{" "}
+              <br className="hidden sm:block" />
+              <span className="bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                Meets the Sea
+              </span>
+            </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-base sm:text-lg lg:text-xl text-foreground/80 mb-8 text-balance max-w-3xl mx-auto leading-relaxed font-light"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-base sm:text-lg text-foreground/80 mb-8 text-balance max-w-2xl mx-auto"
             >
               Experience the ultimate in floating luxury with our handcrafted marine platforms and accessories
             </motion.p>
@@ -191,55 +148,64 @@ export default function Index() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center"
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
             >
               <Link to="/products">
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button size="lg" className="group text-base px-8 py-6 rounded-xl shadow-2xl hover:shadow-primary/40 transition-all duration-300 bg-gradient-to-r from-primary via-blue-600 to-primary hover:from-blue-600 hover:to-primary border-2 border-primary/20">
-                    Explore Collection
-                    <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
-                  </Button>
-                </motion.div>
+                <Button size="lg" className="px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                  Explore Collection
+                  <ArrowRightIcon className="ml-2 h-5 w-5" />
+                </Button>
               </Link>
               <Link to="/products">
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button size="lg" variant="outline" className="text-base px-8 py-6 rounded-xl border-2 backdrop-blur-md bg-background/60 hover:bg-background/90 hover:border-primary transition-all duration-300">
-                    View Catalog
-                  </Button>
-                </motion.div>
+                <Button size="lg" variant="outline" className="px-8 py-6 rounded-xl backdrop-blur-sm hover:bg-primary/10 transition-all">
+                  View Catalog
+                </Button>
               </Link>
+            </motion.div>
+
+            {/* Trust indicators - Compact */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-12 flex flex-wrap justify-center gap-6"
+            >
+              {features.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ scale: 1.05 }}
+                  className="flex items-center gap-2 bg-card/30 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-border/30"
+                >
+                  <feature.icon className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">{feature.title}</span>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
         </motion.div>
         
-        {/* 3D Animated scroll indicator */}
+        {/* Simplified scroll indicator */}
         <motion.div
-          className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20"
-          animate={{ y: [0, 15, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
         >
-          <div className="w-8 h-14 rounded-full border-2 border-primary/60 flex items-start justify-center p-2 backdrop-blur-sm bg-background/20 shadow-xl">
+          <div className="w-6 h-10 rounded-full border-2 border-primary/40 flex items-start justify-center p-1.5 backdrop-blur-sm bg-background/20">
             <motion.div
-              className="w-2 h-3 rounded-full bg-primary shadow-lg shadow-primary/50"
-              animate={{ y: [0, 20, 0], opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="w-1.5 h-2 rounded-full bg-primary"
+              animate={{ y: [0, 15, 0], opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
             />
           </div>
         </motion.div>
 
-        {/* Floating yacht decoration at bottom */}
+        {/* Subtle bottom decoration */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-32 opacity-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 0.1, y: 0 }}
-          transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-0 left-0 right-0 h-20 opacity-5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.05 }}
+          transition={{ delay: 1, duration: 1 }}
         >
           <div
             className="w-full h-full bg-cover bg-center"
