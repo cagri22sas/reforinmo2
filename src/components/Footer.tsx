@@ -286,43 +286,40 @@ export default function Footer() {
             <div className="flex items-center gap-4">
               {/* Visa */}
               <motion.div
-                whileHover={{ scale: 1.1, rotate: -3, y: -3 }}
-                className="group relative"
+                whileHover={{ scale: 1.15, y: -4 }}
+                className="group relative cursor-pointer"
               >
-                <div className="absolute inset-0 bg-blue-600/30 blur-xl rounded-lg group-hover:bg-blue-600/50 transition-all" />
-                <div className="relative w-16 h-11 rounded-lg bg-gradient-to-br from-[#1434CB] to-[#1A1F71] flex items-center justify-center shadow-xl border border-white/10 overflow-hidden cursor-pointer">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
-                  <svg viewBox="0 0 48 16" className="w-10 h-auto" fill="white">
-                    <path d="M19.5 3.4l-3.8 9.2h-2.4l-1.9-7.3c-.1-.4-.2-.5-.6-.7-.6-.3-1.6-.5-2.5-.7l.1-.2h4.3c.5 0 1 .4 1.1.9l1 5.4 2.5-6.3h2.4zm9.4 6.2c0-2.4-3.4-2.6-3.4-3.7 0-.3.3-.7 1-.8.3-.1 1.2-.1 2.2.4l.4-1.8c-.5-.2-1.3-.4-2.2-.4-2.3 0-4 1.2-4 3 0 1.3 1.2 2 2.1 2.4.9.4 1.3.7 1.3 1.1 0 .6-.7.8-1.4.8-1.2 0-1.8-.3-2.4-.5l-.4 2c.5.2 1.5.4 2.5.4 2.5 0 4.1-1.2 4.1-3.1zm6.3 3h2.1l-1.8-9.2h-1.9c-.4 0-.8.3-.9.7l-3.4 8.5h2.4l.5-1.3h3l.3 1.3zm-2.6-3.1l1.2-3.4.7 3.4h-1.9zm-9.5-6.1l-1.9 9.2h-2.3l1.9-9.2h2.3z"/>
+                <div className="absolute inset-0 bg-blue-600/0 blur-xl rounded-lg group-hover:bg-blue-600/40 transition-all duration-300" />
+                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center">
+                  <svg viewBox="0 0 48 16" className="w-12 h-auto grayscale group-hover:grayscale-0 transition-all duration-300">
+                    <path d="M19.5 3.4l-3.8 9.2h-2.4l-1.9-7.3c-.1-.4-.2-.5-.6-.7-.6-.3-1.6-.5-2.5-.7l.1-.2h4.3c.5 0 1 .4 1.1.9l1 5.4 2.5-6.3h2.4zm9.4 6.2c0-2.4-3.4-2.6-3.4-3.7 0-.3.3-.7 1-.8.3-.1 1.2-.1 2.2.4l.4-1.8c-.5-.2-1.3-.4-2.2-.4-2.3 0-4 1.2-4 3 0 1.3 1.2 2 2.1 2.4.9.4 1.3.7 1.3 1.1 0 .6-.7.8-1.4.8-1.2 0-1.8-.3-2.4-.5l-.4 2c.5.2 1.5.4 2.5.4 2.5 0 4.1-1.2 4.1-3.1zm6.3 3h2.1l-1.8-9.2h-1.9c-.4 0-.8.3-.9.7l-3.4 8.5h2.4l.5-1.3h3l.3 1.3zm-2.6-3.1l1.2-3.4.7 3.4h-1.9zm-9.5-6.1l-1.9 9.2h-2.3l1.9-9.2h2.3z" fill="#1434CB" className="group-hover:fill-[#1434CB]"/>
                   </svg>
                 </div>
               </motion.div>
 
               {/* Mastercard */}
               <motion.div
-                whileHover={{ scale: 1.1, rotate: 3, y: -3 }}
-                className="group relative"
+                whileHover={{ scale: 1.15, y: -4 }}
+                className="group relative cursor-pointer"
               >
-                <div className="absolute inset-0 bg-orange-600/30 blur-xl rounded-lg group-hover:bg-orange-600/50 transition-all" />
-                <div className="relative w-16 h-11 rounded-lg bg-gradient-to-br from-[#EB001B] via-[#F79E1B] to-[#FF5F00] flex items-center justify-center shadow-xl border border-white/10 overflow-hidden cursor-pointer">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
-                  <div className="flex items-center justify-center gap-[-4px]">
-                    <div className="w-5 h-5 rounded-full bg-[#EB001B] opacity-90" />
-                    <div className="w-5 h-5 rounded-full bg-[#F79E1B] opacity-90 -ml-3" />
+                <div className="absolute inset-0 bg-orange-600/0 blur-xl rounded-lg group-hover:bg-orange-600/40 transition-all duration-300" />
+                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center">
+                  <div className="flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-muted-foreground group-hover:bg-[#EB001B] transition-all duration-300" />
+                    <div className="w-6 h-6 rounded-full bg-muted-foreground/60 group-hover:bg-[#F79E1B] transition-all duration-300 -ml-3" />
                   </div>
                 </div>
               </motion.div>
 
               {/* American Express */}
               <motion.div
-                whileHover={{ scale: 1.1, rotate: -3, y: -3 }}
-                className="group relative"
+                whileHover={{ scale: 1.15, y: -4 }}
+                className="group relative cursor-pointer"
               >
-                <div className="absolute inset-0 bg-blue-500/30 blur-xl rounded-lg group-hover:bg-blue-500/50 transition-all" />
-                <div className="relative w-16 h-11 rounded-lg bg-gradient-to-br from-[#006FCF] to-[#00478F] flex items-center justify-center shadow-xl border border-white/10 overflow-hidden cursor-pointer">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
-                  <svg viewBox="0 0 48 16" className="w-10 h-auto" fill="white">
-                    <path d="M4.5 6.8l-.9 2.1h1.8l-.9-2.1zm14.8 0l-.9 2.1h1.8l-.9-2.1zM1.8 4l-1.8 8h2.4l.3-.8h2.6l.3.8h2.6l-1.8-8H4.2l-.3.8h-.9L2.7 4H1.8zm8.9 0v8h3.7c1.5 0 2.4-.9 2.4-2.3 0-.9-.5-1.6-1.3-1.9.6-.3.9-.9.9-1.6 0-1.3-.9-2.2-2.2-2.2h-3.5zm8.7 0l-1.8 8h2.4l.3-.8h2.6l.3.8h2.6l-1.8-8h-2.2l-.3.8h-.9L21.3 4h-.9zm9 0v8h2.1V9.7h1.1l1.3 2.3h2.4l-1.5-2.5c.8-.3 1.3-1 1.3-2 0-1.3-.9-2.2-2.2-2.2h-4.5v.7zm2.1 1.6h1.9c.5 0 .8.3.8.8s-.3.8-.8.8h-1.9V5.6z"/>
+                <div className="absolute inset-0 bg-blue-500/0 blur-xl rounded-lg group-hover:bg-blue-500/40 transition-all duration-300" />
+                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center">
+                  <svg viewBox="0 0 48 16" className="w-12 h-auto grayscale group-hover:grayscale-0 transition-all duration-300">
+                    <path d="M4.5 6.8l-.9 2.1h1.8l-.9-2.1zm14.8 0l-.9 2.1h1.8l-.9-2.1zM1.8 4l-1.8 8h2.4l.3-.8h2.6l.3.8h2.6l-1.8-8H4.2l-.3.8h-.9L2.7 4H1.8zm8.9 0v8h3.7c1.5 0 2.4-.9 2.4-2.3 0-.9-.5-1.6-1.3-1.9.6-.3.9-.9.9-1.6 0-1.3-.9-2.2-2.2-2.2h-3.5zm8.7 0l-1.8 8h2.4l.3-.8h2.6l.3.8h2.6l-1.8-8h-2.2l-.3.8h-.9L21.3 4h-.9zm9 0v8h2.1V9.7h1.1l1.3 2.3h2.4l-1.5-2.5c.8-.3 1.3-1 1.3-2 0-1.3-.9-2.2-2.2-2.2h-4.5v.7zm2.1 1.6h1.9c.5 0 .8.3.8.8s-.3.8-.8.8h-1.9V5.6z" fill="#006FCF" className="group-hover:fill-[#006FCF]"/>
                   </svg>
                 </div>
               </motion.div>
