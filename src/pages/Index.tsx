@@ -91,15 +91,36 @@ export default function Index() {
 
       <Header />
       
-      {/* Hero Section with 3D effect */}
+      {/* Hero Section with 3D Yacht Design */}
       <section ref={heroRef} className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
-        {/* Floating background elements */}
+        {/* 3D Yacht Background Image */}
         <motion.div
-          className="absolute top-20 left-10 w-72 h-72 rounded-full bg-primary/10 blur-3xl"
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1562281302-809108fd533c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            scale,
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/85 to-background/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-transparent to-background/90" />
+        </motion.div>
+        
+        {/* 3D Floating yacht elements */}
+        <motion.div
+          className="absolute top-1/4 right-[10%] w-[500px] h-[300px] opacity-20 rounded-3xl shadow-2xl"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1541599955-d89bfc188927?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            rotateY: useTransform(smoothMouseX, [-20, 20], [-15, 15]),
+            rotateX: useTransform(smoothMouseY, [-20, 20], [15, -15]),
+            transformStyle: "preserve-3d",
+          }}
           animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 30, 0],
-            y: [0, -30, 0],
+            y: [0, -20, 0],
+            x: [0, 10, 0],
           }}
           transition={{
             duration: 8,
@@ -107,64 +128,51 @@ export default function Index() {
             ease: "easeInOut",
           }}
         />
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-primary/5 blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, -40, 0],
-            y: [0, 40, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
         
         <motion.div 
           className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20"
-          style={{ opacity, scale }}
+          style={{ opacity }}
         >
-          <div className="max-w-5xl mx-auto text-center">
+          <div className="max-w-6xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-8 shadow-lg"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/15 backdrop-blur-md border border-primary/30 mb-10 shadow-xl"
             >
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
               >
-                <SparklesIcon className="h-4 w-4 text-primary" />
+                <SparklesIcon className="h-5 w-5 text-primary" />
               </motion.div>
-              <span className="text-sm font-semibold text-primary">Premium Marine Lifestyle</span>
+              <span className="text-sm font-bold text-primary tracking-wide">PREMIUM MARINE LIFESTYLE</span>
             </motion.div>
 
             <motion.div
               style={{ 
-                rotateX: useTransform(smoothMouseY, [-20, 20], [5, -5]),
-                rotateY: useTransform(smoothMouseX, [-20, 20], [-5, 5]),
+                rotateX: useTransform(smoothMouseY, [-20, 20], [3, -3]),
+                rotateY: useTransform(smoothMouseX, [-20, 20], [-3, 3]),
+                transformStyle: "preserve-3d",
               }}
-              className="perspective-1000"
             >
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold text-balance mb-8 leading-[1.1] tracking-tighter"
+                className="text-6xl sm:text-7xl lg:text-8xl xl:text-[10rem] font-bold text-balance mb-10 leading-[1] tracking-tighter"
               >
                 Where Luxury{" "}
                 <br className="hidden sm:block" />
                 <span className="relative inline-block">
-                  <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent drop-shadow-2xl">
                     Meets the Sea
                   </span>
                   <motion.div
-                    className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"
+                    className="absolute -bottom-3 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-primary to-transparent blur-sm"
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
-                    transition={{ duration: 1, delay: 1 }}
+                    transition={{ duration: 1.2, delay: 1 }}
                   />
                 </span>
               </motion.h1>
@@ -174,7 +182,7 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground mb-12 text-balance max-w-3xl mx-auto leading-relaxed font-light"
+              className="text-xl sm:text-2xl lg:text-4xl text-foreground/80 mb-14 text-balance max-w-4xl mx-auto leading-relaxed font-light backdrop-blur-sm"
             >
               Experience the ultimate in floating luxury with our handcrafted marine platforms and accessories
             </motion.p>
@@ -183,25 +191,25 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
+              className="flex flex-col sm:flex-row gap-6 justify-center"
             >
               <Link to="/products">
                 <motion.div
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.08, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Button size="lg" className="group text-base px-10 py-7 rounded-2xl shadow-2xl hover:shadow-primary/25 transition-all duration-300 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary">
+                  <Button size="lg" className="group text-lg px-14 py-8 rounded-2xl shadow-2xl hover:shadow-primary/40 transition-all duration-300 bg-gradient-to-r from-primary via-blue-600 to-primary hover:from-blue-600 hover:to-primary border-2 border-primary/20">
                     Explore Collection
-                    <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRightIcon className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
                   </Button>
                 </motion.div>
               </Link>
               <Link to="/products">
                 <motion.div
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.08, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Button size="lg" variant="outline" className="text-base px-10 py-7 rounded-2xl border-2 backdrop-blur-sm bg-background/50 hover:bg-background/80 hover:border-primary/50 transition-all duration-300">
+                  <Button size="lg" variant="outline" className="text-lg px-14 py-8 rounded-2xl border-2 backdrop-blur-md bg-background/60 hover:bg-background/90 hover:border-primary transition-all duration-300">
                     View Catalog
                   </Button>
                 </motion.div>
@@ -210,29 +218,34 @@ export default function Index() {
           </div>
         </motion.div>
         
-        {/* Animated scroll indicator */}
+        {/* 3D Animated scroll indicator */}
         <motion.div
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20"
+          animate={{ y: [0, 15, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <div className="w-7 h-12 rounded-full border-2 border-primary/40 flex items-start justify-center p-2">
+          <div className="w-8 h-14 rounded-full border-2 border-primary/60 flex items-start justify-center p-2 backdrop-blur-sm bg-background/20 shadow-xl">
             <motion.div
-              className="w-1.5 h-2 rounded-full bg-primary"
-              animate={{ y: [0, 16, 0], opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="w-2 h-3 rounded-full bg-primary shadow-lg shadow-primary/50"
+              animate={{ y: [0, 20, 0], opacity: [1, 0.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
         </motion.div>
 
-        {/* Floating wave decoration */}
+        {/* Floating yacht decoration at bottom */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-24"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.1 }}
-          transition={{ delay: 1 }}
+          className="absolute bottom-0 left-0 right-0 h-32 opacity-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 0.1, y: 0 }}
+          transition={{ delay: 1.5, duration: 1 }}
         >
-          <WavesIcon className="w-full h-full text-primary" />
+          <div
+            className="w-full h-full bg-cover bg-center"
+            style={{
+              backgroundImage: `url('https://images.unsplash.com/photo-1758671625125-6a1a876e6ae8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920')`,
+            }}
+          />
         </motion.div>
       </section>
 
@@ -437,64 +450,185 @@ export default function Index() {
         </div>
       </section>
 
-      {/* CTA Section with parallax */}
-      <section className="py-40 relative overflow-hidden">
+      {/* CTA Section - Centered with Stunning Yacht Design */}
+      <section className="py-32 lg:py-48 relative overflow-hidden">
+        {/* 3D Yacht Background with Parallax */}
         <motion.div
           className="absolute inset-0"
-          style={{ y: useTransform(scrollYProgress, [0.8, 1], ["0%", "20%"]) }}
+          style={{ y: useTransform(scrollYProgress, [0.7, 1], ["0%", "30%"]) }}
         >
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1719391083606-da1dd6454a68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920')`,
+              backgroundImage: `url('https://images.unsplash.com/photo-1758671625125-6a1a876e6ae8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920')`,
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/90 to-primary/85" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/98 via-blue-600/95 to-cyan-600/90" />
+          
+          {/* Animated overlay pattern */}
+          <motion.div
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: `radial-gradient(circle at center, transparent 0%, rgba(255,255,255,0.1) 100%)`,
+            }}
+            animate={{
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
         </motion.div>
 
+        {/* Floating yacht decoration */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          className="absolute top-[15%] left-[5%] w-[400px] h-[250px] opacity-10 hidden lg:block rounded-3xl shadow-2xl"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1541599955-d89bfc188927?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+          animate={{
+            y: [0, -30, 0],
+            rotate: [-5, 5, -5],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        <motion.div
+          className="absolute bottom-[10%] right-[5%] w-[400px] h-[250px] opacity-10 hidden lg:block rounded-3xl shadow-2xl"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1562281302-809108fd533c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+          animate={{
+            y: [0, 30, 0],
+            rotate: [5, -5, 5],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Main Content - Perfectly Centered */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center"
+          transition={{ duration: 1 }}
+          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
         >
-          <motion.h2
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 text-primary-foreground tracking-tight"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Begin Your Journey
-          </motion.h2>
-          <motion.p
-            className="text-xl sm:text-2xl lg:text-3xl text-primary-foreground/95 mb-14 max-w-3xl mx-auto leading-relaxed font-light"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            Transform your aquatic experience with our exclusive collection of premium floating platforms
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            <Link to="/products">
-              <motion.div
-                whileHover={{ scale: 1.05, y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Button size="lg" variant="secondary" className="text-base px-12 py-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 font-semibold">
-                  Shop Collection
-                  <ArrowRightIcon className="ml-2 h-6 w-6" />
-                </Button>
-              </motion.div>
-            </Link>
-          </motion.div>
+          <div className="max-w-5xl mx-auto text-center flex flex-col items-center justify-center min-h-[60vh]">
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-12 shadow-2xl"
+            >
+              <ShipIcon className="h-5 w-5 text-white" />
+              <span className="text-sm font-bold text-white tracking-wider">EXCLUSIVE COLLECTION</span>
+            </motion.div>
+
+            {/* Main Heading */}
+            <motion.h2
+              className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold mb-10 text-white tracking-tight drop-shadow-2xl"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              Begin Your
+              <br />
+              <span className="bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent">
+                Journey
+              </span>
+            </motion.h2>
+
+            {/* Description */}
+            <motion.p
+              className="text-2xl sm:text-3xl lg:text-4xl text-white/95 mb-16 max-w-4xl leading-relaxed font-light drop-shadow-lg"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+            >
+              Transform your aquatic experience with our exclusive collection of premium floating platforms
+            </motion.p>
+
+            {/* CTA Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+            >
+              <Link to="/products">
+                <motion.div
+                  whileHover={{ scale: 1.1, y: -6 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group"
+                >
+                  <Button 
+                    size="lg" 
+                    className="text-xl px-16 py-10 rounded-3xl shadow-2xl hover:shadow-white/30 transition-all duration-500 font-bold bg-white text-primary hover:bg-white/90 border-4 border-white/50"
+                  >
+                    Shop Collection
+                    <motion.div
+                      className="ml-3"
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      <ArrowRightIcon className="h-7 w-7" />
+                    </motion.div>
+                  </Button>
+                </motion.div>
+              </Link>
+            </motion.div>
+
+            {/* Trust indicators */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="flex items-center gap-8 mt-16 text-white/90 text-sm"
+            >
+              <div className="flex items-center gap-2">
+                <ShieldCheckIcon className="h-5 w-5" />
+                <span className="font-semibold">Secure Checkout</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <AwardIcon className="h-5 w-5" />
+                <span className="font-semibold">Premium Quality</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ShipIcon className="h-5 w-5" />
+                <span className="font-semibold">Free Shipping</span>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Bottom wave decoration */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-24 opacity-20"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.2 }}
+          viewport={{ once: true }}
+          transition={{ delay: 1 }}
+        >
+          <WavesIcon className="w-full h-full text-white" />
         </motion.div>
       </section>
 
