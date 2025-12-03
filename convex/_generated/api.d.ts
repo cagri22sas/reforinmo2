@@ -39,6 +39,7 @@ import type * as reviews from "../reviews.js";
 import type * as shipping from "../shipping.js";
 import type * as stripe from "../stripe.js";
 import type * as testimonials from "../testimonials.js";
+import type * as updateImages from "../updateImages.js";
 import type * as users from "../users.js";
 import type * as wishlist from "../wishlist.js";
 
@@ -80,6 +81,7 @@ declare const fullApi: ApiFromModules<{
   shipping: typeof shipping;
   stripe: typeof stripe;
   testimonials: typeof testimonials;
+  updateImages: typeof updateImages;
   users: typeof users;
   wishlist: typeof wishlist;
 }>;

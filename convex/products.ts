@@ -31,10 +31,19 @@ export const list = query({
     return await Promise.all(
       products.map(async (product) => {
         const category = await ctx.db.get(product.categoryId);
-        const imageUrls = await Promise.all(
-          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
-        );
-        return { ...product, category, images: imageUrls.filter((url) => url !== null) as string[] };
+        
+        // Use images field if available, otherwise convert imageStorageIds to URLs
+        let images: string[] = [];
+        if (product.images && product.images.length > 0) {
+          images = product.images;
+        } else if (product.imageStorageIds && product.imageStorageIds.length > 0) {
+          const imageUrls = await Promise.all(
+            product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+          );
+          images = imageUrls.filter((url) => url !== null) as string[];
+        }
+        
+        return { ...product, category, images };
       }),
     );
   },
@@ -53,10 +62,19 @@ export const get = query({
     }
 
     const category = await ctx.db.get(product.categoryId);
-    const imageUrls = await Promise.all(
-      product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
-    );
-    return { ...product, category, images: imageUrls.filter((url) => url !== null) as string[] };
+    
+    // Use images field if available, otherwise convert imageStorageIds to URLs
+    let images: string[] = [];
+    if (product.images && product.images.length > 0) {
+      images = product.images;
+    } else if (product.imageStorageIds && product.imageStorageIds.length > 0) {
+      const imageUrls = await Promise.all(
+        product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+      );
+      images = imageUrls.filter((url) => url !== null) as string[];
+    }
+    
+    return { ...product, category, images };
   },
 });
 
@@ -80,10 +98,19 @@ export const getRelated = query({
           const relatedProduct = await ctx.db.get(id);
           if (!relatedProduct || !relatedProduct.active) return null;
           const category = await ctx.db.get(relatedProduct.categoryId);
-          const imageUrls = await Promise.all(
-            relatedProduct.imageStorageIds.map((id) => ctx.storage.getUrl(id))
-          );
-          return { ...relatedProduct, category, images: imageUrls.filter((url) => url !== null) as string[] };
+          
+          // Use images field if available, otherwise convert imageStorageIds to URLs
+          let images: string[] = [];
+          if (relatedProduct.images && relatedProduct.images.length > 0) {
+            images = relatedProduct.images;
+          } else if (relatedProduct.imageStorageIds && relatedProduct.imageStorageIds.length > 0) {
+            const imageUrls = await Promise.all(
+              relatedProduct.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+            );
+            images = imageUrls.filter((url) => url !== null) as string[];
+          }
+          
+          return { ...relatedProduct, category, images };
         })
       );
       return relatedProducts.filter((p) => p !== null);
@@ -104,10 +131,19 @@ export const getRelated = query({
     return await Promise.all(
       categoryProducts.map(async (p) => {
         const category = await ctx.db.get(p.categoryId);
-        const imageUrls = await Promise.all(
-          p.imageStorageIds.map((id) => ctx.storage.getUrl(id))
-        );
-        return { ...p, category, images: imageUrls.filter((url) => url !== null) as string[] };
+        
+        // Use images field if available, otherwise convert imageStorageIds to URLs
+        let images: string[] = [];
+        if (p.images && p.images.length > 0) {
+          images = p.images;
+        } else if (p.imageStorageIds && p.imageStorageIds.length > 0) {
+          const imageUrls = await Promise.all(
+            p.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+          );
+          images = imageUrls.filter((url) => url !== null) as string[];
+        }
+        
+        return { ...p, category, images };
       })
     );
   },
@@ -192,16 +228,23 @@ export const search = query({
           ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
           : 0;
 
-        const imageUrls = await Promise.all(
-          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
-        );
+        // Use images field if available, otherwise convert imageStorageIds to URLs
+        let images: string[] = [];
+        if (product.images && product.images.length > 0) {
+          images = product.images;
+        } else if (product.imageStorageIds && product.imageStorageIds.length > 0) {
+          const imageUrls = await Promise.all(
+            product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+          );
+          images = imageUrls.filter((url) => url !== null) as string[];
+        }
 
         return { 
           ...product, 
           category,
           reviewCount: reviews.length,
           averageRating: avgRating,
-          images: imageUrls.filter((url) => url !== null) as string[],
+          images,
         };
       })
     );

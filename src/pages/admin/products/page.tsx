@@ -64,8 +64,8 @@ function ProductDialog({
     price: number;
     compareAtPrice?: number;
     categoryId: Id<"categories">;
-    imageStorageIds: Id<"_storage">[];
-    images: string[];
+    imageStorageIds?: Id<"_storage">[];
+    images?: string[];
     stock: number;
     sku?: string;
     featured: boolean;
@@ -354,8 +354,8 @@ type Product = {
   price: number;
   compareAtPrice?: number;
   categoryId: Id<"categories">;
-  imageStorageIds: Id<"_storage">[];
-  images: string[];
+  imageStorageIds?: Id<"_storage">[];
+  images?: string[];
   stock: number;
   sku?: string;
   featured: boolean;

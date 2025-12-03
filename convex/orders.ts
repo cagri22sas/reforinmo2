@@ -100,9 +100,12 @@ export const create = mutation({
       }
 
       // Get first image URL
-      const imageUrl = product.imageStorageIds.length > 0 
-        ? await ctx.storage.getUrl(product.imageStorageIds[0])
-        : null;
+      let imageUrl = null;
+      if (product.images && product.images.length > 0) {
+        imageUrl = product.images[0];
+      } else if (product.imageStorageIds && product.imageStorageIds.length > 0) {
+        imageUrl = await ctx.storage.getUrl(product.imageStorageIds[0]);
+      }
 
       subtotal += product.price * cartItem.quantity;
       items.push({

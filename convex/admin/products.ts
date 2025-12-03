@@ -19,10 +19,19 @@ export const list = query({
     return await Promise.all(
       products.map(async (product) => {
         const category = await ctx.db.get(product.categoryId);
-        const imageUrls = await Promise.all(
-          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
-        );
-        return { ...product, category, images: imageUrls.filter((url) => url !== null) as string[] };
+        
+        // Use images field if available, otherwise convert imageStorageIds to URLs
+        let images: string[] = [];
+        if (product.images && product.images.length > 0) {
+          images = product.images;
+        } else if (product.imageStorageIds && product.imageStorageIds.length > 0) {
+          const imageUrls = await Promise.all(
+            product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+          );
+          images = imageUrls.filter((url) => url !== null) as string[];
+        }
+        
+        return { ...product, category, images };
       }),
     );
   },
@@ -49,10 +58,19 @@ export const get = query({
     }
 
     const category = await ctx.db.get(product.categoryId);
-    const imageUrls = await Promise.all(
-      product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
-    );
-    return { ...product, category, images: imageUrls.filter((url) => url !== null) as string[] };
+    
+    // Use images field if available, otherwise convert imageStorageIds to URLs
+    let images: string[] = [];
+    if (product.images && product.images.length > 0) {
+      images = product.images;
+    } else if (product.imageStorageIds && product.imageStorageIds.length > 0) {
+      const imageUrls = await Promise.all(
+        product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+      );
+      images = imageUrls.filter((url) => url !== null) as string[];
+    }
+    
+    return { ...product, category, images };
   },
 });
 
@@ -80,7 +98,8 @@ export const create = mutation({
     price: v.number(),
     compareAtPrice: v.optional(v.number()),
     categoryId: v.id("categories"),
-    imageStorageIds: v.array(v.id("_storage")),
+    imageStorageIds: v.optional(v.array(v.id("_storage"))),
+    images: v.optional(v.array(v.string())),
     stock: v.number(),
     sku: v.optional(v.string()),
     featured: v.boolean(),
@@ -129,7 +148,8 @@ export const update = mutation({
     price: v.number(),
     compareAtPrice: v.optional(v.number()),
     categoryId: v.id("categories"),
-    imageStorageIds: v.array(v.id("_storage")),
+    imageStorageIds: v.optional(v.array(v.id("_storage"))),
+    images: v.optional(v.array(v.string())),
     stock: v.number(),
     sku: v.optional(v.string()),
     featured: v.boolean(),

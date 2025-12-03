@@ -44,14 +44,21 @@ export const get = query({
           return null;
         }
         // Get image URLs
-        const imageUrls = await Promise.all(
-          product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
-        );
+        let images: string[] = [];
+        if (product.images && product.images.length > 0) {
+          images = product.images;
+        } else if (product.imageStorageIds && product.imageStorageIds.length > 0) {
+          const imageUrls = await Promise.all(
+            product.imageStorageIds.map((id) => ctx.storage.getUrl(id))
+          );
+          images = imageUrls.filter((url) => url !== null) as string[];
+        }
+        
         return {
           ...item,
           product: {
             ...product,
-            images: imageUrls.filter((url) => url !== null) as string[],
+            images,
           },
         };
       }),
