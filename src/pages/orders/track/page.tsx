@@ -160,7 +160,6 @@ export default function OrderTrackingPage() {
                       {...register("orderNumber", {
                         required: t("required"),
                       })}
-                      placeholder="ORD-1234567890-ABC"
                       className="mt-1.5"
                     />
                     {errors.orderNumber && (
@@ -182,7 +181,6 @@ export default function OrderTrackingPage() {
                           message: t("invalidEmail"),
                         },
                       })}
-                      placeholder="john@example.com"
                       className="mt-1.5"
                     />
                     {errors.email && (

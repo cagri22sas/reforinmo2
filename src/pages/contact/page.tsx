@@ -242,7 +242,6 @@ export default function ContactPage() {
                           {...register("name", {
                             required: t("required"),
                           })}
-                          placeholder="John Doe"
                           className="mt-1.5"
                         />
                         {errors.name && (
@@ -269,7 +268,6 @@ export default function ContactPage() {
                               message: t("invalidEmail"),
                             },
                           })}
-                          placeholder="john@example.com"
                           className="mt-1.5"
                         />
                         {errors.email && (
@@ -296,7 +294,6 @@ export default function ContactPage() {
                               message: t("invalidPhone"),
                             },
                           })}
-                          placeholder="+1 (555) 123-4567"
                           className="mt-1.5"
                         />
                         {errors.phone && (
@@ -319,7 +316,6 @@ export default function ContactPage() {
                         {...register("subject", {
                           required: t("required"),
                         })}
-                        placeholder={t("howCanWeHelp")}
                         className="mt-1.5"
                       />
                       {errors.subject && (
@@ -345,7 +341,6 @@ export default function ContactPage() {
                             message: t("required"),
                           },
                         })}
-                        placeholder={t("tellUsMore")}
                         rows={6}
                         className="mt-1.5 resize-none"
                       />
