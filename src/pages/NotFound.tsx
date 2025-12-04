@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button.tsx";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 
 export default function NotFound() {
   const location = useLocation();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   useEffect(() => {
     console.error(
@@ -17,14 +20,14 @@ export default function NotFound() {
       <div className="text-center space-y-6">
         <div className="space-y-2">
           <h1 className="text-6xl font-bold text-muted-foreground">404</h1>
-          <h2 className="text-2xl font-semibold">Page Not Found</h2>
+          <h2 className="text-2xl font-semibold">{t.pageNotFound}</h2>
         </div>
         <p className="text-lg text-muted-foreground max-w-md mx-auto">
-          This page does not exist.
+          {t.pageNotExist}
         </p>
         <div className="pt-4">
           <Button asChild>
-            <Link to="/">Return to Home</Link>
+            <Link to="/">{t.returnHome}</Link>
           </Button>
         </div>
       </div>

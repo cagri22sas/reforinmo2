@@ -3,8 +3,12 @@ import Footer from "@/components/Footer.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { XCircleIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 
 export default function CheckoutCancelPage() {
+  const { language } = useLanguage();
+  const t = translations[language];
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -18,22 +22,21 @@ export default function CheckoutCancelPage() {
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold">Payment Cancelled</h1>
+            <h1 className="text-3xl font-bold">{t.paymentCancelled}</h1>
             <p className="text-muted-foreground">
-              Your payment has been cancelled. Your cart items have been
-              preserved.
+              {t.paymentCancelledDesc}
             </p>
           </div>
 
           <div className="space-y-3">
             <Link to="/cart" className="block">
               <Button size="lg" className="w-full">
-                Return to Cart
+                {t.returnToCart}
               </Button>
             </Link>
             <Link to="/products" className="block">
               <Button size="lg" variant="outline" className="w-full">
-                Continue Shopping
+                {t.continueShopping}
               </Button>
             </Link>
           </div>

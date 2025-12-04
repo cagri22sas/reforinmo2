@@ -3,8 +3,12 @@ import Footer from "@/components/Footer.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { CheckCircleIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage, translations } from "@/hooks/use-language.ts";
 
 export default function CheckoutSuccessPage() {
+  const { language } = useLanguage();
+  const t = translations[language];
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -18,28 +22,27 @@ export default function CheckoutSuccessPage() {
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold">Payment Successful!</h1>
+            <h1 className="text-3xl font-bold">{t.paymentSuccessful}</h1>
             <p className="text-muted-foreground">
-              Your order has been successfully created. Order details have been
-              sent to your email address.
+              {t.orderCreated}
             </p>
           </div>
 
           <div className="space-y-3">
             <Link to="/orders" className="block">
               <Button size="lg" className="w-full">
-                View My Orders
+                {t.viewMyOrders}
               </Button>
             </Link>
             <Link to="/products" className="block">
               <Button size="lg" variant="outline" className="w-full">
-                Continue Shopping
+                {t.continueShopping}
               </Button>
             </Link>
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <p>Thank you! 🎉</p>
+            <p>{t.thankYou}</p>
           </div>
         </div>
       </div>
