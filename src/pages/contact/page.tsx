@@ -39,6 +39,7 @@ type SiteConfigWithUrls = {
 interface ContactForm {
   name: string;
   email: string;
+  phone: string;
   subject: string;
   message: string;
 }
@@ -228,7 +229,7 @@ export default function ContactPage() {
                 
                 <CardContent className="relative z-10">
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid md:grid-cols-3 gap-4">
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -274,6 +275,33 @@ export default function ContactPage() {
                         {errors.email && (
                           <p className="text-sm text-destructive mt-1">
                             {errors.email.message}
+                          </p>
+                        )}
+                      </motion.div>
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.65 }}
+                      >
+                        <Label htmlFor="phone">{t("phoneNumber")} *</Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          {...register("phone", {
+                            required: t("required"),
+                            pattern: {
+                              value: /^[\d\s\-+()]+$/,
+                              message: t("invalidPhone"),
+                            },
+                          })}
+                          placeholder="+1 (555) 123-4567"
+                          className="mt-1.5"
+                        />
+                        {errors.phone && (
+                          <p className="text-sm text-destructive mt-1">
+                            {errors.phone.message}
                           </p>
                         )}
                       </motion.div>
