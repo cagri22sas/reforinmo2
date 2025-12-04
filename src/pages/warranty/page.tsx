@@ -181,7 +181,7 @@ export default function WarrantyPage() {
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-cyan-500/10 to-transparent rounded-full blur-3xl" />
                 
                 <div 
-                  className="relative prose prose-lg dark:prose-invert prose-headings:bg-gradient-to-r prose-headings:from-foreground prose-headings:to-primary prose-headings:bg-clip-text prose-headings:text-transparent max-w-none"
+                  className="relative prose prose-lg dark:prose-invert prose-headings:bg-gradient-to-r prose-headings:from-foreground prose-headings:to-primary prose-headings:bg-clip-text prose-headings:text-transparent prose-p:text-foreground prose-li:text-foreground prose-strong:text-foreground prose-a:text-primary max-w-none"
                   dangerouslySetInnerHTML={{ __html: page.content }}
                 />
               </div>
