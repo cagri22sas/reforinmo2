@@ -2,7 +2,7 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { ConvexError } from "convex/values";
 
-// Subscribe to newsletter
+// Subscribe to newsletter with rate limiting
 export const subscribe = mutation({
   args: {
     email: v.string(),
@@ -15,6 +15,21 @@ export const subscribe = mutation({
     if (!emailRegex.test(args.email)) {
       throw new ConvexError({
         message: "Please enter a valid email address",
+        code: "BAD_REQUEST",
+      });
+    }
+
+    // Rate limiting: Check recent subscription attempts
+    // For production, implement proper rate limiting with IP tracking
+    const recentAttempts = await ctx.db
+      .query("newsletterSubscribers")
+      .withIndex("by_email", (q) => q.eq("email", args.email.toLowerCase()))
+      .first();
+
+    // If email was just added/updated in last 60 seconds, reject
+    if (recentAttempts && recentAttempts._creationTime > Date.now() - 60000) {
+      throw new ConvexError({
+        message: "Please wait before subscribing again",
         code: "BAD_REQUEST",
       });
     }

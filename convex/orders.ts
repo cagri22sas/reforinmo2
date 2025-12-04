@@ -121,8 +121,10 @@ export const create = mutation({
     const discount = args.discount || 0;
     const total = subtotal + shippingCost - discount;
 
-    // Generate order number
-    const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(7).toUpperCase()}`;
+    // Generate secure, unpredictable order number
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const randomPart = Math.random().toString(36).substring(2, 12).toUpperCase();
+    const orderNumber = `ORD-${timestamp}${randomPart}`;
 
     // Create order
     const orderId = await ctx.db.insert("orders", {
@@ -315,6 +317,36 @@ export const handleSuccessfulPayment = internalMutation({
       return;
     }
 
+    // Get order items
+    const items = await ctx.db
+      .query("orderItems")
+      .withIndex("by_order", (q) => q.eq("orderId", order._id))
+      .collect();
+
+    // Re-validate stock before processing payment
+    for (const item of items) {
+      const product = await ctx.db.get(item.productId);
+      if (!product) {
+        console.error("Product not found during payment:", item.productId);
+        // Cancel order due to missing product
+        await ctx.db.patch(order._id, {
+          status: "cancelled",
+          notes: "Product no longer available",
+        });
+        return;
+      }
+      
+      if (product.stock < item.quantity) {
+        console.error("Insufficient stock during payment:", item.productId);
+        // Cancel order due to insufficient stock
+        await ctx.db.patch(order._id, {
+          status: "cancelled",
+          notes: `Insufficient stock for ${product.name}`,
+        });
+        return;
+      }
+    }
+
     // Update order status
     await ctx.db.patch(order._id, {
       status: "processing",
@@ -322,11 +354,6 @@ export const handleSuccessfulPayment = internalMutation({
     });
 
     // Reduce stock for each item
-    const items = await ctx.db
-      .query("orderItems")
-      .withIndex("by_order", (q) => q.eq("orderId", order._id))
-      .collect();
-
     for (const item of items) {
       const product = await ctx.db.get(item.productId);
       if (product) {

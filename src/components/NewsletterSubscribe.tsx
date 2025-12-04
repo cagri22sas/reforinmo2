@@ -78,6 +78,7 @@ export default function NewsletterSubscribe({
               exit={{ opacity: 0, y: -10 }}
               onSubmit={handleSubmit}
               className="flex gap-2"
+              aria-disabled={isLoading}
             >
               <Input
                 type="email"

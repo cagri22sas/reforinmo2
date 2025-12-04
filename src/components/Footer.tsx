@@ -316,7 +316,7 @@ export default function Footer() {
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             {/* Copyright */}
             <p className="text-sm text-muted-foreground">
-              {siteConfig?.footerText || `© ${currentYear} YachtBeach. All rights reserved.`}
+              {siteConfig?.footerText || `© ${currentYear} ${siteConfig?.siteName || "Marine Store"}. ${t.allRightsReserved}.`}
             </p>
 
             {/* Payment Cards - Right Side */}

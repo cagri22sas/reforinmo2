@@ -50,11 +50,8 @@ export default function Header() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   
   useEffect(() => {
-    let id = localStorage.getItem("guestSessionId");
-    if (!id) {
-      id = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      localStorage.setItem("guestSessionId", id);
-    }
+    // Guest session is now created by useGuestSession hook with UUID
+    const id = localStorage.getItem("guestSessionId");
     setSessionId(id);
   }, []);
   
@@ -108,7 +105,7 @@ export default function Header() {
                 {/* Brand text with gradient */}
                 <div className="flex flex-col">
                   <div className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent tracking-tight leading-none group-hover:tracking-wide transition-all duration-300">
-                    {siteConfig?.siteName || "YachtBeach"}
+                    {siteConfig?.siteName || "Marine Store"}
                   </div>
                   <div className="text-[10px] text-muted-foreground/80 tracking-widest uppercase font-medium">
                     {t.marineExcellence}

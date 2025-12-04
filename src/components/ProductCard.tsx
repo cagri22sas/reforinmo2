@@ -26,11 +26,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   const t = translations[language];
   
   useEffect(() => {
-    let id = localStorage.getItem("guestSessionId");
-    if (!id) {
-      id = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      localStorage.setItem("guestSessionId", id);
-    }
+    // Guest session is now created by useGuestSession hook with UUID
+    const id = localStorage.getItem("guestSessionId") || "";
     setSessionId(id);
   }, []);
   

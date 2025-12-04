@@ -81,11 +81,8 @@ export default function ProductDetailPage() {
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
   useEffect(() => {
-    let id = localStorage.getItem("guestSessionId");
-    if (!id) {
-      id = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      localStorage.setItem("guestSessionId", id);
-    }
+    // Guest session is now created by useGuestSession hook with UUID
+    const id = localStorage.getItem("guestSessionId") || "";
     setSessionId(id);
   }, []);
 
@@ -136,7 +133,12 @@ export default function ProductDetailPage() {
 
   const handleMarkHelpful = async (reviewId: string) => {
     try {
-      await markHelpful({ reviewId: reviewId as never });
+      // Generate a simple user fingerprint based on browser/device info
+      const userFingerprint = `${navigator.userAgent}-${screen.width}x${screen.height}`.substring(0, 100);
+      await markHelpful({ 
+        reviewId: reviewId as never,
+        userFingerprint 
+      });
       toast.success("Thank you for your feedback!");
     } catch (error) {
       toast.error("Failed to mark as helpful");

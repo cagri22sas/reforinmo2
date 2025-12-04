@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 // Hook to manage guest session ID for cart tracking with 30-day expiry
 export function useGuestSession() {
@@ -16,8 +17,8 @@ export function useGuestSession() {
       : true;
     
     if (!existingSessionId || isExpired) {
-      // Create new session ID
-      existingSessionId = `guest-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+      // Create new session ID with UUID for unpredictability
+      existingSessionId = `guest-${uuidv4()}`;
       localStorage.setItem("guestSessionId", existingSessionId);
       localStorage.setItem("guestSessionTimestamp", Date.now().toString());
     }

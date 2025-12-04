@@ -15,7 +15,7 @@ export const useLanguage = create<LanguageStore>()(
       setLanguage: (language) => set({ language }),
     }),
     {
-      name: "yachtbeach-language",
+      name: "marine-store-language",
     }
   )
 );
@@ -230,11 +230,11 @@ export const translations = {
     send: "Send",
     
     // About page
-    aboutYachtBeach: "About YachtBeach",
+    aboutYachtBeach: "About Us",
     navigationExcellence: "Navigating excellence in marine lifestyle. Premium equipment for those who live and breathe the ocean.",
     ourJourney: "Our Journey",
     chartingNewWaters: "Charting New Waters",
-    aboutStory1: "Born from a passion for the sea, YachtBeach emerged as a beacon of quality in marine equipment. We're not just suppliers – we're sailors, divers, and ocean enthusiasts who understand what it means to trust your gear.",
+    aboutStory1: "Born from a passion for the sea, we emerged as a beacon of quality in marine equipment. We're not just suppliers – we're sailors, divers, and ocean enthusiasts who understand what it means to trust your gear.",
     aboutStory2: "Every product in our collection has been tested in real conditions, from calm harbors to challenging open waters. We believe in equipment that performs when it matters most.",
     ourCoreValues: "Our Core Values",
     coreValuesPrinciples: "The principles that guide every decision we make",
@@ -712,11 +712,11 @@ export const translations = {
     send: "Enviar",
     
     // About page
-    aboutYachtBeach: "Sobre YachtBeach",
+    aboutYachtBeach: "Sobre Nosotros",
     navigationExcellence: "Navegando la excelencia en estilo de vida marino. Equipamiento premium para quienes viven y respiran el océano.",
     ourJourney: "Nuestro Viaje",
     chartingNewWaters: "Trazando Nuevas Aguas",
-    aboutStory1: "Nacido de una pasión por el mar, YachtBeach emergió como un faro de calidad en equipamiento marino. No somos solo proveedores – somos navegantes, buzos y entusiastas del océano que entendemos lo que significa confiar en tu equipo.",
+    aboutStory1: "Nacido de una pasión por el mar, emergimos como un faro de calidad en equipamiento marino. No somos solo proveedores – somos navegantes, buzos y entusiastas del océano que entendemos lo que significa confiar en tu equipo.",
     aboutStory2: "Cada producto en nuestra colección ha sido probado en condiciones reales, desde puertos tranquilos hasta aguas abiertas desafiantes. Creemos en equipamiento que funciona cuando más importa.",
     ourCoreValues: "Nuestros Valores Fundamentales",
     coreValuesPrinciples: "Los principios que guían cada decisión que tomamos",
