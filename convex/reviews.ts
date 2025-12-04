@@ -148,7 +148,22 @@ export const create = mutation({
       }
     }
 
-    // Create review
+    // Validate review length
+    if (args.title.length > 200) {
+      throw new ConvexError({
+        message: "Review title must be 200 characters or less",
+        code: "BAD_REQUEST",
+      });
+    }
+
+    if (args.comment.length > 2000) {
+      throw new ConvexError({
+        message: "Review comment must be 2000 characters or less",
+        code: "BAD_REQUEST",
+      });
+    }
+
+    // Create review with pending status for admin approval
     const reviewId = await ctx.db.insert("reviews", {
       productId: args.productId,
       userId: user._id,
@@ -159,7 +174,7 @@ export const create = mutation({
       comment: args.comment,
       verifiedPurchase,
       helpfulCount: 0,
-      status: "approved", // Auto-approve for now
+      status: "pending", // Requires admin approval
     });
 
     return reviewId;

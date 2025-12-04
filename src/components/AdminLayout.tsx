@@ -20,7 +20,8 @@ import {
   ChevronRightIcon,
   MessageCircleIcon,
   TagIcon,
-  FileTextIcon
+  FileTextIcon,
+  StarIcon
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -42,6 +43,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       items: [
         { path: "/admin/products", label: "Products", icon: PackageIcon },
         { path: "/admin/categories", label: "Categories", icon: FolderIcon },
+        { path: "/admin/reviews", label: "Reviews", icon: StarIcon },
         { path: "/admin/media", label: "Media Library", icon: ImageIcon },
       ]
     },

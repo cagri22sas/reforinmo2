@@ -39,6 +39,7 @@ import AdminChatPage from "./pages/admin/chat/page.tsx";
 import AdminCouponsPage from "./pages/admin/coupons/page.tsx";
 import AdminPagesPage from "./pages/admin/pages/page.tsx";
 import AdminUpdateImagesPage from "./pages/admin/update-images.tsx";
+import AdminReviewsPage from "./pages/admin/reviews/page.tsx";
 import WishlistPage from "./pages/wishlist/page.tsx";
 import StoresPage from "./pages/stores/page.tsx";
 
@@ -85,6 +86,7 @@ export default function App() {
           <Route path="/admin/chat" element={<AdminChatPage />} />
           <Route path="/admin/coupons" element={<AdminCouponsPage />} />
           <Route path="/admin/pages" element={<AdminPagesPage />} />
+          <Route path="/admin/reviews" element={<AdminReviewsPage />} />
           <Route path="/admin/update-images" element={<AdminUpdateImagesPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

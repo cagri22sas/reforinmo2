@@ -27,8 +27,8 @@ export const list = query({
           .query("orders")
           .withIndex("by_status", (q) => q.eq("status", args.status!))
           .order("desc")
-          .collect()
-      : await ctx.db.query("orders").order("desc").collect();
+          .take(100)
+      : await ctx.db.query("orders").order("desc").take(100);
 
     return await Promise.all(
       orders.map(async (order) => {

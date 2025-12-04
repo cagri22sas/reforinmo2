@@ -50,12 +50,12 @@ export const createCheckoutSession = action({
       quantity: number;
     }> = order.items.map((item) => ({
       price_data: {
-        currency: "try",
+        currency: "eur",
         product_data: {
           name: item.productName,
           images: [item.productImage],
         },
-        unit_amount: Math.round(item.price * 100), // Convert to kuruş
+        unit_amount: Math.round(item.price * 100), // Convert to cents
       },
       quantity: item.quantity,
     }));
@@ -64,9 +64,9 @@ export const createCheckoutSession = action({
     if (order.shippingCost > 0 && order.shippingMethod) {
       lineItems.push({
         price_data: {
-          currency: "try",
+          currency: "eur",
           product_data: {
-            name: "Kargo Ücreti",
+            name: "Shipping Cost",
             description: order.shippingMethod.name,
           },
           unit_amount: Math.round(order.shippingCost * 100),

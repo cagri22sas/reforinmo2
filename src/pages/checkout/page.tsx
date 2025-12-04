@@ -383,9 +383,19 @@ export default function CheckoutPage() {
                           <Label htmlFor="phone" className="text-base mb-2">Phone</Label>
                           <Input
                             id="phone"
+                            type="tel"
                             className="h-12 rounded-xl text-base"
+                            placeholder="+34 123 456 789"
                             {...register("phone", {
                               required: "Phone is required",
+                              pattern: {
+                                value: /^[\d\s\-+()]+$/,
+                                message: "Please enter a valid phone number",
+                              },
+                              minLength: {
+                                value: 8,
+                                message: "Phone number must be at least 8 digits",
+                              },
                             })}
                           />
                           {errors.phone && (

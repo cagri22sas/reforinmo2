@@ -15,7 +15,7 @@ export const list = query({
       });
     }
 
-    const products = await ctx.db.query("products").order("desc").collect();
+    const products = await ctx.db.query("products").order("desc").take(100);
     return await Promise.all(
       products.map(async (product) => {
         const category = await ctx.db.get(product.categoryId);

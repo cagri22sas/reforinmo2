@@ -123,7 +123,7 @@ export default function ProductDetailPage() {
         title: reviewTitle,
         comment: reviewComment,
       });
-      toast.success("Review submitted successfully!");
+      toast.success("Review submitted! It will be visible after admin approval.");
       setReviewTitle("");
       setReviewComment("");
       setReviewRating(5);
