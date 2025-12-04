@@ -207,6 +207,60 @@ export const get = query({
   },
 });
 
+export const trackOrder = query({
+  args: {
+    orderNumber: v.string(),
+    email: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const order = await ctx.db
+      .query("orders")
+      .withIndex("by_order_number", (q) => q.eq("orderNumber", args.orderNumber))
+      .unique();
+
+    if (!order) {
+      throw new ConvexError({
+        message: "Order not found",
+        code: "NOT_FOUND",
+      });
+    }
+
+    // Verify email matches
+    const emailLower = args.email.toLowerCase();
+    const orderEmail = order.guestEmail?.toLowerCase();
+    
+    // For authenticated users, check the user's email
+    if (order.userId) {
+      const user = await ctx.db.get(order.userId);
+      if (user && user.email?.toLowerCase() !== emailLower) {
+        throw new ConvexError({
+          message: "Email does not match order",
+          code: "FORBIDDEN",
+        });
+      }
+    } else if (orderEmail !== emailLower) {
+      // For guest orders, check guest email
+      throw new ConvexError({
+        message: "Email does not match order",
+        code: "FORBIDDEN",
+      });
+    }
+
+    const items = await ctx.db
+      .query("orderItems")
+      .withIndex("by_order", (q) => q.eq("orderId", order._id))
+      .collect();
+
+    const shippingMethod = await ctx.db.get(order.shippingMethodId);
+
+    return {
+      ...order,
+      items,
+      shippingMethod,
+    };
+  },
+});
+
 // Internal queries and mutations for Stripe
 export const getOrderForCheckout = internalQuery({
   args: { orderId: v.id("orders") },

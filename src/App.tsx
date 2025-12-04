@@ -12,6 +12,7 @@ import CheckoutSuccessPage from "./pages/checkout/success/page.tsx";
 import CheckoutCancelPage from "./pages/checkout/cancel/page.tsx";
 import OrdersPage from "./pages/orders/page.tsx";
 import OrderDetailPage from "./pages/orders/[id]/page.tsx";
+import OrderTrackingPage from "./pages/orders/track/page.tsx";
 import ProfilePage from "./pages/profile/page.tsx";
 import AboutPage from "./pages/about/page.tsx";
 import ContactPage from "./pages/contact/page.tsx";
@@ -55,6 +56,7 @@ export default function App() {
           <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
           <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/track" element={<OrderTrackingPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
