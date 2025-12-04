@@ -11,15 +11,13 @@ import {
   UsersIcon, 
   DollarSignIcon,
   AlertTriangleIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
   FolderIcon,
   TruckIcon,
   ArrowUpIcon,
-  ArrowDownIcon
+  ArrowDownIcon,
+  TrendingUpIcon
 } from "lucide-react";
-import Header from "@/components/Header.tsx";
-import Footer from "@/components/Footer.tsx";
+import AdminLayout from "@/components/AdminLayout.tsx";
 import { 
   LineChart, 
   Line, 
@@ -131,39 +129,51 @@ function AdminDashboardContent() {
 
   return (
     <div className="space-y-8">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Track your e-commerce performance
+      {/* Page Header with Gradient */}
+      <div className="flex items-center justify-between pb-6 border-b">
+        <div className="space-y-1">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+            Dashboard
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            Track your e-commerce performance and metrics
           </p>
+        </div>
+        <div className="px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl border border-primary/20">
+          <p className="text-sm text-muted-foreground">Last updated</p>
+          <p className="text-sm font-semibold">{new Date().toLocaleDateString()}</p>
         </div>
       </div>
 
-      {/* Main Stats */}
+      {/* Main Stats - Enhanced Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat) => {
           const Icon = stat.icon;
           const content = (
-            <Card className={`${stat.link ? 'hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02]' : ''} border-l-4 border-l-primary/50`}>
-              <CardHeader className="pb-3">
+            <Card className={`${stat.link ? 'hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.03] hover:-translate-y-1' : ''} relative overflow-hidden group`}>
+              {/* Gradient Background Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <CardHeader className="pb-3 relative z-10">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     {stat.title}
                   </CardTitle>
-                  <div className={`p-2 rounded-lg ${stat.iconBg}`}>
+                  <div className={`p-2.5 rounded-xl shadow-md ${stat.iconBg} group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className={`h-5 w-5 ${stat.iconColor}`} />
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-1">
-                <div className="text-3xl font-bold">{stat.value}</div>
+              <CardContent className="space-y-2 relative z-10">
+                <div className="text-3xl font-bold tracking-tight">{stat.value}</div>
                 <div className="flex items-center justify-between">
-                  <p className="text-xs text-muted-foreground">{stat.subtitle}</p>
+                  <p className="text-xs text-muted-foreground font-medium">{stat.subtitle}</p>
                   {stat.trend !== undefined && formatTrend(stat.trend)}
                 </div>
               </CardContent>
+              
+              {/* Bottom Accent Line */}
+              <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${stat.iconBg}`} />
             </Card>
           );
 
@@ -177,13 +187,20 @@ function AdminDashboardContent() {
         })}
       </div>
 
-      {/* Charts Row */}
+      {/* Charts Row - Enhanced */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Revenue Chart */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Last 7 Days Revenue Trend</CardTitle>
-            <CardDescription>Daily revenue and order counts</CardDescription>
+        <Card className="border-t-4 border-t-primary shadow-sm hover:shadow-lg transition-shadow duration-300">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-2">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <TrendingUpIcon className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Revenue Trend</CardTitle>
+                <CardDescription>Last 7 days performance</CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -233,10 +250,17 @@ function AdminDashboardContent() {
         </Card>
 
         {/* Order Status Chart */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Order Status Distribution</CardTitle>
-            <CardDescription>Summary of current order statuses</CardDescription>
+        <Card className="border-t-4 border-t-accent shadow-sm hover:shadow-lg transition-shadow duration-300">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-2">
+              <div className="p-2 bg-accent/10 rounded-lg">
+                <PackageIcon className="h-5 w-5 text-accent" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Order Status</CardTitle>
+                <CardDescription>Current distribution</CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -266,20 +290,24 @@ function AdminDashboardContent() {
         </Card>
       </div>
 
-      {/* Quick Action Cards */}
+      {/* Quick Action Cards - Enhanced */}
       <div>
-        <h2 className="text-xl font-bold mb-4">Quick Access</h2>
+        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+          <div className="h-1 w-8 bg-gradient-to-r from-primary to-accent rounded-full" />
+          Quick Access
+        </h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Link to="/admin/products">
-            <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02] border-l-4 border-l-blue-500">
-              <CardContent className="pt-6">
+            <Card className="hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.05] hover:-translate-y-1 group relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <CardContent className="pt-6 relative z-10">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                  <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/20 rounded-xl shadow-md group-hover:scale-110 transition-transform">
                     <PackageIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">Products</p>
-                    <p className="text-sm text-muted-foreground">{stats.totalProducts} products</p>
+                    <p className="font-semibold text-lg">Products</p>
+                    <p className="text-sm text-muted-foreground">{stats.totalProducts} total</p>
                   </div>
                 </div>
               </CardContent>
@@ -287,15 +315,16 @@ function AdminDashboardContent() {
           </Link>
 
           <Link to="/admin/categories">
-            <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02] border-l-4 border-l-purple-500">
-              <CardContent className="pt-6">
+            <Card className="hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.05] hover:-translate-y-1 group relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <CardContent className="pt-6 relative z-10">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                  <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/20 rounded-xl shadow-md group-hover:scale-110 transition-transform">
                     <FolderIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">Categories</p>
-                    <p className="text-sm text-muted-foreground">Manage</p>
+                    <p className="font-semibold text-lg">Categories</p>
+                    <p className="text-sm text-muted-foreground">Organize</p>
                   </div>
                 </div>
               </CardContent>
@@ -303,14 +332,15 @@ function AdminDashboardContent() {
           </Link>
 
           <Link to="/admin/orders">
-            <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02] border-l-4 border-l-orange-500">
-              <CardContent className="pt-6">
+            <Card className="hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.05] hover:-translate-y-1 group relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <CardContent className="pt-6 relative z-10">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                  <div className="p-3 bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/20 rounded-xl shadow-md group-hover:scale-110 transition-transform">
                     <ShoppingCartIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">Orders</p>
+                    <p className="font-semibold text-lg">Orders</p>
                     <p className="text-sm text-muted-foreground">{stats.pendingOrders} pending</p>
                   </div>
                 </div>
@@ -319,15 +349,16 @@ function AdminDashboardContent() {
           </Link>
 
           <Link to="/admin/shipping">
-            <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02] border-l-4 border-l-green-500">
-              <CardContent className="pt-6">
+            <Card className="hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.05] hover:-translate-y-1 group relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <CardContent className="pt-6 relative z-10">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                  <div className="p-3 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/20 rounded-xl shadow-md group-hover:scale-110 transition-transform">
                     <TruckIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">Shipping</p>
-                    <p className="text-sm text-muted-foreground">Settings</p>
+                    <p className="font-semibold text-lg">Shipping</p>
+                    <p className="text-sm text-muted-foreground">Configure</p>
                   </div>
                 </div>
               </CardContent>
@@ -336,18 +367,20 @@ function AdminDashboardContent() {
         </div>
       </div>
 
-      {/* Alert for Low Stock */}
+      {/* Alert for Low Stock - Enhanced */}
       {stats.lowStockProducts > 0 && (
-        <Card className="border-l-4 border-l-orange-500 bg-orange-50/50 dark:bg-orange-900/10">
+        <Card className="border-l-4 border-l-orange-500 bg-gradient-to-r from-orange-50/50 to-transparent dark:from-orange-900/10 dark:to-transparent shadow-md">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <AlertTriangleIcon className="h-6 w-6 text-orange-600" />
-              <div>
-                <p className="font-semibold">Low Stock Alert</p>
+              <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-xl">
+                <AlertTriangleIcon className="h-6 w-6 text-orange-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-bold text-lg mb-1">⚠️ Low Stock Alert</p>
                 <p className="text-sm text-muted-foreground">
-                  {stats.lowStockProducts} products have low stock levels. 
-                  <Link to="/admin/products" className="ml-1 underline hover:text-primary">
-                    View products
+                  {stats.lowStockProducts} product{stats.lowStockProducts > 1 ? 's' : ''} running low on inventory.
+                  <Link to="/admin/products" className="ml-2 text-primary underline hover:text-primary/80 font-medium transition-colors">
+                    Review now →
                   </Link>
                 </p>
               </div>
@@ -361,14 +394,14 @@ function AdminDashboardContent() {
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      
-      <div className="flex-1 container mx-auto px-4 py-8 max-w-7xl">
-        <Unauthenticated>
-          <Card>
+    <>
+      <Unauthenticated>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <Card className="max-w-md w-full">
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
+                <AlertTriangleIcon className="h-12 w-12 text-muted-foreground mx-auto" />
+                <h2 className="text-xl font-bold">Authentication Required</h2>
                 <p className="text-muted-foreground">
                   You must be signed in to access the admin panel
                 </p>
@@ -376,9 +409,11 @@ export default function AdminDashboard() {
               </div>
             </CardContent>
           </Card>
-        </Unauthenticated>
+        </div>
+      </Unauthenticated>
 
-        <AuthLoading>
+      <AuthLoading>
+        <AdminLayout>
           <div className="space-y-6">
             <Skeleton className="h-32 w-full" />
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -387,14 +422,14 @@ export default function AdminDashboard() {
               ))}
             </div>
           </div>
-        </AuthLoading>
+        </AdminLayout>
+      </AuthLoading>
 
-        <Authenticated>
+      <Authenticated>
+        <AdminLayout>
           <AdminDashboardContent />
-        </Authenticated>
-      </div>
-
-      <Footer />
-    </div>
+        </AdminLayout>
+      </Authenticated>
+    </>
   );
 }
