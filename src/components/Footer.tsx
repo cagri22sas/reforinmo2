@@ -211,6 +211,7 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 text-sm">
               {[
+                { to: "/orders/track", label: t.orderTracking },
                 { to: "/shipping", label: t.shippingInfo },
                 { to: "/returns", label: t.returnPolicy },
                 { to: "/faq", label: t.faq },
