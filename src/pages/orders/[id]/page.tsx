@@ -10,8 +10,10 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import { ArrowLeftIcon, PackageIcon, TruckIcon, MapPinIcon, CreditCardIcon } from "lucide-react";
+import { useTranslation } from "@/hooks/use-language.ts";
 
 function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
+  const { t } = useTranslation();
   const orderData = useQuery(api.orders.get, { orderId });
 
   if (orderData === undefined) {
@@ -28,33 +30,33 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
   const getStatusInfo = (status: string) => {
     const statusConfig = {
       pending: { 
-        label: "Beklemede", 
+        label: t("pending"), 
         variant: "secondary" as const,
-        description: "Siparişiniz ödeme bekliyor",
+        description: t("pending"),
         icon: PackageIcon
       },
       processing: { 
-        label: "İşleniyor", 
+        label: t("orderProcessing"), 
         variant: "default" as const,
-        description: "Siparişiniz hazırlanıyor",
+        description: t("preparing"),
         icon: PackageIcon
       },
       shipped: { 
-        label: "Kargoda", 
+        label: t("shipped"), 
         variant: "default" as const,
-        description: "Siparişiniz kargoya verildi",
+        description: t("shipped_status"),
         icon: TruckIcon
       },
       delivered: { 
-        label: "Teslim Edildi", 
+        label: t("delivered"), 
         variant: "success" as const,
-        description: "Siparişiniz teslim edildi",
+        description: t("delivered_status"),
         icon: MapPinIcon
       },
       cancelled: { 
-        label: "İptal Edildi", 
+        label: t("cancelled"), 
         variant: "destructive" as const,
-        description: "Sipariş iptal edildi",
+        description: t("cancelled_status"),
         icon: PackageIcon
       },
     };
@@ -64,21 +66,21 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
 
   const getOrderTimeline = () => {
     const timeline = [
-      { status: 'pending', label: 'Sipariş Alındı', completed: true },
-      { status: 'processing', label: 'Hazırlanıyor', completed: order.status !== 'pending' },
-      { status: 'shipped', label: 'Kargoya Verildi', completed: order.status === 'shipped' || order.status === 'delivered' },
-      { status: 'delivered', label: 'Teslim Edildi', completed: order.status === 'delivered' },
+      { status: 'pending', label: t("orderReceived"), completed: true },
+      { status: 'processing', label: t("preparing"), completed: order.status !== 'pending' },
+      { status: 'shipped', label: t("shipped_status"), completed: order.status === 'shipped' || order.status === 'delivered' },
+      { status: 'delivered', label: t("delivered_status"), completed: order.status === 'delivered' },
     ];
     
     if (order.status === 'cancelled') {
-      return [{ status: 'cancelled', label: 'İptal Edildi', completed: true }];
+      return [{ status: 'cancelled', label: t("cancelled_status"), completed: true }];
     }
     
     return timeline;
   };
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("tr-TR", {
+    return new Date(timestamp).toLocaleDateString("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -105,7 +107,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
             <div className="space-y-2">
               <CardTitle className="text-2xl">{order.orderNumber}</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Sipariş Tarihi: {formatDate(order._creationTime)}
+                {t("orderDate")}: {formatDate(order._creationTime)}
               </p>
             </div>
             <div className="text-right">
@@ -126,7 +128,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TruckIcon className="h-5 w-5" />
-            Sipariş Takibi
+            {t("orderTracking")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -178,7 +180,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <PackageIcon className="h-5 w-5" />
-              Sipariş Detayları
+              {t("orderItems")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -192,7 +194,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
                 <div className="flex-1">
                   <h4 className="font-medium">{item.productName}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Adet: {item.quantity}
+                    {t("quantity")}: {item.quantity}
                   </p>
                   <p className="text-sm font-medium mt-1">
                     {formatPrice(item.price * item.quantity)}
@@ -205,16 +207,16 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
 
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Ara Toplam</span>
+                <span className="text-muted-foreground">{t("subtotal")}</span>
                 <span>{formatPrice(order.subtotal)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Kargo</span>
+                <span className="text-muted-foreground">{t("shipping")}</span>
                 <span>{formatPrice(order.shippingCost)}</span>
               </div>
               <Separator />
               <div className="flex justify-between font-bold text-lg">
-                <span>Toplam</span>
+                <span>{t("total")}</span>
                 <span>{formatPrice(order.total)}</span>
               </div>
             </div>
@@ -228,7 +230,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <MapPinIcon className="h-5 w-5" />
-                Teslimat Adresi
+                {t("shippingDeliveryInfo")}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm space-y-1">
@@ -247,7 +249,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <TruckIcon className="h-5 w-5" />
-                Kargo Yöntemi
+                {t("shippingMethod")}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm">
@@ -255,7 +257,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
               <p className="text-muted-foreground">{shippingMethod?.description}</p>
               {order.trackingNumber && (
                 <div className="mt-3 p-3 bg-muted rounded-md">
-                  <p className="text-xs text-muted-foreground mb-1">Takip Numarası</p>
+                  <p className="text-xs text-muted-foreground mb-1">{t("trackingNumber")}</p>
                   <p className="font-mono font-medium">{order.trackingNumber}</p>
                 </div>
               )}
@@ -267,12 +269,12 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <CreditCardIcon className="h-5 w-5" />
-                Ödeme
+                {t("payment")}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm">
               <p className="text-muted-foreground">
-                {order.stripePaymentIntentId ? "Kredi Kartı ile ödendi" : "Ödeme bekleniyor"}
+                {order.stripePaymentIntentId ? t("paidByCard") : t("awaitingPayment")}
               </p>
             </CardContent>
           </Card>
@@ -280,7 +282,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
           {order.notes && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Notlar</CardTitle>
+                <CardTitle className="text-base">{t("notes")}</CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
                 {order.notes}
@@ -294,6 +296,7 @@ function OrderDetailContent({ orderId }: { orderId: Id<"orders"> }) {
 }
 
 export default function OrderDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
 
   return (
@@ -302,7 +305,7 @@ export default function OrderDetailPage() {
         <Link to="/orders">
           <Button variant="ghost" size="sm">
             <ArrowLeftIcon className="h-4 w-4 mr-2" />
-            Siparişlerime Dön
+            {t("returnToOrders")}
           </Button>
         </Link>
       </div>
@@ -312,7 +315,7 @@ export default function OrderDetailPage() {
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
               <p className="text-muted-foreground">
-                Sipariş detaylarını görüntülemek için giriş yapmalısınız
+                {t("viewOrderDetails")}
               </p>
               <SignInButton />
             </div>

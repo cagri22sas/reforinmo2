@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useState } from "react";
 import { motion } from "motion/react";
+import { useTranslation } from "@/hooks/use-language.ts";
 
 type SiteConfigWithUrls = {
   siteName: string;
@@ -43,6 +44,7 @@ interface ContactForm {
 }
 
 export default function ContactPage() {
+  const { t } = useTranslation();
   const siteConfig = useQuery(api.admin.siteConfig.get, {}) as SiteConfigWithUrls | null | undefined;
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -59,7 +61,7 @@ export default function ContactPage() {
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    toast.success("Message sent successfully! We'll get back to you soon.");
+    toast.success(t("subscribeSuccess"));
     reset();
     setIsSubmitting(false);
   };
@@ -67,29 +69,29 @@ export default function ContactPage() {
   const contactMethods = [
     {
       icon: MailIcon,
-      title: "Email",
+      title: t("emailTitle"),
       value: siteConfig?.contactInfo?.email || "support@yachtbeach.com",
       color: "from-blue-500 to-cyan-600",
       delay: 0
     },
     {
       icon: PhoneIcon,
-      title: "Phone",
+      title: t("phoneTitle"),
       value: siteConfig?.contactInfo?.phone || "+1 (555) 123-4567",
       color: "from-green-500 to-emerald-600",
       delay: 0.1
     },
     {
       icon: MapPinIcon,
-      title: "Address",
+      title: t("addressTitle"),
       value: siteConfig?.contactInfo?.address || "123 Harbor Street, Miami, FL 33101",
       color: "from-purple-500 to-pink-600",
       delay: 0.2
     },
     {
       icon: ClockIcon,
-      title: "Business Hours",
-      value: "Mon-Fri: 9AM-6PM\nSat: 10AM-4PM\nSun: Closed",
+      title: t("businessHours"),
+      value: t("businessHoursValue"),
       color: "from-orange-500 to-red-600",
       delay: 0.3
     }
@@ -98,8 +100,8 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-background to-muted/20">
       <SEO
-        title="Contact Us"
-        description="Get in touch with our team. We're here to help with any questions about our products or services."
+        title={t("contact")}
+        description={t("haveQuestions")}
       />
       <Header />
       
@@ -142,7 +144,7 @@ export default function ContactPage() {
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
               >
-                Get In Touch
+                {t("getInTouch")}
               </motion.h1>
               
               <motion.p
@@ -151,7 +153,7 @@ export default function ContactPage() {
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto"
               >
-                Have questions? We're here to help you navigate your maritime needs.
+                {t("haveQuestions")}
               </motion.p>
             </motion.div>
           </div>
@@ -220,8 +222,8 @@ export default function ContactPage() {
                 />
                 
                 <CardHeader className="relative z-10">
-                  <CardTitle className="text-2xl md:text-3xl">Send Us a Message</CardTitle>
-                  <p className="text-muted-foreground">We typically respond within 24 hours</p>
+                  <CardTitle className="text-2xl md:text-3xl">{t("sendUsMessage")}</CardTitle>
+                  <p className="text-muted-foreground">{t("weRespond24h")}</p>
                 </CardHeader>
                 
                 <CardContent className="relative z-10">
@@ -233,11 +235,11 @@ export default function ContactPage() {
                         viewport={{ once: true }}
                         transition={{ delay: 0.5 }}
                       >
-                        <Label htmlFor="name">Your Name *</Label>
+                        <Label htmlFor="name">{t("yourName")} *</Label>
                         <Input
                           id="name"
                           {...register("name", {
-                            required: "Name is required",
+                            required: t("required"),
                           })}
                           placeholder="John Doe"
                           className="mt-1.5"
@@ -255,15 +257,15 @@ export default function ContactPage() {
                         viewport={{ once: true }}
                         transition={{ delay: 0.6 }}
                       >
-                        <Label htmlFor="email">Email Address *</Label>
+                        <Label htmlFor="email">{t("emailAddress")} *</Label>
                         <Input
                           id="email"
                           type="email"
                           {...register("email", {
-                            required: "Email is required",
+                            required: t("required"),
                             pattern: {
                               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                              message: "Invalid email address",
+                              message: t("invalidEmail"),
                             },
                           })}
                           placeholder="john@example.com"
@@ -283,13 +285,13 @@ export default function ContactPage() {
                       viewport={{ once: true }}
                       transition={{ delay: 0.7 }}
                     >
-                      <Label htmlFor="subject">Subject *</Label>
+                      <Label htmlFor="subject">{t("subject")} *</Label>
                       <Input
                         id="subject"
                         {...register("subject", {
-                          required: "Subject is required",
+                          required: t("required"),
                         })}
-                        placeholder="How can we help you?"
+                        placeholder={t("howCanWeHelp")}
                         className="mt-1.5"
                       />
                       {errors.subject && (
@@ -305,17 +307,17 @@ export default function ContactPage() {
                       viewport={{ once: true }}
                       transition={{ delay: 0.8 }}
                     >
-                      <Label htmlFor="message">Message *</Label>
+                      <Label htmlFor="message">{t("message")} *</Label>
                       <Textarea
                         id="message"
                         {...register("message", {
-                          required: "Message is required",
+                          required: t("required"),
                           minLength: {
                             value: 10,
-                            message: "Message must be at least 10 characters",
+                            message: t("required"),
                           },
                         })}
-                        placeholder="Tell us more about your inquiry..."
+                        placeholder={t("tellUsMore")}
                         rows={6}
                         className="mt-1.5 resize-none"
                       />
@@ -341,11 +343,11 @@ export default function ContactPage() {
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (
-                          "Sending..."
+                          t("sending")
                         ) : (
                           <>
                             <SendIcon className="w-4 h-4 mr-2" />
-                            Send Message
+                            {t("sendMessage")}
                           </>
                         )}
                       </Button>

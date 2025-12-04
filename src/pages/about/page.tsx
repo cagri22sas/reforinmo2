@@ -7,8 +7,10 @@ import { motion } from "motion/react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { useTranslation } from "@/hooks/use-language.ts";
 
 export default function AboutPage() {
+  const { t } = useTranslation();
   const page = useQuery(api.pages.getBySlug, { slug: "about" });
 
   if (page === undefined) {
@@ -30,7 +32,7 @@ export default function AboutPage() {
       <div className="min-h-screen flex flex-col">
         <SEO
           title={page.title}
-          description={page.metaDescription || "About Us"}
+          description={page.metaDescription || t("about")}
         />
         <Header />
         
@@ -67,8 +69,8 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-background to-muted/20">
       <SEO
-        title="About Us"
-        description="Learn about our mission to provide premium yacht and beach equipment with exceptional quality and service."
+        title={t("about")}
+        description={t("navigationExcellence")}
       />
       <Header />
       
@@ -117,7 +119,7 @@ export default function AboutPage() {
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
               >
-                About YachtBeach
+                {t("aboutYachtBeach")}
               </motion.h1>
               
               <motion.p
@@ -126,7 +128,7 @@ export default function AboutPage() {
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto"
               >
-                Navigating excellence in marine lifestyle. Premium equipment for those who live and breathe the ocean.
+                {t("navigationExcellence")}
               </motion.p>
             </motion.div>
           </div>
@@ -151,18 +153,18 @@ export default function AboutPage() {
                   className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-6"
                 >
                   <CompassIcon className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-semibold text-primary">Our Journey</span>
+                  <span className="text-sm font-semibold text-primary">{t("ourJourney")}</span>
                 </motion.div>
                 
                 <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                  Charting New Waters
+                  {t("chartingNewWaters")}
                 </h2>
                 <div className="space-y-4 text-muted-foreground text-lg">
                   <p>
-                    Born from a passion for the sea, YachtBeach emerged as a beacon of quality in marine equipment. We're not just suppliers – we're sailors, divers, and ocean enthusiasts who understand what it means to trust your gear.
+                    {t("aboutStory1")}
                   </p>
                   <p>
-                    Every product in our collection has been tested in real conditions, from calm harbors to challenging open waters. We believe in equipment that performs when it matters most.
+                    {t("aboutStory2")}
                   </p>
                 </div>
               </div>
@@ -204,36 +206,36 @@ export default function AboutPage() {
               className="mb-24"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-                Our Core Values
+                {t("ourCoreValues")}
               </h2>
               <p className="text-center text-muted-foreground text-lg mb-12 max-w-2xl mx-auto">
-                The principles that guide every decision we make
+                {t("coreValuesPrinciples")}
               </p>
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
                   {
                     icon: TrophyIcon,
-                    title: "Premium Quality",
-                    description: "Only the finest marine-grade products that withstand the test of time and elements.",
+                    title: t("premiumQualityTitle"),
+                    description: t("premiumQualityDesc"),
                     color: "from-amber-500 to-orange-600"
                   },
                   {
                     icon: ShieldCheckIcon,
-                    title: "Safety First",
-                    description: "Rigorous testing and certification ensure your adventures are always secure.",
+                    title: t("safetyFirst"),
+                    description: t("safetyFirstDesc"),
                     color: "from-green-500 to-emerald-600"
                   },
                   {
                     icon: HeartIcon,
-                    title: "Customer Passion",
-                    description: "Your satisfaction fuels our commitment to exceptional service and support.",
+                    title: t("customerPassion"),
+                    description: t("customerPassionDesc"),
                     color: "from-red-500 to-pink-600"
                   },
                   {
                     icon: ShipIcon,
-                    title: "Expert Knowledge",
-                    description: "Decades of maritime expertise guide our curation and recommendations.",
+                    title: t("expertKnowledge"),
+                    description: t("expertKnowledgeDesc"),
                     color: "from-blue-500 to-cyan-600"
                   }
                 ].map((value, index) => (
@@ -302,9 +304,9 @@ export default function AboutPage() {
                       <AnchorIcon className="w-10 h-10 text-primary-foreground" />
                     </motion.div>
                     
-                    <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Mission</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("ourMission")}</h2>
                     <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                      To empower maritime enthusiasts with premium equipment that transforms every voyage into an extraordinary experience. We're committed to quality, safety, and innovation – ensuring that whether you're navigating open waters or relaxing on shore, you're equipped for excellence.
+                      {t("missionStatement")}
                     </p>
                   </div>
                 </CardContent>

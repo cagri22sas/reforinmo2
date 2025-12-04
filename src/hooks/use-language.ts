@@ -978,6 +978,16 @@ export const translations = {
   },
 };
 
+export const useTranslation = () => {
+  const { language } = useLanguage();
+  
+  const t = (key: keyof typeof translations.en): string => {
+    return translations[language][key] || translations.en[key] || key;
+  };
+  
+  return { t, language };
+};
+
 export const getPageSlug = (basePage: string, language: Language): string => {
   const slugs: Record<string, Record<Language, string>> = {
     privacy: { en: "privacy", es: "privacidad" },
