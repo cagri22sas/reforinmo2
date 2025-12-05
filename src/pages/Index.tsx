@@ -10,15 +10,31 @@ import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link } from "react-router-dom";
 import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { useLanguage, translations } from "@/hooks/use-language.ts";
 
+// Fisher-Yates shuffle algorithm
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export default function Index() {
-  const featuredProducts = useQuery(api.products.list, { featured: true });
+  const featuredProductsRaw = useQuery(api.products.list, { featured: true });
   const categories = useQuery(api.categories.list, {});
   const seoSettings = useQuery(api.admin.seoSettings.get);
   const { language } = useLanguage();
   const t = translations[language];
+  
+  // Shuffle featured products to mix categories
+  const featuredProducts = useMemo(() => {
+    if (!featuredProductsRaw) return undefined;
+    return shuffleArray(featuredProductsRaw);
+  }, [featuredProductsRaw]);
   
   const { scrollYProgress } = useScroll();
   const heroRef = useRef<HTMLDivElement>(null);
