@@ -243,116 +243,201 @@ export default function Header() {
             {/* Mobile Menu */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden">
+                <Button variant="ghost" size="icon" className="lg:hidden hover:bg-primary/10 transition-all">
                   <MenuIcon className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[350px]">
-                <SheetHeader>
-                  <SheetTitle className="text-left">Menu</SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col gap-4 mt-8">
-                  {/* Navigation Links */}
+              <SheetContent side="right" className="w-[85vw] max-w-[380px] p-0 overflow-y-auto">
+                {/* Header with Gradient */}
+                <div className="relative bg-gradient-to-br from-primary/10 via-accent/5 to-background p-6 pb-8 border-b border-border/50">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-full blur-md opacity-50" />
+                        <div className="relative bg-gradient-to-br from-primary to-accent p-2 rounded-full">
+                          <MenuIcon className="h-5 w-5 text-primary-foreground" />
+                        </div>
+                      </div>
+                      <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                        {t.menu || "Menu"}
+                      </h2>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="hover:bg-destructive/10 hover:text-destructive transition-colors rounded-full"
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  
+                  {/* User Info Card */}
+                  <Authenticated>
+                    <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50 shadow-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-full blur-sm opacity-30" />
+                          <div className="relative bg-gradient-to-br from-primary/20 to-accent/20 p-2.5 rounded-full border border-primary/20">
+                            <UserIcon className="h-5 w-5 text-primary" />
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-sm truncate">{currentUser?.name || "User"}</p>
+                          <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Authenticated>
+                  
+                  <Unauthenticated>
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl p-4 border border-primary/20">
+                      <p className="text-sm text-muted-foreground mb-3">{t.signInPrompt || "Sign in to unlock all features"}</p>
+                      <SignInButton className="w-full" />
+                    </div>
+                  </Unauthenticated>
+                </div>
+
+                {/* Navigation Section */}
+                <div className="p-6 space-y-1">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-3">
+                    {t.shopByCategory || "Shop"}
+                  </p>
+                  
                   <Link 
                     to="/products" 
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-lg font-medium hover:text-primary transition-colors py-2"
+                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
                   >
-                    {t.allProducts}
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                      <PackageIcon className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="font-medium text-base">{t.allProducts}</span>
                   </Link>
+                  
                   {categories?.slice(0, 5).map((category) => (
                     <Link
                       key={category._id}
                       to={`/products?category=${category._id}`}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-base text-muted-foreground hover:text-primary transition-colors py-2 pl-4"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-primary/5 transition-colors group pl-12"
                     >
-                      {category.name}
+                      <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                        {category.name}
+                      </span>
                     </Link>
                   ))}
-                  
-                  <div className="border-t my-4" />
-                  
-                  {/* User Actions */}
-                  <Authenticated>
-                    <Link 
-                      to="/wishlist" 
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors py-2"
-                    >
-                      <Heart className="h-5 w-5" />
-                      {t.myWishlist}
-                    </Link>
+                </div>
+
+                {/* User Actions */}
+                <Authenticated>
+                  <div className="px-6 pb-6 space-y-1">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-3">
+                      {t.myAccount || "My Account"}
+                    </p>
+                    
                     <Link 
                       to="/orders" 
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors py-2"
+                      className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
                     >
-                      <PackageIcon className="h-5 w-5" />
-                      {t.myOrders}
+                      <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                        <PackageIcon className="h-4 w-4 text-primary" />
+                      </div>
+                      <span className="font-medium text-sm">{t.myOrders}</span>
                     </Link>
+                    
+                    <Link 
+                      to="/wishlist" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
+                    >
+                      <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                        <Heart className="h-4 w-4 text-primary" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-sm">{t.myWishlist}</span>
+                        {wishlistCount !== undefined && wishlistCount > 0 && (
+                          <span className="bg-primary text-primary-foreground text-xs rounded-full px-2 py-0.5 font-bold">
+                            {wishlistCount}
+                          </span>
+                        )}
+                      </div>
+                    </Link>
+                    
                     <Link 
                       to="/profile" 
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors py-2"
+                      className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
                     >
-                      <UserIcon className="h-5 w-5" />
-                      {t.myProfile}
+                      <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                        <UserIcon className="h-4 w-4 text-primary" />
+                      </div>
+                      <span className="font-medium text-sm">{t.myProfile}</span>
                     </Link>
+                    
                     {isAdmin && (
                       <Link 
                         to="/admin" 
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors py-2"
+                        className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-accent/10 transition-colors group border border-accent/20"
                       >
-                        {t.admin}
+                        <div className="bg-gradient-to-br from-accent/20 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                          <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </div>
+                        <span className="font-medium text-sm">{t.admin}</span>
                       </Link>
                     )}
-                    <div className="border-t my-4" />
+                  </div>
+                </Authenticated>
+
+                {/* Language Selector */}
+                <div className="px-6 pb-6 space-y-3">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3">
+                    {language === 'en' ? 'Language' : 'Idioma'}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant={language === "en" ? "default" : "outline"}
+                      onClick={() => {
+                        setLanguage("en");
+                      }}
+                      className="h-11"
+                    >
+                      <span className="mr-2">🇬🇧</span>
+                      English
+                    </Button>
+                    <Button
+                      variant={language === "es" ? "default" : "outline"}
+                      onClick={() => {
+                        setLanguage("es");
+                      }}
+                      className="h-11"
+                    >
+                      <span className="mr-2">🇪🇸</span>
+                      Español
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Sign Out Button */}
+                <Authenticated>
+                  <div className="px-6 pb-6">
                     <Button
                       variant="outline"
                       onClick={() => {
                         signoutRedirect();
                         setMobileMenuOpen(false);
                       }}
-                      className="w-full justify-start text-destructive hover:text-destructive"
+                      className="w-full h-11 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20 hover:border-destructive/30"
                     >
                       {t.signOut}
                     </Button>
-                  </Authenticated>
-                  
-                  <Unauthenticated>
-                    <SignInButton className="w-full" />
-                  </Unauthenticated>
-                  
-                  {/* Language Selector */}
-                  <div className="border-t my-4" />
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium text-muted-foreground">{language === 'en' ? 'Language' : 'Idioma'}</p>
-                    <div className="flex gap-2">
-                      <Button
-                        variant={language === "en" ? "default" : "outline"}
-                        onClick={() => {
-                          setLanguage("en");
-                          setMobileMenuOpen(false);
-                        }}
-                        className="flex-1"
-                      >
-                        🇬🇧 English
-                      </Button>
-                      <Button
-                        variant={language === "es" ? "default" : "outline"}
-                        onClick={() => {
-                          setLanguage("es");
-                          setMobileMenuOpen(false);
-                        }}
-                        className="flex-1"
-                      >
-                        🇪🇸 Español
-                      </Button>
-                    </div>
                   </div>
-                </div>
+                </Authenticated>
               </SheetContent>
             </Sheet>
           </div>

@@ -40,8 +40,11 @@ export const translations = {
     
     // Header
     marineExcellence: "Marine Excellence",
+    menu: "Menu",
     signIn: "Sign In",
     signOut: "Sign Out",
+    signInPrompt: "Sign in to unlock all features",
+    myAccount: "My Account",
     myOrders: "My Orders",
     myProfile: "My Profile",
     myWishlist: "My Wishlist",
@@ -522,8 +525,11 @@ export const translations = {
     
     // Header
     marineExcellence: "Excelencia Marina",
+    menu: "Menú",
     signIn: "Iniciar Sesión",
     signOut: "Cerrar Sesión",
+    signInPrompt: "Inicia sesión para desbloquear todas las funciones",
+    myAccount: "Mi Cuenta",
     myOrders: "Mis Pedidos",
     myProfile: "Mi Perfil",
     myWishlist: "Mi Lista de Deseos",
