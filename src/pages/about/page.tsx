@@ -131,7 +131,7 @@ export default function AboutPage() {
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8 text-center leading-tight"
               >
                 <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                  {t("aboutYachtBeach")}
+                  {t("aboutReforinmoMarine")}
                 </span>
               </motion.h1>
               

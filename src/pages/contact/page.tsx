@@ -71,7 +71,7 @@ export default function ContactPage() {
     {
       icon: MailIcon,
       title: t("emailTitle"),
-      value: siteConfig?.contactInfo?.email || "support@yachtbeach.com",
+      value: siteConfig?.contactInfo?.email || "support@reforinmomarine.com",
       color: "from-blue-500 to-cyan-600",
       delay: 0
     },

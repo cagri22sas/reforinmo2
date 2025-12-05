@@ -233,7 +233,7 @@ export const translations = {
     send: "Send",
     
     // About page
-    aboutYachtBeach: "About Us",
+    aboutReforinmoMarine: "About Us",
     navigationExcellence: "Navigating excellence in marine lifestyle. Premium equipment for those who live and breathe the ocean.",
     ourJourney: "Our Journey",
     chartingNewWaters: "Charting New Waters",
@@ -730,7 +730,7 @@ export const translations = {
     send: "Enviar",
     
     // About page
-    aboutYachtBeach: "Sobre Nosotros",
+    aboutReforinmoMarine: "Sobre Nosotros",
     navigationExcellence: "Navegando la excelencia en estilo de vida marino. Equipamiento premium para quienes viven y respiran el océano.",
     ourJourney: "Nuestro Viaje",
     chartingNewWaters: "Trazando Nuevas Aguas",
