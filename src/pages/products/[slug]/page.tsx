@@ -94,6 +94,15 @@ export default function ProductDetailPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  const getImageUrl = useQuery(
+    uploadedStorageId 
+      ? api.products.getImageUrl 
+      : "skip" as never,
+    uploadedStorageId 
+      ? { storageId: uploadedStorageId as never }
+      : "skip" as never
+  );
+
   const currentUser = useQuery(api.users.getCurrentUser, {});
   const isAdmin = currentUser?.role === "admin";
 
@@ -110,6 +119,14 @@ export default function ProductDetailPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
+
+  // When image URL is fetched, update editImageUrl
+  useEffect(() => {
+    if (getImageUrl && uploadedStorageId) {
+      setEditImageUrl(getImageUrl);
+      toast.success("Image URL ready!");
+    }
+  }, [getImageUrl, uploadedStorageId]);
 
   const handleStartEdit = () => {
     if (!product) return;
@@ -167,11 +184,11 @@ export default function ProductDetailPage() {
 
       const { storageId } = await result.json();
 
-      // Step 3: Store the storage ID (not URL) - Convex will convert it to URL automatically
+      // Step 3: Store the storage ID - query will fetch the URL
       setUploadedStorageId(storageId);
-      setEditImageUrl(""); // Clear URL field since we're using storage ID
+      setEditImageUrl(""); // Clear URL field
       setSelectedFile(null);
-      toast.success("Image uploaded successfully!");
+      toast.success("Image uploaded! Getting URL...");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to upload image");
     } finally {
@@ -188,58 +205,33 @@ export default function ProductDetailPage() {
       return;
     }
 
-    if (!editImageUrl.trim() && !uploadedStorageId) {
+    if (!editImageUrl.trim()) {
       toast.error("Please enter a valid image URL or upload an image");
       return;
     }
 
     setIsSaving(true);
     try {
-      // If user uploaded a file, use imageStorageIds, otherwise use images (URLs)
-      if (uploadedStorageId) {
-        // Use storage ID
-        const existingStorageIds = product.imageStorageIds || [];
-        await updateProduct({
-          id: product._id,
-          name: product.name,
-          slug: product.slug,
-          description: product.description,
-          price,
-          compareAtPrice: product.compareAtPrice,
-          categoryId: product.categoryId,
-          imageStorageIds: [uploadedStorageId as never, ...existingStorageIds.slice(1)],
-          images: product.images && product.images.length > 0 ? product.images : undefined,
-          stock: product.stock,
-          sku: product.sku,
-          featured: product.featured,
-          active: product.active,
-          seoTitle: product.seoTitle,
-          seoDescription: product.seoDescription,
-          seoKeywords: product.seoKeywords,
-          specifications: product.specifications,
-        });
-      } else {
-        // Use URL
-        await updateProduct({
-          id: product._id,
-          name: product.name,
-          slug: product.slug,
-          description: product.description,
-          price,
-          compareAtPrice: product.compareAtPrice,
-          categoryId: product.categoryId,
-          images: [editImageUrl, ...(product.images?.slice(1) || [])],
-          imageStorageIds: product.imageStorageIds,
-          stock: product.stock,
-          sku: product.sku,
-          featured: product.featured,
-          active: product.active,
-          seoTitle: product.seoTitle,
-          seoDescription: product.seoDescription,
-          seoKeywords: product.seoKeywords,
-          specifications: product.specifications,
-        });
-      }
+      // Always use images (URLs) - whether from upload or manual entry
+      await updateProduct({
+        id: product._id,
+        name: product.name,
+        slug: product.slug,
+        description: product.description,
+        price,
+        compareAtPrice: product.compareAtPrice,
+        categoryId: product.categoryId,
+        images: [editImageUrl, ...(product.images?.slice(1) || [])],
+        imageStorageIds: product.imageStorageIds,
+        stock: product.stock,
+        sku: product.sku,
+        featured: product.featured,
+        active: product.active,
+        seoTitle: product.seoTitle,
+        seoDescription: product.seoDescription,
+        seoKeywords: product.seoKeywords,
+        specifications: product.specifications,
+      });
       toast.success("Product updated successfully!");
       setIsEditMode(false);
       setUploadedStorageId("");
