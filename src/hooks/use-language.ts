@@ -67,12 +67,12 @@ export const translations = {
     
     // Homepage
     premiumMarineLifestyle: "MARINE EXCELLENCE & INNOVATION",
-    heroTitle: "Marine Aksesuarlar ve",
-    heroTitleHighlight: "Deniz Eğlencesi",
-    heroDescription: "Denizcilik teknolojisi ve eğlence dünyasının profesyonel ürünleri. Tekneniz için ihtiyacınız olan her şey, yüksek kalite ve güvenilirlik garantisiyle.",
-    exploreCollection: "Ürünleri Keşfet",
-    shopCollection: "Alışverişe Başla",
-    viewAllProducts: "Tüm Ürünler",
+    heroTitle: "Marine Accessories &",
+    heroTitleHighlight: "Water Recreation",
+    heroDescription: "Professional products from the world of marine technology and entertainment. Everything you need for your vessel, with guaranteed high quality and reliability.",
+    exploreCollection: "Explore Products",
+    shopCollection: "Start Shopping",
+    viewAllProducts: "All Products",
     
     // Features
     expertConsultation: "Expert Consultation",
