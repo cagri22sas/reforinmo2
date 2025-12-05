@@ -76,6 +76,7 @@ export default function ProductDetailPage() {
   const markHelpful = useMutation(api.reviews.markHelpful);
   const updateProduct = useMutation(api.admin.products.update);
   const generateUploadUrl = useMutation(api.products.generateUploadUrl);
+  const getStorageUrl = useMutation(api.products.getStorageUrl);
   const [quantity, setQuantity] = useState(1);
   const [sessionId, setSessionId] = useState<string>("");
   
@@ -165,8 +166,15 @@ export default function ProductDetailPage() {
 
       const { storageId } = await result.json();
 
-      // Step 3: Get the URL from storage ID
-      const imageUrl = `${window.location.origin}/_storage/${storageId}`;
+      // Step 3: Get the actual URL from Convex storage
+      const imageUrl = await getStorageUrl({ 
+        storageId: storageId as never 
+      });
+      
+      if (!imageUrl) {
+        throw new Error("Failed to get storage URL");
+      }
+
       setEditImageUrl(imageUrl);
       setSelectedFile(null);
       toast.success("Image uploaded successfully!");
