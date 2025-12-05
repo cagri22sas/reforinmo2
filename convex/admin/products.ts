@@ -204,3 +204,23 @@ export const remove = mutation({
     await ctx.db.delete(args.id);
   },
 });
+
+export const bulkRemove = mutation({
+  args: { ids: v.array(v.id("products")) },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUser(ctx);
+    if (user.role !== "admin") {
+      throw new ConvexError({
+        message: "Unauthorized",
+        code: "FORBIDDEN",
+      });
+    }
+
+    // Delete all products
+    for (const id of args.ids) {
+      await ctx.db.delete(id);
+    }
+
+    return { deletedCount: args.ids.length };
+  },
+});

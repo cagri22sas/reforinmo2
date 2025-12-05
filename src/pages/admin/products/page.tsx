@@ -34,7 +34,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
-import { PlusIcon, EditIcon, Trash2Icon } from "lucide-react";
+import { PlusIcon, EditIcon, Trash2Icon, Trash2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
 import AdminLayout from "@/components/AdminLayout.tsx";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -375,8 +376,10 @@ function ProductsContent() {
   const navigate = useNavigate();
   const products = useQuery(api.admin.products.list, {});
   const deleteProduct = useMutation(api.admin.products.remove);
+  const bulkDeleteProducts = useMutation(api.admin.products.bulkRemove);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
+  const [selectedProducts, setSelectedProducts] = useState<Set<Id<"products">>>(new Set());
 
   if (products === undefined) {
     return <Skeleton className="h-96 w-full" />;
@@ -396,6 +399,47 @@ function ProductsContent() {
       }
     }
   };
+
+  const handleBulkDelete = async () => {
+    if (selectedProducts.size === 0) {
+      toast.error("No products selected");
+      return;
+    }
+
+    if (confirm(`Are you sure you want to delete ${selectedProducts.size} product(s)?`)) {
+      try {
+        await bulkDeleteProducts({ ids: Array.from(selectedProducts) as never[] });
+        toast.success(`${selectedProducts.size} product(s) deleted`);
+        setSelectedProducts(new Set());
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("An error occurred");
+        }
+      }
+    }
+  };
+
+  const toggleProduct = (id: Id<"products">) => {
+    const newSelected = new Set(selectedProducts);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedProducts(newSelected);
+  };
+
+  const toggleAll = () => {
+    if (selectedProducts.size === products.length) {
+      setSelectedProducts(new Set());
+    } else {
+      setSelectedProducts(new Set(products.map(p => p._id)));
+    }
+  };
+
+  const isAllSelected = products.length > 0 && selectedProducts.size === products.length;
 
   const formatPrice = (price: number) => `€${price.toFixed(2)}`;
 
@@ -421,31 +465,50 @@ function ProductsContent() {
           <h1 className="text-3xl font-bold">Products</h1>
           <p className="text-muted-foreground">
             {products.length} products found
+            {selectedProducts.size > 0 && ` • ${selectedProducts.size} selected`}
           </p>
         </div>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={openCreateDialog}>
-              <PlusIcon className="h-4 w-4 mr-2" />
-              New Product
+        <div className="flex gap-2">
+          {selectedProducts.size > 0 && (
+            <Button
+              variant="destructive"
+              onClick={handleBulkDelete}
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete Selected ({selectedProducts.size})
             </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
-                {editingProduct ? "Edit Product" : "Create New Product"}
-              </DialogTitle>
-            </DialogHeader>
-            <ProductDialog product={editingProduct} onClose={closeDialog} />
-          </DialogContent>
-        </Dialog>
+          )}
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={openCreateDialog}>
+                <PlusIcon className="h-4 w-4 mr-2" />
+                New Product
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>
+                  {editingProduct ? "Edit Product" : "Create New Product"}
+                </DialogTitle>
+              </DialogHeader>
+              <ProductDialog product={editingProduct} onClose={closeDialog} />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <Card>
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-12">
+                <Checkbox
+                  checked={isAllSelected}
+                  onCheckedChange={toggleAll}
+                  aria-label="Select all"
+                />
+              </TableHead>
               <TableHead>Image</TableHead>
               <TableHead>Product</TableHead>
               <TableHead>Category</TableHead>
@@ -458,6 +521,13 @@ function ProductsContent() {
           <TableBody>
             {products.map((product) => (
               <TableRow key={product._id}>
+                <TableCell>
+                  <Checkbox
+                    checked={selectedProducts.has(product._id)}
+                    onCheckedChange={() => toggleProduct(product._id)}
+                    aria-label={`Select ${product.name}`}
+                  />
+                </TableCell>
                 <TableCell>
                   <img
                     src={product.images[0] || "/placeholder.svg"}
