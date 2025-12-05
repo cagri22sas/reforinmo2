@@ -66,12 +66,12 @@ export const translations = {
     spanish: "Spanish",
     
     // Homepage
-    premiumMarineLifestyle: "MARINE EXCELLENCE & INNOVATION",
-    heroTitle: "Marine Accessories &",
-    heroTitleHighlight: "Water Recreation",
-    heroDescription: "Professional products from the world of marine technology and entertainment. Everything you need for your vessel, with guaranteed high quality and reliability.",
-    exploreCollection: "Explore Products",
-    shopCollection: "Start Shopping",
+    premiumMarineLifestyle: "INNOVATION ON THE WATER",
+    heroTitle: "Navigate Your Adventures",
+    heroTitleHighlight: "Command the Waves",
+    heroDescription: "Professional marine technology and entertainment solutions. Premium equipment and gear engineered for performance, reliability, and unforgettable experiences on the water.",
+    exploreCollection: "Discover More",
+    shopCollection: "Explore Collection",
     viewAllProducts: "All Products",
     
     // Features
@@ -563,12 +563,12 @@ export const translations = {
     spanish: "Español",
     
     // Homepage
-    premiumMarineLifestyle: "EXCELENCIA E INNOVACIÓN MARINA",
-    heroTitle: "Accesorios Marinos y",
-    heroTitleHighlight: "Diversión Náutica",
-    heroDescription: "Productos profesionales del mundo de la tecnología y el entretenimiento náutico. Todo lo que necesitas para tu embarcación, con garantía de alta calidad y fiabilidad.",
-    exploreCollection: "Descubrir Productos",
-    shopCollection: "Comenzar a Comprar",
+    premiumMarineLifestyle: "INNOVACIÓN EN EL AGUA",
+    heroTitle: "Navega Tus Aventuras",
+    heroTitleHighlight: "Domina Las Olas",
+    heroDescription: "Soluciones profesionales de tecnología y entretenimiento marino. Equipamiento premium diseñado para rendimiento, fiabilidad y experiencias inolvidables en el agua.",
+    exploreCollection: "Descubrir Más",
+    shopCollection: "Explorar Colección",
     viewAllProducts: "Todos los Productos",
     
     // Features
