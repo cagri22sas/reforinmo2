@@ -96,7 +96,7 @@ export default function Index() {
       <Header />
       
       {/* Hero Section - Compact & Modern */}
-      <section ref={heroRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center overflow-hidden">
         {/* 3D Yacht Background Image */}
         <motion.div
           className="absolute inset-0"
@@ -261,7 +261,7 @@ export default function Index() {
               <p className="text-base text-muted-foreground max-w-2xl mx-auto">{t.discoverCurated}</p>
             </motion.div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
               {categories.slice(0, 4).map((category, index) => (
                 <motion.div
                   key={category._id}
@@ -553,7 +553,7 @@ export default function Index() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex items-center gap-6 mt-10 text-white/90 text-xs sm:text-sm"
+              className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-10 text-white/90 text-xs sm:text-sm"
             >
               <div className="flex items-center gap-2">
                 <ShieldCheckIcon className="h-4 w-4" />

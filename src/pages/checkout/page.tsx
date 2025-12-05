@@ -216,26 +216,30 @@ export default function CheckoutPage() {
       <div className="flex-1">
         <div className="container mx-auto px-4 py-12 max-w-7xl">
           {/* Header */}
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <Link
               to="/cart"
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors group"
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4 sm:mb-6 transition-colors group"
             >
               <ArrowLeftIcon className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
               Back to Cart
             </Link>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                   Checkout
                 </h1>
                 {!user && (
-                  <p className="text-muted-foreground">
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     Checking out as a guest
                   </p>
                 )}
               </div>
-              <div className="hidden md:flex items-center gap-3 bg-card px-6 py-3 rounded-full border border-border/50">
+              <div className="flex sm:hidden items-center gap-3 bg-card px-4 py-2 rounded-full border border-border/50 w-fit">
+                <LockIcon className="h-4 w-4 text-green-600" />
+                <span className="text-xs font-medium">Secure Checkout</span>
+              </div>
+              <div className="hidden sm:flex items-center gap-3 bg-card px-6 py-3 rounded-full border border-border/50">
                 <LockIcon className="h-5 w-5 text-green-600" />
                 <span className="text-sm font-medium">Secure Checkout</span>
               </div>
@@ -328,7 +332,7 @@ export default function CheckoutPage() {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="city" className="text-base mb-2">City</Label>
                           <Input
@@ -362,7 +366,7 @@ export default function CheckoutPage() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="zipCode" className="text-base mb-2">ZIP / Postal Code</Label>
                           <Input

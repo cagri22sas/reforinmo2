@@ -320,15 +320,15 @@ export default function Footer() {
             </p>
 
             {/* Payment Cards - Right Side */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
               {/* Visa */}
               <motion.div
                 whileHover={{ scale: 1.15, y: -4 }}
                 className="group relative cursor-pointer"
               >
                 <div className="absolute inset-0 bg-blue-600/0 blur-xl rounded-lg group-hover:bg-blue-600/40 transition-all duration-300" />
-                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center">
-                  <svg viewBox="0 0 48 16" className="w-12 h-auto grayscale group-hover:grayscale-0 transition-all duration-300">
+                <div className="relative w-12 h-8 sm:w-14 sm:h-10 lg:w-16 lg:h-11 rounded-lg flex items-center justify-center">
+                  <svg viewBox="0 0 48 16" className="w-9 sm:w-10 lg:w-12 h-auto grayscale group-hover:grayscale-0 transition-all duration-300">
                     <path d="M19.5 3.4l-3.8 9.2h-2.4l-1.9-7.3c-.1-.4-.2-.5-.6-.7-.6-.3-1.6-.5-2.5-.7l.1-.2h4.3c.5 0 1 .4 1.1.9l1 5.4 2.5-6.3h2.4zm9.4 6.2c0-2.4-3.4-2.6-3.4-3.7 0-.3.3-.7 1-.8.3-.1 1.2-.1 2.2.4l.4-1.8c-.5-.2-1.3-.4-2.2-.4-2.3 0-4 1.2-4 3 0 1.3 1.2 2 2.1 2.4.9.4 1.3.7 1.3 1.1 0 .6-.7.8-1.4.8-1.2 0-1.8-.3-2.4-.5l-.4 2c.5.2 1.5.4 2.5.4 2.5 0 4.1-1.2 4.1-3.1zm6.3 3h2.1l-1.8-9.2h-1.9c-.4 0-.8.3-.9.7l-3.4 8.5h2.4l.5-1.3h3l.3 1.3zm-2.6-3.1l1.2-3.4.7 3.4h-1.9zm-9.5-6.1l-1.9 9.2h-2.3l1.9-9.2h2.3z" fill="#1434CB" className="group-hover:fill-[#1434CB]"/>
                   </svg>
                 </div>
@@ -340,10 +340,10 @@ export default function Footer() {
                 className="group relative cursor-pointer"
               >
                 <div className="absolute inset-0 bg-orange-600/0 blur-xl rounded-lg group-hover:bg-orange-600/40 transition-all duration-300" />
-                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center">
+                <div className="relative w-12 h-8 sm:w-14 sm:h-10 lg:w-16 lg:h-11 rounded-lg flex items-center justify-center">
                   <div className="flex items-center justify-center">
-                    <div className="w-6 h-6 rounded-full bg-muted-foreground group-hover:bg-[#EB001B] transition-all duration-300" />
-                    <div className="w-6 h-6 rounded-full bg-muted-foreground/60 group-hover:bg-[#F79E1B] transition-all duration-300 -ml-3" />
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-muted-foreground group-hover:bg-[#EB001B] transition-all duration-300" />
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-muted-foreground/60 group-hover:bg-[#F79E1B] transition-all duration-300 -ml-2.5 sm:-ml-3" />
                   </div>
                 </div>
               </motion.div>
@@ -354,7 +354,7 @@ export default function Footer() {
                 className="group relative cursor-pointer"
               >
                 <div className="absolute inset-0 bg-blue-500/0 blur-xl rounded-lg group-hover:bg-blue-500/40 transition-all duration-300" />
-                <div className="relative w-16 h-11 rounded-lg flex items-center justify-center overflow-hidden">
+                <div className="relative w-12 h-8 sm:w-14 sm:h-10 lg:w-16 lg:h-11 rounded-lg flex items-center justify-center overflow-hidden">
                   <img 
                     src="https://cdn.hercules.app/file_Z6GbPV94QjeHbH7lprqdiYP5" 
                     alt="American Express" 

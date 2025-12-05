@@ -1,6 +1,6 @@
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart, Languages } from "lucide-react";
+import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart, Languages, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useQuery } from "convex/react";
@@ -12,6 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet.tsx";
 import { useAuth } from "@/hooks/use-auth.ts";
 import { useLanguage, translations } from "@/hooks/use-language.ts";
 import { useState, useEffect } from "react";
@@ -45,6 +52,7 @@ export default function Header() {
   const { signoutRedirect } = useAuth();
   const { language, setLanguage } = useLanguage();
   const t = translations[language];
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Generate or retrieve session ID for guest users
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -69,28 +77,28 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-24 items-center justify-between">
           {/* Logo with 3D Marine Design */}
-          <Link to="/" className="flex items-center space-x-3 group relative">
+          <Link to="/" className="flex items-center space-x-2 sm:space-x-3 group relative flex-shrink-0">
             {siteConfig && 'logoUrl' in siteConfig && siteConfig.logoUrl ? (
               <img 
                 src={siteConfig.logoUrl} 
                 alt={siteConfig.siteName}
-                className="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                className="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
               <>
                 {/* 3D Marine Icon with Multiple Layers */}
                 <div className="relative">
                   {/* Background glow */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-3xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-2xl sm:rounded-3xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-300" />
                   
                   {/* Main icon container */}
-                  <div className="relative bg-gradient-to-br from-primary via-primary/95 to-accent p-3 rounded-3xl shadow-2xl group-hover:shadow-primary/50 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
+                  <div className="relative bg-gradient-to-br from-primary via-primary/95 to-accent p-2 sm:p-3 rounded-2xl sm:rounded-3xl shadow-2xl group-hover:shadow-primary/50 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
                     {/* Layered marine elements */}
                     <div className="relative">
                       {/* Background waves */}
-                      <WavesIcon className="absolute inset-0 h-7 w-7 text-primary-foreground/20 translate-y-2 translate-x-1" />
+                      <WavesIcon className="absolute inset-0 h-5 w-5 sm:h-7 sm:w-7 text-primary-foreground/20 translate-y-1 sm:translate-y-2 translate-x-0.5 sm:translate-x-1" />
                       {/* Main anchor icon */}
-                      <svg className="h-7 w-7 text-primary-foreground relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="h-5 w-5 sm:h-7 sm:w-7 text-primary-foreground relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="5" r="3"/>
                         <line x1="12" y1="22" x2="12" y2="8"/>
                         <path d="M5 12H2a10 10 0 0 0 20 0h-3"/>
@@ -98,16 +106,16 @@ export default function Header() {
                     </div>
                     
                     {/* Decorative corner accent */}
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full shadow-lg" />
+                    <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-2 h-2 sm:w-3 sm:h-3 bg-accent rounded-full shadow-lg" />
                   </div>
                 </div>
                 
                 {/* Brand text with gradient */}
                 <div className="flex flex-col">
-                  <div className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent tracking-tight leading-none group-hover:tracking-wide transition-all duration-300">
+                  <div className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent tracking-tight leading-none group-hover:tracking-wide transition-all duration-300">
                     {siteConfig?.siteName || "Marine Store"}
                   </div>
-                  <div className="text-[10px] text-muted-foreground/80 tracking-widest uppercase font-medium">
+                  <div className="text-[8px] sm:text-[10px] text-muted-foreground/80 tracking-widest uppercase font-medium hidden sm:block">
                     {t.marineExcellence}
                   </div>
                 </div>
@@ -229,13 +237,124 @@ export default function Header() {
               </DropdownMenu>
             </Authenticated>
             <Unauthenticated>
-              <SignInButton />
+              <SignInButton className="hidden sm:inline-flex" />
             </Unauthenticated>
             
             {/* Mobile Menu */}
-            <Button variant="ghost" size="icon" className="lg:hidden">
-              <MenuIcon className="h-5 w-5" />
-            </Button>
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden">
+                  <MenuIcon className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[350px]">
+                <SheetHeader>
+                  <SheetTitle className="text-left">Menu</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col gap-4 mt-8">
+                  {/* Navigation Links */}
+                  <Link 
+                    to="/products" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-lg font-medium hover:text-primary transition-colors py-2"
+                  >
+                    {t.allProducts}
+                  </Link>
+                  {categories?.slice(0, 5).map((category) => (
+                    <Link
+                      key={category._id}
+                      to={`/products?category=${category._id}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-base text-muted-foreground hover:text-primary transition-colors py-2 pl-4"
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                  
+                  <div className="border-t my-4" />
+                  
+                  {/* User Actions */}
+                  <Authenticated>
+                    <Link 
+                      to="/wishlist" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors py-2"
+                    >
+                      <Heart className="h-5 w-5" />
+                      {t.myWishlist}
+                    </Link>
+                    <Link 
+                      to="/orders" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors py-2"
+                    >
+                      <PackageIcon className="h-5 w-5" />
+                      {t.myOrders}
+                    </Link>
+                    <Link 
+                      to="/profile" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors py-2"
+                    >
+                      <UserIcon className="h-5 w-5" />
+                      {t.myProfile}
+                    </Link>
+                    {isAdmin && (
+                      <Link 
+                        to="/admin" 
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors py-2"
+                      >
+                        {t.admin}
+                      </Link>
+                    )}
+                    <div className="border-t my-4" />
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        signoutRedirect();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full justify-start text-destructive hover:text-destructive"
+                    >
+                      {t.signOut}
+                    </Button>
+                  </Authenticated>
+                  
+                  <Unauthenticated>
+                    <SignInButton className="w-full" />
+                  </Unauthenticated>
+                  
+                  {/* Language Selector */}
+                  <div className="border-t my-4" />
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">{language === 'en' ? 'Language' : 'Idioma'}</p>
+                    <div className="flex gap-2">
+                      <Button
+                        variant={language === "en" ? "default" : "outline"}
+                        onClick={() => {
+                          setLanguage("en");
+                          setMobileMenuOpen(false);
+                        }}
+                        className="flex-1"
+                      >
+                        🇬🇧 English
+                      </Button>
+                      <Button
+                        variant={language === "es" ? "default" : "outline"}
+                        onClick={() => {
+                          setLanguage("es");
+                          setMobileMenuOpen(false);
+                        }}
+                        className="flex-1"
+                      >
+                        🇪🇸 Español
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>

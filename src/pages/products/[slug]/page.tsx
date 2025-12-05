@@ -248,7 +248,7 @@ export default function ProductDetailPage() {
             <span className="text-sm">{product.name}</span>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+          <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12">
             {/* Product Images */}
             <div className="lg:col-span-7">
               <ProductImageGallery
@@ -271,7 +271,7 @@ export default function ProductDetailPage() {
               />
 
               {/* Trust Badges Below Images */}
-              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="mt-6 sm:mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                 <div className="flex flex-col items-center text-center p-4 rounded-lg hover:bg-muted/30 transition-colors">
                   <ShieldCheckIcon className="h-6 w-6 text-muted-foreground mb-2" />
                   <span className="text-xs font-medium text-muted-foreground">Secure Payment</span>

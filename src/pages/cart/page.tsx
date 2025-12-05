@@ -63,20 +63,20 @@ export default function CartPage() {
       <div className="flex-1">
         <div className="container mx-auto px-4 py-12 max-w-7xl">
           {/* Header */}
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <Link 
               to="/products" 
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-6 group"
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4 sm:mb-6 group"
             >
               <ArrowLeftIcon className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
               {t.continueShopping}
             </Link>
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                   {t.shoppingCart}
                 </h1>
-                <p className="text-muted-foreground">
+                <p className="text-sm sm:text-base text-muted-foreground">
                   {cartItems?.length ? `${cartItems.length} ${cartItems.length === 1 ? language === 'en' ? 'item' : 'artículo' : language === 'en' ? 'items' : 'artículos'}` : t.cartEmpty}
                 </p>
               </div>
@@ -121,13 +121,13 @@ export default function CartPage() {
                       animation: `fadeInUp 0.4s ease-out ${index * 0.1}s both`
                     }}
                   >
-                    <div className="flex gap-6 p-6">
+                    <div className="flex gap-4 sm:gap-6 p-4 sm:p-6">
                       {/* Product Image */}
                       <Link
                         to={`/products/${item.product.slug}`}
                         className="flex-shrink-0"
                       >
-                        <div className="w-28 h-28 relative overflow-hidden rounded-xl bg-gradient-to-br from-muted to-muted/50 group-hover:scale-105 transition-transform duration-300">
+                        <div className="w-20 h-20 sm:w-28 sm:h-28 relative overflow-hidden rounded-xl bg-gradient-to-br from-muted to-muted/50 group-hover:scale-105 transition-transform duration-300">
                           {item.product.images[0] ? (
                             <img
                               src={item.product.images[0]}
@@ -146,54 +146,54 @@ export default function CartPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start mb-3">
                           <Link to={`/products/${item.product.slug}`}>
-                            <h3 className="font-semibold text-lg line-clamp-2 hover:text-primary transition-colors">
+                            <h3 className="font-semibold text-base sm:text-lg line-clamp-2 hover:text-primary transition-colors pr-2">
                               {item.product.name}
                             </h3>
                           </Link>
                           <button
                             onClick={() => handleRemove(item._id)}
-                            className="ml-4 p-2 rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                            className="ml-2 p-1.5 sm:p-2 rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors flex-shrink-0"
                           >
-                            <XIcon className="h-5 w-5" />
+                            <XIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                           </button>
                         </div>
                         
-                        <div className="flex items-end justify-between mt-6">
+                        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-0 mt-4 sm:mt-6">
                           {/* Quantity Controls */}
-                          <div className="flex items-center gap-3">
-                            <span className="text-sm text-muted-foreground mr-2">{language === 'en' ? 'Qty:' : 'Cant:'}</span>
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <span className="text-xs sm:text-sm text-muted-foreground">{language === 'en' ? 'Qty:' : 'Cant:'}</span>
                             <div className="flex items-center rounded-full border border-border/50 bg-muted/30">
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-9 w-9 rounded-full hover:bg-background"
+                                className="h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-background"
                                 onClick={() => handleUpdateQuantity(item._id, item.quantity - 1)}
                                 disabled={item.quantity <= 1}
                               >
-                                <MinusIcon className="h-4 w-4" />
+                                <MinusIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                               </Button>
-                              <span className="w-12 text-center font-semibold">
+                              <span className="w-10 sm:w-12 text-center text-sm sm:text-base font-semibold">
                                 {item.quantity}
                               </span>
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-9 w-9 rounded-full hover:bg-background"
+                                className="h-8 w-8 sm:h-9 sm:w-9 rounded-full hover:bg-background"
                                 onClick={() => handleUpdateQuantity(item._id, item.quantity + 1)}
                                 disabled={item.quantity >= item.product.stock}
                               >
-                                <PlusIcon className="h-4 w-4" />
+                                <PlusIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                               </Button>
                             </div>
                           </div>
 
                           {/* Price */}
-                          <div className="text-right">
-                            <p className="text-2xl font-bold">
+                          <div className="text-left sm:text-right">
+                            <p className="text-xl sm:text-2xl font-bold">
                               €{(item.product.price * item.quantity).toFixed(2)}
                             </p>
                             {item.quantity > 1 && (
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-xs sm:text-sm text-muted-foreground">
                                 €{item.product.price.toFixed(2)} each
                               </p>
                             )}
