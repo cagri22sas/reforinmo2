@@ -162,9 +162,9 @@ export default function ContactPage() {
 
         {/* Contact Section */}
         <div className="container mx-auto px-4 py-24">
-          <div className="grid lg:grid-cols-5 gap-8 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-5 gap-8 max-w-7xl mx-auto items-start">
             {/* Contact Information Cards */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 flex flex-col gap-6">
               {contactMethods.map((method) => (
                 <motion.div
                   key={method.title}
@@ -173,13 +173,14 @@ export default function ContactPage() {
                   viewport={{ once: true }}
                   transition={{ delay: method.delay }}
                   whileHover={{ x: 8, transition: { duration: 0.2 } }}
+                  className="flex-1"
                 >
-                  <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl">
+                  <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl h-full">
                     {/* Background glow */}
                     <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${method.color} rounded-full opacity-10 blur-2xl`} />
                     
-                    <CardContent className="pt-6 relative z-10">
-                      <div className="flex items-start gap-4">
+                    <CardContent className="pt-6 relative z-10 h-full flex items-center">
+                      <div className="flex items-start gap-4 w-full">
                         <motion.div
                           whileHover={{ scale: 1.1, rotate: 5 }}
                           transition={{ type: "spring", stiffness: 300 }}
@@ -206,9 +207,9 @@ export default function ContactPage() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="lg:col-span-3"
+              className="lg:col-span-3 flex"
             >
-              <Card className="relative overflow-hidden border-2 border-primary/20 shadow-2xl">
+              <Card className="relative overflow-hidden border-2 border-primary/20 shadow-2xl flex-1 flex flex-col">
                 {/* Animated gradient background */}
                 <motion.div
                   animate={{
@@ -227,8 +228,8 @@ export default function ContactPage() {
                   <p className="text-muted-foreground">{t("weRespond24h")}</p>
                 </CardHeader>
                 
-                <CardContent className="relative z-10">
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <CardContent className="relative z-10 flex-1 flex flex-col">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 flex-1 flex flex-col">
                     <div className="grid md:grid-cols-3 gap-4">
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
@@ -330,6 +331,7 @@ export default function ContactPage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.8 }}
+                      className="flex-1 flex flex-col"
                     >
                       <Label htmlFor="message">{t("message")} *</Label>
                       <Textarea
@@ -341,8 +343,7 @@ export default function ContactPage() {
                             message: t("required"),
                           },
                         })}
-                        rows={6}
-                        className="mt-1.5 resize-none"
+                        className="mt-1.5 resize-none flex-1"
                       />
                       {errors.message && (
                         <p className="text-sm text-destructive mt-1">
