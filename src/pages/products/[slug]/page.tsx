@@ -27,7 +27,10 @@ import {
   CheckCircle2Icon,
   ThumbsUpIcon,
   MessageSquareIcon,
-  VerifiedIcon
+  VerifiedIcon,
+  PencilIcon,
+  SaveIcon,
+  XIcon
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -71,6 +74,7 @@ export default function ProductDetailPage() {
   const addToCart = useMutation(api.cart.add);
   const createReview = useMutation(api.reviews.create);
   const markHelpful = useMutation(api.reviews.markHelpful);
+  const updateProduct = useMutation(api.admin.products.update);
   const [quantity, setQuantity] = useState(1);
   const [sessionId, setSessionId] = useState<string>("");
   
@@ -80,11 +84,86 @@ export default function ProductDetailPage() {
   const [reviewComment, setReviewComment] = useState("");
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
+  // Admin edit state
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editPrice, setEditPrice] = useState("");
+  const [editImageUrl, setEditImageUrl] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  const currentUser = useQuery(api.users.getCurrentUser, {});
+  const isAdmin = currentUser?.role === "admin";
+
   useEffect(() => {
     // Guest session is now created by useGuestSession hook with UUID
     const id = localStorage.getItem("guestSessionId") || "";
     setSessionId(id);
   }, []);
+
+  useEffect(() => {
+    if (product && !editPrice) {
+      setEditPrice(product.price.toString());
+      setEditImageUrl(product.images[0] || "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
+
+  const handleStartEdit = () => {
+    if (!product) return;
+    setEditPrice(product.price.toString());
+    setEditImageUrl(product.images[0] || "");
+    setIsEditMode(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditMode(false);
+    if (product) {
+      setEditPrice(product.price.toString());
+      setEditImageUrl(product.images[0] || "");
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!product) return;
+
+    const price = parseFloat(editPrice);
+    if (isNaN(price) || price <= 0) {
+      toast.error("Please enter a valid price");
+      return;
+    }
+
+    if (!editImageUrl.trim()) {
+      toast.error("Please enter a valid image URL");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await updateProduct({
+        id: product._id,
+        name: product.name,
+        slug: product.slug,
+        description: product.description,
+        price,
+        compareAtPrice: product.compareAtPrice,
+        categoryId: product.categoryId,
+        images: [editImageUrl, ...(product.images.slice(1) || [])],
+        stock: product.stock,
+        sku: product.sku,
+        featured: product.featured,
+        active: product.active,
+        seoTitle: product.seoTitle,
+        seoDescription: product.seoDescription,
+        seoKeywords: product.seoKeywords,
+        specifications: product.specifications,
+      });
+      toast.success("Product updated successfully!");
+      setIsEditMode(false);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to update product");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleAddToCart = async () => {
     if (!product || !sessionId) return;
@@ -319,20 +398,83 @@ export default function ProductDetailPage() {
 
                 {/* Price */}
                 <div className="space-y-2">
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-bold">€{product.price.toFixed(2)}</span>
-                    {hasDiscount && (
-                      <>
-                        <span className="text-lg text-muted-foreground line-through">
-                          €{product.compareAtPrice!.toFixed(2)}
-                        </span>
-                        <Badge variant="secondary" className="bg-green-500/10 text-green-700 border-green-200">
-                          Save {discountPercentage}%
-                        </Badge>
-                      </>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">Tax included · Free shipping over €500</p>
+                  {isEditMode ? (
+                    <div className="space-y-3 p-4 border-2 border-primary rounded-lg bg-primary/5">
+                      <div>
+                        <Label htmlFor="editPrice" className="text-sm font-semibold mb-2">
+                          Price (€)
+                        </Label>
+                        <Input
+                          id="editPrice"
+                          type="number"
+                          step="0.01"
+                          value={editPrice}
+                          onChange={(e) => setEditPrice(e.target.value)}
+                          className="h-12 text-lg"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="editImageUrl" className="text-sm font-semibold mb-2">
+                          Main Image URL
+                        </Label>
+                        <Input
+                          id="editImageUrl"
+                          type="url"
+                          value={editImageUrl}
+                          onChange={(e) => setEditImageUrl(e.target.value)}
+                          placeholder="https://example.com/image.jpg"
+                          className="h-12"
+                        />
+                      </div>
+                      <div className="flex gap-2 pt-2">
+                        <Button
+                          onClick={handleSaveEdit}
+                          disabled={isSaving}
+                          className="flex-1"
+                          size="lg"
+                        >
+                          <SaveIcon className="mr-2 h-4 w-4" />
+                          {isSaving ? "Saving..." : "Save Changes"}
+                        </Button>
+                        <Button
+                          onClick={handleCancelEdit}
+                          disabled={isSaving}
+                          variant="outline"
+                          size="lg"
+                        >
+                          <XIcon className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-3xl font-bold">€{product.price.toFixed(2)}</span>
+                        {hasDiscount && (
+                          <>
+                            <span className="text-lg text-muted-foreground line-through">
+                              €{product.compareAtPrice!.toFixed(2)}
+                            </span>
+                            <Badge variant="secondary" className="bg-green-500/10 text-green-700 border-green-200">
+                              Save {discountPercentage}%
+                            </Badge>
+                          </>
+                        )}
+                        {isAdmin && (
+                          <Button
+                            onClick={handleStartEdit}
+                            size="sm"
+                            variant="outline"
+                            className="ml-auto"
+                          >
+                            <PencilIcon className="mr-2 h-3 w-3" />
+                            Quick Edit
+                          </Button>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">Tax included · Free shipping over €500</p>
+                    </>
+                  )}
                 </div>
 
                 {/* Description */}
