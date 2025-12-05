@@ -84,6 +84,7 @@ export default function ProductDetailPage() {
   const [reviewTitle, setReviewTitle] = useState("");
   const [reviewComment, setReviewComment] = useState("");
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
 
   // Admin edit state
   const [isEditMode, setIsEditMode] = useState(false);
@@ -280,6 +281,7 @@ export default function ProductDetailPage() {
       setReviewTitle("");
       setReviewComment("");
       setReviewRating(5);
+      setShowReviewForm(false);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to submit review");
     } finally {
@@ -700,8 +702,8 @@ export default function ProductDetailPage() {
           {/* Reviews Section - Only show if there are reviews */}
           {reviews !== undefined && reviews.length > 0 && (
             <div className="mt-20">
-              <div className="flex items-center justify-between mb-8">
-                <div>
+              <div className="flex items-start justify-between mb-8 gap-4">
+                <div className="flex-1">
                   <h2 className="text-3xl font-bold mb-2">Customer Reviews</h2>
                   {reviewStats && reviewStats.totalReviews > 0 && (
                     <div className="flex items-center gap-4">
@@ -715,42 +717,21 @@ export default function ProductDetailPage() {
                     </div>
                   )}
                 </div>
+                <Button
+                  onClick={() => setShowReviewForm(!showReviewForm)}
+                  variant="default"
+                  size="sm"
+                  className="flex-shrink-0"
+                >
+                  <PencilIcon className="h-4 w-4 mr-2" />
+                  Write a Review
+                </Button>
               </div>
 
-              {/* Rating Distribution */}
-              {reviewStats && reviewStats.totalReviews > 0 && (
+              {/* Write a Review Form - Toggle visibility */}
+              {showReviewForm && (
                 <Card className="mb-8">
                   <CardContent className="pt-6">
-                    <div className="space-y-3">
-                      {[5, 4, 3, 2, 1].map((rating) => {
-                        const count = reviewStats.ratingDistribution[rating as 1 | 2 | 3 | 4 | 5];
-                        const percentage = reviewStats.totalReviews > 0 
-                          ? (count / reviewStats.totalReviews) * 100 
-                          : 0;
-                        return (
-                          <div key={rating} className="flex items-center gap-3">
-                            <span className="text-sm font-medium w-12">{rating} stars</span>
-                            <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-yellow-400 transition-all"
-                                style={{ width: `${percentage}%` }}
-                              />
-                            </div>
-                            <span className="text-sm text-muted-foreground w-12 text-right">{count}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Write a Review */}
-              <Card className="mb-8">
-                <CardHeader>
-                  <CardTitle>Write a Review</CardTitle>
-                </CardHeader>
-                <CardContent>
                   <Authenticated>
                     <form onSubmit={handleSubmitReview} className="space-y-6">
                       <div>
@@ -796,18 +777,19 @@ export default function ProductDetailPage() {
                         {isSubmittingReview ? "Submitting..." : "Submit Review"}
                       </Button>
                     </form>
-                  </Authenticated>
-                  <Unauthenticated>
-                    <div className="text-center py-8">
-                      <MessageSquareIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                      <p className="text-muted-foreground mb-4">
-                        Sign in to write a review
-                      </p>
-                      <SignInButton />
-                    </div>
-                  </Unauthenticated>
-                </CardContent>
-              </Card>
+                    </Authenticated>
+                    <Unauthenticated>
+                      <div className="text-center py-8">
+                        <MessageSquareIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                        <p className="text-muted-foreground mb-4">
+                          Sign in to write a review
+                        </p>
+                        <SignInButton />
+                      </div>
+                    </Unauthenticated>
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Reviews List */}
               <div className="space-y-6">
