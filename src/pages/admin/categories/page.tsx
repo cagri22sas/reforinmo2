@@ -2,7 +2,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { SignInButton } from "@/components/ui/signin.tsx";
@@ -25,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
-import { PlusIcon, EditIcon, Trash2Icon } from "lucide-react";
+import { PlusIcon, EditIcon, Trash2Icon, UploadIcon, XIcon } from "lucide-react";
 import AdminLayout from "@/components/AdminLayout.tsx";
 import { toast } from "sonner";
 
@@ -53,6 +53,7 @@ function CategoryDialog({
 }) {
   const createCategory = useMutation(api.admin.categories.create);
   const updateCategory = useMutation(api.admin.categories.update);
+  const generateUploadUrl = useMutation(api.admin.categories.generateUploadUrl);
 
   const [formData, setFormData] = useState<CategoryFormData>({
     name: category?.name || "",
@@ -61,6 +62,26 @@ function CategoryDialog({
     imageUrl: category?.imageUrl || "",
     order: category?.order?.toString() || "0",
   });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedStorageId, setUploadedStorageId] = useState<Id<"_storage"> | null>(null);
+  
+  const getImageUrl = useQuery(
+    api.admin.categories.getImageUrl,
+    uploadedStorageId ? { storageId: uploadedStorageId } : "skip"
+  );
+
+  // When image URL is ready, update form
+  useEffect(() => {
+    if (getImageUrl) {
+      setFormData((prev) => ({ ...prev, imageUrl: getImageUrl }));
+      setUploadedStorageId(null);
+      setSelectedFile(null);
+      toast.success("Resim URL hazır!");
+    }
+  }, [getImageUrl]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +125,56 @@ function CategoryDialog({
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
     setFormData({ ...formData, slug });
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Lütfen bir resim dosyası seçin");
+        return;
+      }
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+    
+    setIsUploading(true);
+    try {
+      toast.info("Resim yükleniyor...");
+      
+      // Get upload URL
+      const uploadUrl = await generateUploadUrl();
+      
+      // Upload file
+      const result = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": selectedFile.type },
+        body: selectedFile,
+      });
+      
+      const { storageId } = await result.json();
+      
+      toast.info("Resim URL alınıyor...");
+      setUploadedStorageId(storageId);
+      
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Resim yüklenirken hata oluştu");
+      setSelectedFile(null);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleCancelUpload = () => {
+    setSelectedFile(null);
+    setUploadedStorageId(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -151,6 +222,65 @@ function CategoryDialog({
           onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
           placeholder="https://example.com/image.jpg"
         />
+        
+        {/* PC'den Yükleme */}
+        <div className="mt-4 space-y-2">
+          <Label>veya PC'den Yükle</Label>
+          <div className="flex gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+            {!selectedFile ? (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                className="flex-1"
+              >
+                <UploadIcon className="h-4 w-4 mr-2" />
+                Dosya Seç
+              </Button>
+            ) : (
+              <>
+                <div className="flex-1 flex items-center gap-2 p-2 border rounded-md">
+                  <span className="text-sm truncate">{selectedFile.name}</span>
+                </div>
+                <Button
+                  type="button"
+                  onClick={handleUpload}
+                  disabled={isUploading}
+                >
+                  {isUploading ? "Yükleniyor..." : "Yükle"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleCancelUpload}
+                  disabled={isUploading}
+                >
+                  <XIcon className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+        
+        {/* Önizleme */}
+        {formData.imageUrl && (
+          <div className="mt-2">
+            <img
+              src={formData.imageUrl}
+              alt="Önizleme"
+              className="h-24 w-24 object-cover rounded-md border"
+            />
+          </div>
+        )}
       </div>
 
       <div className="space-y-2">

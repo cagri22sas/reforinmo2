@@ -3,6 +3,27 @@ import { v } from "convex/values";
 import { mutation, query } from "../_generated/server";
 import { getCurrentUser } from "../helpers";
 
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const user = await getCurrentUser(ctx);
+    if (user.role !== "admin") {
+      throw new ConvexError({
+        message: "Unauthorized",
+        code: "FORBIDDEN",
+      });
+    }
+    return await ctx.storage.generateUploadUrl();
+  },
+});
+
+export const getImageUrl = query({
+  args: { storageId: v.id("_storage") },
+  handler: async (ctx, args) => {
+    return await ctx.storage.getUrl(args.storageId);
+  },
+});
+
 export const list = query({
   args: {},
   handler: async (ctx) => {
