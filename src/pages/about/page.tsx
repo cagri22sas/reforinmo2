@@ -180,8 +180,8 @@ export default function AboutPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {[
-                { icon: Users, number: "50K+", label: t("happyCustomers") },
-                { icon: Award, number: "15+", label: t("yearsExperience") },
+                { icon: Users, number: "1K+", label: t("happyCustomers") },
+                { icon: Award, number: "4+", label: t("yearsExperience") },
                 { icon: Globe, number: "80+", label: t("countriesServed") },
                 { icon: ShipIcon, number: "10K+", label: t("productsDelivered") },
               ].map((stat, index) => (
