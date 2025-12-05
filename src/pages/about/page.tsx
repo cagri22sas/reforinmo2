@@ -4,7 +4,7 @@ import SEO from "@/components/SEO.tsx";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
-import { ShipIcon, ShieldCheckIcon, HeartIcon, TrophyIcon, AnchorIcon, CompassIcon, WavesIcon, Users, Award, Globe, Sparkles, Target, Zap, ArrowRight, Radio, Gauge, LifeBuoy, Wifi } from "lucide-react";
+import { ShipIcon, ShieldCheckIcon, HeartIcon, TrophyIcon, AnchorIcon, CompassIcon, WavesIcon, Users, Award, Globe, Sparkles, Target, Zap, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
@@ -208,130 +208,6 @@ export default function AboutPage() {
                 </motion.div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Product Expertise Section */}
-        <div className="py-16 sm:py-20 bg-gradient-to-b from-background to-muted/30">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <Badge className="mb-6 bg-accent/10 text-accent border-accent/20">
-                <Target className="w-4 h-4 mr-2" />
-                Our Expertise
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-                Premium Marine Product Categories
-              </h2>
-              <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                Specialized solutions for every aspect of marine navigation and safety
-              </p>
-            </motion.div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-              {[
-                {
-                  icon: Radio,
-                  title: "Marine Electronics",
-                  count: "450+",
-                  description: "VHF radios, chartplotters, and communication systems",
-                  gradient: "from-blue-500 to-cyan-600"
-                },
-                {
-                  icon: Gauge,
-                  title: "Navigation Systems",
-                  count: "380+",
-                  description: "GPS, compasses, and advanced navigation instruments",
-                  gradient: "from-purple-500 to-indigo-600"
-                },
-                {
-                  icon: LifeBuoy,
-                  title: "Safety Equipment",
-                  count: "520+",
-                  description: "Life jackets, flares, and emergency safety gear",
-                  gradient: "from-red-500 to-orange-600"
-                },
-                {
-                  icon: Wifi,
-                  title: "Marine Electronics",
-                  count: "350+",
-                  description: "Radar systems, fish finders, and autopilot solutions",
-                  gradient: "from-green-500 to-emerald-600"
-                }
-              ].map((category, index) => (
-                <motion.div
-                  key={category.title + index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <motion.div
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Card className="h-full bg-gradient-to-br from-card to-card/50 border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-2xl">
-                      <CardContent className="pt-6 pb-6 px-5 relative overflow-hidden">
-                        {/* Background glow */}
-                        <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${category.gradient} rounded-full opacity-5 blur-3xl`} />
-                        
-                        <motion.div
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                          className={`inline-flex items-center justify-center w-14 h-14 mb-4 bg-gradient-to-br ${category.gradient} rounded-xl shadow-lg relative z-10`}
-                        >
-                          <category.icon className="w-7 h-7 text-white" />
-                        </motion.div>
-                        
-                        <div className="mb-2">
-                          <div className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-1">
-                            {category.count}
-                          </div>
-                          <h3 className="font-bold text-base mb-2">{category.title}</h3>
-                        </div>
-                        
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                          {category.description}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Additional Stats Row */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
-            >
-              {[
-                { label: "Product SKUs", value: "1,700+" },
-                { label: "Certified Brands", value: "85+" },
-                { label: "Technical Support", value: "24/7" },
-                { label: "Warranty Coverage", value: "2-5 Years" }
-              ].map((item, index) => (
-                <motion.div
-                  key={item.label}
-                  whileHover={{ scale: 1.05 }}
-                  className="text-center p-4 rounded-xl bg-muted/50 border border-border/50"
-                >
-                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">
-                    {item.value}
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">
-                    {item.label}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
           </div>
         </div>
 
