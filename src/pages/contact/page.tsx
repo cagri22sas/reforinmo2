@@ -162,9 +162,9 @@ export default function ContactPage() {
 
         {/* Contact Section */}
         <div className="container mx-auto px-4 py-24">
-          <div className="grid lg:grid-cols-5 gap-8 max-w-7xl mx-auto items-start">
+          <div className="grid lg:grid-cols-5 gap-8 max-w-7xl mx-auto items-stretch">
             {/* Contact Information Cards */}
-            <div className="lg:col-span-2 flex flex-col gap-6">
+            <div className="lg:col-span-2 flex flex-col gap-6 h-full">
               {contactMethods.map((method) => (
                 <motion.div
                   key={method.title}
@@ -207,7 +207,7 @@ export default function ContactPage() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="lg:col-span-3 flex"
+              className="lg:col-span-3 flex h-full"
             >
               <Card className="relative overflow-hidden border-2 border-primary/20 shadow-2xl flex-1 flex flex-col">
                 {/* Animated gradient background */}
