@@ -247,9 +247,9 @@ export default function Header() {
                   <MenuIcon className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[85vw] max-w-[380px] p-0 overflow-y-auto">
-                {/* Header with Gradient */}
-                <div className="relative bg-gradient-to-br from-primary/10 via-accent/5 to-background p-6 pb-8 border-b border-border/50">
+              <SheetContent side="right" className="w-[85vw] max-w-[380px] p-0 flex flex-col">
+                {/* Header with Gradient - Sticky */}
+                <div className="sticky top-0 z-10 bg-gradient-to-br from-primary/10 via-accent/5 to-background p-6 pb-8 border-b border-border/50 backdrop-blur-xl">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className="relative">
@@ -272,7 +272,7 @@ export default function Header() {
                     </Button>
                   </div>
                   
-                  {/* User Info Card */}
+                  {/* User Info Card - Only for Authenticated */}
                   <Authenticated>
                     <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50 shadow-lg">
                       <div className="flex items-center gap-3">
@@ -289,14 +289,10 @@ export default function Header() {
                       </div>
                     </div>
                   </Authenticated>
-                  
-                  <Unauthenticated>
-                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl p-4 border border-primary/20">
-                      <p className="text-sm text-muted-foreground mb-3">{t.signInPrompt || "Sign in to unlock all features"}</p>
-                      <SignInButton className="w-full" />
-                    </div>
-                  </Unauthenticated>
                 </div>
+                
+                {/* Scrollable Content */}
+                <div className="flex-1 overflow-y-auto">
 
                 {/* Navigation Section */}
                 <div className="p-6 space-y-1">
@@ -394,8 +390,29 @@ export default function Header() {
                   </div>
                 </Authenticated>
 
-                {/* Language Selector */}
+                {/* Sign In / Sign Out Section */}
                 <div className="px-6 pb-6 space-y-3">
+                  <Unauthenticated>
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl p-4 border border-primary/20 mb-6">
+                      <p className="text-sm text-muted-foreground mb-3">{t.signInPrompt || "Sign in to unlock all features"}</p>
+                      <SignInButton className="w-full" />
+                    </div>
+                  </Unauthenticated>
+                  
+                  <Authenticated>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        signoutRedirect();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full h-11 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20 hover:border-destructive/30 mb-6"
+                    >
+                      {t.signOut}
+                    </Button>
+                  </Authenticated>
+                  
+                  {/* Language Selector */}
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3">
                     {language === 'en' ? 'Language' : 'Idioma'}
                   </p>
@@ -422,22 +439,7 @@ export default function Header() {
                     </Button>
                   </div>
                 </div>
-
-                {/* Sign Out Button */}
-                <Authenticated>
-                  <div className="px-6 pb-6">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        signoutRedirect();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="w-full h-11 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20 hover:border-destructive/30"
-                    >
-                      {t.signOut}
-                    </Button>
-                  </div>
-                </Authenticated>
+                </div>
               </SheetContent>
             </Sheet>
           </div>
