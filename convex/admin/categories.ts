@@ -105,11 +105,16 @@ export const remove = mutation({
     const products = await ctx.db
       .query("products")
       .withIndex("by_category", (q) => q.eq("categoryId", args.id))
-      .collect();
+      .first();
 
-    if (products.length > 0) {
+    if (products) {
+      const productCount = await ctx.db
+        .query("products")
+        .withIndex("by_category", (q) => q.eq("categoryId", args.id))
+        .collect();
+      
       throw new ConvexError({
-        message: "Cannot delete category with products",
+        message: `Bu kategori ${productCount.length} ürün içeriyor. Önce bu ürünleri başka bir kategoriye taşımalı veya silmelisiniz.`,
         code: "CONFLICT",
       });
     }

@@ -202,11 +202,20 @@ function CategoriesContent() {
         await deleteCategory({ id });
         toast.success("Kategori silindi");
       } catch (error) {
-        if (error instanceof Error) {
-          toast.error(error.message);
-        } else {
-          toast.error("Bir hata oluştu");
+        // Extract error message from Convex error
+        let errorMessage = "Bir hata oluştu";
+        
+        if (error && typeof error === "object" && "data" in error) {
+          const convexError = error as { data: { message?: string } };
+          errorMessage = convexError.data.message || errorMessage;
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
         }
+        
+        toast.error(errorMessage, {
+          duration: 5000,
+          description: "Kategoriyi silmek için önce içindeki ürünleri başka kategorilere taşıyın."
+        });
       }
     }
   };
