@@ -183,7 +183,7 @@ export default function AboutPage() {
                 { icon: Users, number: "1K+", label: t("happyCustomers") },
                 { icon: Award, number: "4+", label: t("yearsExperience") },
                 { icon: Globe, number: "80+", label: t("countriesServed") },
-                { icon: ShipIcon, number: "10K+", label: t("productsDelivered") },
+                { icon: ShipIcon, number: "2K+", label: t("productsDelivered") },
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
