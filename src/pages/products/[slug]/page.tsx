@@ -75,6 +75,7 @@ export default function ProductDetailPage() {
   const createReview = useMutation(api.reviews.create);
   const markHelpful = useMutation(api.reviews.markHelpful);
   const updateProduct = useMutation(api.admin.products.update);
+  const generateUploadUrl = useMutation(api.products.generateUploadUrl);
   const [quantity, setQuantity] = useState(1);
   const [sessionId, setSessionId] = useState<string>("");
   
@@ -88,6 +89,8 @@ export default function ProductDetailPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editPrice, setEditPrice] = useState("");
   const [editImageUrl, setEditImageUrl] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const currentUser = useQuery(api.users.getCurrentUser, {});
@@ -116,9 +119,61 @@ export default function ProductDetailPage() {
 
   const handleCancelEdit = () => {
     setIsEditMode(false);
+    setSelectedFile(null);
     if (product) {
       setEditPrice(product.price.toString());
       setEditImageUrl(product.images[0] || "");
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file");
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Image must be less than 10MB");
+        return;
+      }
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUploadImage = async () => {
+    if (!selectedFile) {
+      toast.error("Please select a file");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      // Step 1: Get upload URL
+      const uploadUrl = await generateUploadUrl({});
+
+      // Step 2: Upload file
+      const result = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": selectedFile.type },
+        body: selectedFile,
+      });
+
+      if (!result.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const { storageId } = await result.json();
+
+      // Step 3: Get the URL from storage ID
+      const imageUrl = `${window.location.origin}/_storage/${storageId}`;
+      setEditImageUrl(imageUrl);
+      setSelectedFile(null);
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to upload image");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -425,6 +480,34 @@ export default function ProductDetailPage() {
                           placeholder="https://example.com/image.jpg"
                           className="h-12"
                         />
+                      </div>
+                      <div>
+                        <Label htmlFor="imageFile" className="text-sm font-semibold mb-2">
+                          Or Upload Image from PC
+                        </Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="imageFile"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="h-12"
+                          />
+                          <Button
+                            type="button"
+                            onClick={handleUploadImage}
+                            disabled={!selectedFile || isUploading}
+                            variant="secondary"
+                            size="lg"
+                          >
+                            {isUploading ? "Uploading..." : "Upload"}
+                          </Button>
+                        </div>
+                        {selectedFile && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Selected: {selectedFile.name}
+                          </p>
+                        )}
                       </div>
                       <div className="flex gap-2 pt-2">
                         <Button
