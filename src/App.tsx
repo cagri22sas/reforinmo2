@@ -41,6 +41,7 @@ import AdminPagesPage from "./pages/admin/pages/page.tsx";
 import AdminUpdateImagesPage from "./pages/admin/update-images.tsx";
 import AdminReviewsPage from "./pages/admin/reviews/page.tsx";
 import AdminRemoveYachtbeachPage from "./pages/admin/remove-yachtbeach/page.tsx";
+import AdminMigrateImagesPage from "./pages/admin/migrate-images/page.tsx";
 import WishlistPage from "./pages/wishlist/page.tsx";
 import StoresPage from "./pages/stores/page.tsx";
 
@@ -90,6 +91,7 @@ export default function App() {
           <Route path="/admin/reviews" element={<AdminReviewsPage />} />
           <Route path="/admin/update-images" element={<AdminUpdateImagesPage />} />
           <Route path="/admin/remove-yachtbeach" element={<AdminRemoveYachtbeachPage />} />
+          <Route path="/admin/migrate-images" element={<AdminMigrateImagesPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

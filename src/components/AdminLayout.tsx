@@ -78,6 +78,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         { path: "/admin/seo", label: "SEO", icon: SearchIcon },
         { path: "/admin/site-config", label: "Site Config", icon: GlobeIcon },
         { path: "/admin/stripe-config", label: "Payments", icon: CreditCardIcon },
+        { path: "/admin/migrate-images", label: "Migrate Images", icon: ImageIcon },
         { path: "/admin/settings", label: "Settings", icon: SettingsIcon },
       ]
     },

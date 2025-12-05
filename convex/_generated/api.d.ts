@@ -31,6 +31,8 @@ import type * as chat from "../chat.js";
 import type * as coupons from "../coupons.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
+import type * as migrateImagesToStorage from "../migrateImagesToStorage.js";
+import type * as migrateImagesToStorageHelpers from "../migrateImagesToStorageHelpers.js";
 import type * as newsletter from "../newsletter.js";
 import type * as orders from "../orders.js";
 import type * as pages from "../pages.js";
@@ -75,6 +77,8 @@ declare const fullApi: ApiFromModules<{
   coupons: typeof coupons;
   helpers: typeof helpers;
   http: typeof http;
+  migrateImagesToStorage: typeof migrateImagesToStorage;
+  migrateImagesToStorageHelpers: typeof migrateImagesToStorageHelpers;
   newsletter: typeof newsletter;
   orders: typeof orders;
   pages: typeof pages;
