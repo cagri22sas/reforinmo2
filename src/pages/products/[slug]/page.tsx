@@ -76,7 +76,6 @@ export default function ProductDetailPage() {
   const markHelpful = useMutation(api.reviews.markHelpful);
   const updateProduct = useMutation(api.admin.products.update);
   const generateUploadUrl = useMutation(api.products.generateUploadUrl);
-  const getStorageUrl = useMutation(api.products.getStorageUrl);
   const [quantity, setQuantity] = useState(1);
   const [sessionId, setSessionId] = useState<string>("");
   
@@ -90,6 +89,7 @@ export default function ProductDetailPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editPrice, setEditPrice] = useState("");
   const [editImageUrl, setEditImageUrl] = useState("");
+  const [uploadedStorageId, setUploadedStorageId] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -121,6 +121,7 @@ export default function ProductDetailPage() {
   const handleCancelEdit = () => {
     setIsEditMode(false);
     setSelectedFile(null);
+    setUploadedStorageId("");
     if (product) {
       setEditPrice(product.price.toString());
       setEditImageUrl(product.images[0] || "");
@@ -166,16 +167,9 @@ export default function ProductDetailPage() {
 
       const { storageId } = await result.json();
 
-      // Step 3: Get the actual URL from Convex storage
-      const imageUrl = await getStorageUrl({ 
-        storageId: storageId as never 
-      });
-      
-      if (!imageUrl) {
-        throw new Error("Failed to get storage URL");
-      }
-
-      setEditImageUrl(imageUrl);
+      // Step 3: Store the storage ID (not URL) - Convex will convert it to URL automatically
+      setUploadedStorageId(storageId);
+      setEditImageUrl(""); // Clear URL field since we're using storage ID
       setSelectedFile(null);
       toast.success("Image uploaded successfully!");
     } catch (error) {
@@ -194,33 +188,61 @@ export default function ProductDetailPage() {
       return;
     }
 
-    if (!editImageUrl.trim()) {
-      toast.error("Please enter a valid image URL");
+    if (!editImageUrl.trim() && !uploadedStorageId) {
+      toast.error("Please enter a valid image URL or upload an image");
       return;
     }
 
     setIsSaving(true);
     try {
-      await updateProduct({
-        id: product._id,
-        name: product.name,
-        slug: product.slug,
-        description: product.description,
-        price,
-        compareAtPrice: product.compareAtPrice,
-        categoryId: product.categoryId,
-        images: [editImageUrl, ...(product.images.slice(1) || [])],
-        stock: product.stock,
-        sku: product.sku,
-        featured: product.featured,
-        active: product.active,
-        seoTitle: product.seoTitle,
-        seoDescription: product.seoDescription,
-        seoKeywords: product.seoKeywords,
-        specifications: product.specifications,
-      });
+      // If user uploaded a file, use imageStorageIds, otherwise use images (URLs)
+      if (uploadedStorageId) {
+        // Use storage ID
+        const existingStorageIds = product.imageStorageIds || [];
+        await updateProduct({
+          id: product._id,
+          name: product.name,
+          slug: product.slug,
+          description: product.description,
+          price,
+          compareAtPrice: product.compareAtPrice,
+          categoryId: product.categoryId,
+          imageStorageIds: [uploadedStorageId as never, ...existingStorageIds.slice(1)],
+          images: product.images && product.images.length > 0 ? product.images : undefined,
+          stock: product.stock,
+          sku: product.sku,
+          featured: product.featured,
+          active: product.active,
+          seoTitle: product.seoTitle,
+          seoDescription: product.seoDescription,
+          seoKeywords: product.seoKeywords,
+          specifications: product.specifications,
+        });
+      } else {
+        // Use URL
+        await updateProduct({
+          id: product._id,
+          name: product.name,
+          slug: product.slug,
+          description: product.description,
+          price,
+          compareAtPrice: product.compareAtPrice,
+          categoryId: product.categoryId,
+          images: [editImageUrl, ...(product.images?.slice(1) || [])],
+          imageStorageIds: product.imageStorageIds,
+          stock: product.stock,
+          sku: product.sku,
+          featured: product.featured,
+          active: product.active,
+          seoTitle: product.seoTitle,
+          seoDescription: product.seoDescription,
+          seoKeywords: product.seoKeywords,
+          specifications: product.specifications,
+        });
+      }
       toast.success("Product updated successfully!");
       setIsEditMode(false);
+      setUploadedStorageId("");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to update product");
     } finally {
@@ -515,6 +537,13 @@ export default function ProductDetailPage() {
                           <p className="text-xs text-muted-foreground mt-1">
                             Selected: {selectedFile.name}
                           </p>
+                        )}
+                        {uploadedStorageId && (
+                          <div className="mt-2 p-2 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-md">
+                            <p className="text-xs text-green-700 dark:text-green-300 font-medium">
+                              ✓ Image uploaded successfully! Click Save to apply.
+                            </p>
+                          </div>
                         )}
                       </div>
                       <div className="flex gap-2 pt-2">
