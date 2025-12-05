@@ -133,13 +133,39 @@ export default function Index() {
         >
           <div className="max-w-5xl mx-auto text-center">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-6"
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 200 }}
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/20 via-blue-500/20 to-cyan-500/20 backdrop-blur-md border-2 border-primary/30 mb-8 shadow-xl shadow-primary/10"
             >
-              <SparklesIcon className="h-3.5 w-3.5 text-primary" />
-              <span className="text-xs font-semibold text-primary tracking-wide">{t.premiumMarineLifestyle}</span>
+              <motion.div
+                animate={{ 
+                  rotate: [0, 360],
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{ 
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <SparklesIcon className="h-4 w-4 text-primary" />
+              </motion.div>
+              <span className="text-sm font-bold bg-gradient-to-r from-primary via-blue-600 to-cyan-600 bg-clip-text text-transparent tracking-wider uppercase">
+                {t.premiumMarineLifestyle}
+              </span>
+              <motion.div
+                animate={{ 
+                  scale: [1, 1.3, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-cyan-500"
+              />
             </motion.div>
 
             <motion.h1

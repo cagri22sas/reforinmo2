@@ -66,13 +66,13 @@ export const translations = {
     spanish: "Spanish",
     
     // Homepage
-    premiumMarineLifestyle: "PREMIUM MARINE LIFESTYLE",
-    heroTitle: "Where Luxury",
-    heroTitleHighlight: "Meets the Sea",
-    heroDescription: "Experience the ultimate in floating luxury with our handcrafted marine platforms and accessories",
-    exploreCollection: "Explore Collection",
-    shopCollection: "Shop Collection",
-    viewAllProducts: "View All Products",
+    premiumMarineLifestyle: "MARINE EXCELLENCE & INNOVATION",
+    heroTitle: "Marine Aksesuarlar ve",
+    heroTitleHighlight: "Deniz Eğlencesi",
+    heroDescription: "Denizcilik teknolojisi ve eğlence dünyasının profesyonel ürünleri. Tekneniz için ihtiyacınız olan her şey, yüksek kalite ve güvenilirlik garantisiyle.",
+    exploreCollection: "Ürünleri Keşfet",
+    shopCollection: "Alışverişe Başla",
+    viewAllProducts: "Tüm Ürünler",
     
     // Features
     expertConsultation: "Expert Consultation",
@@ -563,13 +563,13 @@ export const translations = {
     spanish: "Español",
     
     // Homepage
-    premiumMarineLifestyle: "ESTILO DE VIDA MARINO PREMIUM",
-    heroTitle: "Donde el Lujo",
-    heroTitleHighlight: "Se Encuentra con el Mar",
-    heroDescription: "Experimenta lo último en lujo flotante con nuestras plataformas marinas artesanales y accesorios",
-    exploreCollection: "Explorar Colección",
-    shopCollection: "Comprar Colección",
-    viewAllProducts: "Ver Todos los Productos",
+    premiumMarineLifestyle: "EXCELENCIA E INNOVACIÓN MARINA",
+    heroTitle: "Accesorios Marinos y",
+    heroTitleHighlight: "Diversión Náutica",
+    heroDescription: "Productos profesionales del mundo de la tecnología y el entretenimiento náutico. Todo lo que necesitas para tu embarcación, con garantía de alta calidad y fiabilidad.",
+    exploreCollection: "Descubrir Productos",
+    shopCollection: "Comenzar a Comprar",
+    viewAllProducts: "Todos los Productos",
     
     // Features
     expertConsultation: "Consultoría Experta",
