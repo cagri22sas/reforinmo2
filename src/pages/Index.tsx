@@ -8,7 +8,7 @@ import Testimonials from "@/components/Testimonials.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link } from "react-router-dom";
-import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon, PlayCircleIcon } from "lucide-react";
+import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef, useMemo } from "react";
 import { useLanguage, translations } from "@/hooks/use-language.ts";
@@ -21,6 +21,136 @@ function shuffleArray<T>(array: T[]): T[] {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
+}
+
+// Interactive 3D Product Card Component
+function Interactive3DProductCard({ product, index }: { product: {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+  price: number;
+  compareAtPrice?: number;
+  images?: string[];
+}; index: number }) {
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      style={{
+        transformStyle: "preserve-3d",
+        rotateX,
+        rotateY,
+      }}
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const percentX = (e.clientX - centerX) / (rect.width / 2);
+        const percentY = (e.clientY - centerY) / (rect.height / 2);
+        
+        rotateY.set(percentX * 10);
+        rotateX.set(-percentY * 10);
+      }}
+      onMouseLeave={() => {
+        rotateX.set(0);
+        rotateY.set(0);
+      }}
+      whileHover={{ z: 50 }}
+      className="group relative"
+    >
+      <Link to={`/products/${product.slug}`} className="block">
+        <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border border-border/50 shadow-2xl transition-all duration-500 group-hover:shadow-primary/20 group-hover:border-primary/30">
+          {/* Shine Effect */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+            initial={{ x: "-100%" }}
+            whileHover={{ x: "100%" }}
+            transition={{ duration: 0.8 }}
+          />
+          
+          {/* Product Image */}
+          <div className="relative aspect-square overflow-hidden">
+            <motion.img
+              src={product.images?.[0] || "/placeholder-product.png"}
+              alt={product.name}
+              className="w-full h-full object-cover"
+              whileHover={{ scale: 1.15 }}
+              transition={{ duration: 0.6 }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+            
+            {/* Floating Badge */}
+            <motion.div
+              className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-primary/90 backdrop-blur-md text-xs font-bold text-white shadow-lg"
+              animate={{
+                y: [0, -5, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              PREMIUM
+            </motion.div>
+          </div>
+
+          {/* Content */}
+          <div className="p-6 space-y-4">
+            <div>
+              <motion.h3
+                className="font-bold text-xl mb-2 line-clamp-2 group-hover:text-primary transition-colors"
+                style={{ transformStyle: "preserve-3d", z: 20 }}
+              >
+                {product.name}
+              </motion.h3>
+              <p className="text-sm text-muted-foreground line-clamp-2">
+                {product.description}
+              </p>
+            </div>
+
+            {/* Price */}
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                €{product.price.toFixed(2)}
+              </span>
+              {product.compareAtPrice && product.compareAtPrice > product.price && (
+                <span className="text-sm text-muted-foreground line-through">
+                  €{product.compareAtPrice.toFixed(2)}
+                </span>
+              )}
+            </div>
+
+            {/* Interactive Button */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="pt-2"
+            >
+              <div className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-primary to-blue-600 text-white font-semibold text-center shadow-lg group-hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                <span>View Details</span>
+                <motion.div
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <ArrowRightIcon className="h-4 w-4" />
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* 3D Depth Effect - Corner Glow */}
+          <div className="absolute -z-10 -inset-1 bg-gradient-to-br from-primary/20 via-blue-500/20 to-cyan-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
+      </Link>
+    </motion.div>
+  );
 }
 
 export default function Index() {
@@ -530,31 +660,35 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Video Section - Real YouTube Videos */}
+      {/* Interactive 3D Product Showcase */}
       <section className="py-24 lg:py-32 relative overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
           <motion.div
-            className="absolute top-[10%] left-[5%] w-96 h-96 bg-gradient-to-br from-primary/20 to-blue-500/20 rounded-full blur-3xl"
+            className="absolute top-[20%] left-[10%] w-96 h-96 bg-gradient-to-br from-primary/20 to-blue-500/20 rounded-full blur-3xl"
             animate={{
               scale: [1, 1.3, 1],
               opacity: [0.3, 0.5, 0.3],
+              x: [0, 50, 0],
+              y: [0, 30, 0],
             }}
             transition={{
-              duration: 8,
+              duration: 10,
               repeat: Infinity,
               ease: "easeInOut",
             }}
           />
           <motion.div
-            className="absolute bottom-[10%] right-[5%] w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-primary/20 rounded-full blur-3xl"
+            className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-primary/20 rounded-full blur-3xl"
             animate={{
               scale: [1.3, 1, 1.3],
               opacity: [0.3, 0.5, 0.3],
+              x: [0, -50, 0],
+              y: [0, -30, 0],
             }}
             transition={{
-              duration: 10,
+              duration: 12,
               repeat: Infinity,
               ease: "easeInOut",
             }}
@@ -571,226 +705,85 @@ export default function Index() {
             className="text-center mb-16"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm mb-6">
-              <PlayCircleIcon className="h-4 w-4 text-primary" />
-              <span className="text-sm font-semibold text-primary tracking-wide">{t.watchVideo}</span>
+              <SparklesIcon className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-primary tracking-wide">INTERACTIVE SHOWCASE</span>
             </div>
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-              {t.videoSectionTitle}
+              <span className="bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+                Premium Collection
+              </span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              {t.videoSectionDesc}
+              Explore our handpicked selection of elite marine equipment with interactive 3D showcase
             </p>
           </motion.div>
 
-          {/* Main Featured Video */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-12"
-          >
-            <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border border-border/50">
-              <iframe
-                src="https://www.youtube.com/embed/kBlXGJjJTTM"
-                title="SEABOB F5 - Ultimate Underwater Experience"
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+          {/* 3D Product Grid */}
+          {!featuredProducts ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-[500px] w-full rounded-3xl" />
+              ))}
             </div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-center mt-4"
-            >
-              <h3 className="text-xl font-bold mb-2">SEABOB F5 - Ultimate Underwater Experience</h3>
-              <p className="text-sm text-muted-foreground">Experience the thrill of underwater exploration with SEABOB</p>
-            </motion.div>
-          </motion.div>
+          ) : featuredProducts.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-lg text-muted-foreground">No featured products available</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+              {featuredProducts.slice(0, 6).map((product, index) => (
+                <Interactive3DProductCard key={product._id} product={product} index={index} />
+              ))}
+            </div>
+          )}
 
-          {/* Video Grid */}
+          {/* Bottom CTA */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-center mt-20"
           >
-            {/* Video 1 - SEABOB Features */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              whileHover={{ y: -8 }}
-              className="group"
-            >
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
-                <iframe
-                  src="https://www.youtube.com/embed/RQWYDiTJ-D0"
-                  title="SEABOB F5 S Features"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="mt-4">
-                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">SEABOB F5 S Features</h4>
-                <p className="text-sm text-muted-foreground">Discover all the advanced features</p>
-              </div>
-            </motion.div>
-
-            {/* Video 2 - Marine Water Sports */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              whileHover={{ y: -8 }}
-              className="group"
-            >
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
-                <iframe
-                  src="https://www.youtube.com/embed/gKzMxMwLMh8"
-                  title="Water Sports Equipment Review"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="mt-4">
-                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Ultimate Water Toys</h4>
-                <p className="text-sm text-muted-foreground">Best marine water sports equipment</p>
-              </div>
-            </motion.div>
-
-            {/* Video 3 - Yacht Accessories */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              whileHover={{ y: -8 }}
-              className="group"
-            >
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
-                <iframe
-                  src="https://www.youtube.com/embed/VdDNI0xkLLY"
-                  title="Luxury Yacht Accessories"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="mt-4">
-                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Luxury Yacht Accessories</h4>
-                <p className="text-sm text-muted-foreground">Premium yacht equipment showcase</p>
-              </div>
-            </motion.div>
-
-            {/* Video 4 - Inflatable Water Platform */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              whileHover={{ y: -8 }}
-              className="group"
-            >
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
-                <iframe
-                  src="https://www.youtube.com/embed/BkCmKgP1KJw"
-                  title="Inflatable Water Platform"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="mt-4">
-                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Inflatable Water Platform</h4>
-                <p className="text-sm text-muted-foreground">Floating dock and platform systems</p>
-              </div>
-            </motion.div>
-
-            {/* Video 5 - Awake Vinga Electric Surfboard */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              whileHover={{ y: -8 }}
-              className="group"
-            >
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
-                <iframe
-                  src="https://www.youtube.com/embed/Vc4fG8gVRPo"
-                  title="Electric Surfboard Review"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="mt-4">
-                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Electric Surfboard Technology</h4>
-                <p className="text-sm text-muted-foreground">Next-gen electric water sports</p>
-              </div>
-            </motion.div>
-
-            {/* Video 6 - Marine Electronics Guide */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              whileHover={{ y: -8 }}
-              className="group"
-            >
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
-                <iframe
-                  src="https://www.youtube.com/embed/RG-b7CWHckI"
-                  title="Marine Electronics Guide"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="mt-4">
-                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Marine Electronics Guide</h4>
-                <p className="text-sm text-muted-foreground">Essential navigation equipment</p>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* CTA Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-center mt-16"
-          >
-            <div className="max-w-3xl mx-auto p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-blue-500/10 to-cyan-500/10 border border-primary/20 backdrop-blur-sm">
-              <h3 className="text-2xl lg:text-3xl font-bold mb-4">
-                Ready to Experience Premium Marine Equipment?
-              </h3>
-              <p className="text-base text-muted-foreground mb-6">
-                Explore our complete collection of SEABOB, water sports equipment, and yacht accessories
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/products">
-                  <Button size="lg" className="px-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                    Browse Collection
-                    <ArrowRightIcon className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-                <Link to="/contact">
-                  <Button size="lg" variant="outline" className="px-8 rounded-xl border-2 hover:bg-accent/50 transition-all">
-                    Contact Sales
-                  </Button>
-                </Link>
+            <div className="max-w-4xl mx-auto p-10 rounded-3xl bg-gradient-to-br from-primary/10 via-blue-500/10 to-cyan-500/10 border border-primary/20 backdrop-blur-sm relative overflow-hidden">
+              {/* Animated Background Elements */}
+              <motion.div
+                className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              
+              <div className="relative z-10">
+                <h3 className="text-3xl lg:text-4xl font-bold mb-4">
+                  Discover More Premium Products
+                </h3>
+                <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+                  Explore our complete collection of SEABOB, marine electronics, and luxury yacht accessories
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/products">
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button size="lg" className="px-10 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all text-base">
+                        Browse All Products
+                        <ArrowRightIcon className="ml-2 h-5 w-5" />
+                      </Button>
+                    </motion.div>
+                  </Link>
+                  <Link to="/contact">
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button size="lg" variant="outline" className="px-10 py-6 rounded-xl border-2 hover:bg-accent/50 transition-all text-base">
+                        Contact Expert
+                      </Button>
+                    </motion.div>
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>
