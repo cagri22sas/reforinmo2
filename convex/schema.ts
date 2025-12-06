@@ -276,4 +276,12 @@ export default defineSchema({
     .index("by_published", ["published"])
     .index("by_language", ["language"])
     .index("by_slug_and_language", ["slug", "language"]),
+
+  brands: defineTable({
+    name: v.string(),
+    logoUrl: v.string(),
+    websiteUrl: v.optional(v.string()),
+    order: v.number(),
+    active: v.boolean(),
+  }).index("by_active", ["active"]),
 });

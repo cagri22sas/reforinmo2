@@ -23,7 +23,8 @@ import {
   TagIcon,
   FileTextIcon,
   StarIcon,
-  MenuIcon
+  MenuIcon,
+  AwardIcon
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -54,6 +55,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       label: "Content",
       items: [
         { path: "/admin/pages", label: "Pages", icon: FileTextIcon },
+        { path: "/admin/brands", label: "Brands", icon: AwardIcon },
       ]
     },
     {

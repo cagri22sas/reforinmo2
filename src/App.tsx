@@ -38,6 +38,7 @@ import AdminSEOPage from "./pages/admin/seo/page.tsx";
 import AdminChatPage from "./pages/admin/chat/page.tsx";
 import AdminCouponsPage from "./pages/admin/coupons/page.tsx";
 import AdminPagesPage from "./pages/admin/pages/page.tsx";
+import AdminBrandsPage from "./pages/admin/brands/page.tsx";
 import AdminUpdateImagesPage from "./pages/admin/update-images.tsx";
 import AdminReviewsPage from "./pages/admin/reviews/page.tsx";
 import AdminRemoveYachtbeachPage from "./pages/admin/remove-yachtbeach/page.tsx";
@@ -88,6 +89,7 @@ export default function App() {
           <Route path="/admin/chat" element={<AdminChatPage />} />
           <Route path="/admin/coupons" element={<AdminCouponsPage />} />
           <Route path="/admin/pages" element={<AdminPagesPage />} />
+          <Route path="/admin/brands" element={<AdminBrandsPage />} />
           <Route path="/admin/reviews" element={<AdminReviewsPage />} />
           <Route path="/admin/update-images" element={<AdminUpdateImagesPage />} />
           <Route path="/admin/remove-yachtbeach" element={<AdminRemoveYachtbeachPage />} />

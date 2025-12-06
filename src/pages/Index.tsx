@@ -26,6 +26,7 @@ function shuffleArray<T>(array: T[]): T[] {
 export default function Index() {
   const featuredProductsRaw = useQuery(api.products.list, { featured: true });
   const categories = useQuery(api.categories.list, {});
+  const brands = useQuery(api.brands.list, {});
   const seoSettings = useQuery(api.admin.seoSettings.get);
   const { language } = useLanguage();
   const t = translations[language];
@@ -458,74 +459,74 @@ export default function Index() {
             </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12"
-          >
-            {[
-              { 
-                name: "Yamaha", 
-                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Yamaha_Motor_logo.svg/320px-Yamaha_Motor_logo.svg.png",
-                fallback: "https://1000logos.net/wp-content/uploads/2018/02/Yamaha-Logo.png"
-              },
-              { 
-                name: "Garmin", 
-                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Garmin_logo.svg/320px-Garmin_logo.svg.png",
-                fallback: "https://1000logos.net/wp-content/uploads/2021/04/Garmin-logo.png"
-              },
-              { 
-                name: "Mercury", 
-                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Mercury_Marine_logo.svg/320px-Mercury_Marine_logo.svg.png",
-                fallback: "https://1000logos.net/wp-content/uploads/2020/09/Mercury-Marine-Logo.png"
-              },
-              { 
-                name: "Honda Marine", 
-                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Honda_Marine_Logo.svg/320px-Honda_Marine_Logo.svg.png",
-                fallback: "https://1000logos.net/wp-content/uploads/2018/08/Honda-Logo.png"
-              },
-              { 
-                name: "Lowrance", 
-                logo: "https://www.lowrance.com/lowrance/type/menu-logo/logo-lowrance.png",
-                fallback: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Lowrance_logo.svg/320px-Lowrance_logo.svg.png"
-              },
-              { 
-                name: "Simrad", 
-                logo: "https://www.simrad-yachting.com/simrad/type/menu-logo/logo-simrad.png",
-                fallback: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Simrad_logo.svg/320px-Simrad_logo.svg.png"
-              },
-            ].map((brand, index) => (
-              <motion.div
-                key={brand.name}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.1, y: -5 }}
-                className="flex items-center justify-center p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-300"
-              >
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="max-h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (brand.fallback && target.src !== brand.fallback) {
-                      target.src = brand.fallback;
-                    } else {
-                      target.style.display = "none";
-                      const parent = target.parentElement;
-                      if (parent) {
-                        parent.innerHTML = `<span class="text-xl font-bold text-foreground/70">${brand.name}</span>`;
-                      }
-                    }
-                  }}
-                />
-              </motion.div>
-            ))}
-          </motion.div>
+          {!brands ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-24 w-full rounded-2xl" />
+              ))}
+            </div>
+          ) : brands.length === 0 ? (
+            <p className="text-center text-muted-foreground py-12">
+              No brands to display yet.
+            </p>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12"
+            >
+              {brands.map((brand, index) => (
+                <motion.div
+                  key={brand._id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.1, y: -5 }}
+                  className="flex items-center justify-center p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-300"
+                >
+                  {brand.websiteUrl ? (
+                    <a
+                      href={brand.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full h-full flex items-center justify-center"
+                    >
+                      <img
+                        src={brand.logoUrl}
+                        alt={brand.name}
+                        className="max-h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = "none";
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `<span class="text-xl font-bold text-foreground/70">${brand.name}</span>`;
+                          }
+                        }}
+                      />
+                    </a>
+                  ) : (
+                    <img
+                      src={brand.logoUrl}
+                      alt={brand.name}
+                      className="max-h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = "none";
+                        const parent = target.parentElement;
+                        if (parent) {
+                          parent.innerHTML = `<span class="text-xl font-bold text-foreground/70">${brand.name}</span>`;
+                        }
+                      }}
+                    />
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </section>
 

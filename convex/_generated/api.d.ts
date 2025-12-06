@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as admin_brands from "../admin/brands.js";
 import type * as admin_categories from "../admin/categories.js";
 import type * as admin_chat from "../admin/chat.js";
 import type * as admin_coupons from "../admin/coupons.js";
@@ -25,6 +26,7 @@ import type * as admin_stripeConfig from "../admin/stripeConfig.js";
 import type * as admin_stripeDashboard from "../admin/stripeDashboard.js";
 import type * as admin_testimonials from "../admin/testimonials.js";
 import type * as admin_users from "../admin/users.js";
+import type * as brands from "../brands.js";
 import type * as cart from "../cart.js";
 import type * as categories from "../categories.js";
 import type * as chat from "../chat.js";
@@ -54,6 +56,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  "admin/brands": typeof admin_brands;
   "admin/categories": typeof admin_categories;
   "admin/chat": typeof admin_chat;
   "admin/coupons": typeof admin_coupons;
@@ -71,6 +74,7 @@ declare const fullApi: ApiFromModules<{
   "admin/stripeDashboard": typeof admin_stripeDashboard;
   "admin/testimonials": typeof admin_testimonials;
   "admin/users": typeof admin_users;
+  brands: typeof brands;
   cart: typeof cart;
   categories: typeof categories;
   chat: typeof chat;
