@@ -8,7 +8,7 @@ import Testimonials from "@/components/Testimonials.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link } from "react-router-dom";
-import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon } from "lucide-react";
+import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon, PlayCircleIcon, MailIcon } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef, useMemo } from "react";
 import { useLanguage, translations } from "@/hooks/use-language.ts";
@@ -436,6 +436,251 @@ export default function Index() {
                 </Button>
               </motion.div>
             </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Trusted Brands Section */}
+      <section className="py-16 bg-gradient-to-b from-background to-accent/10 relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4 tracking-tight">
+              {t.trustedBrands}
+            </h2>
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+              {t.trustedBrandsDesc}
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12"
+          >
+            {[
+              { name: "FunAir", logo: "https://funair.com/wp-content/uploads/2023/01/logo-white.png" },
+              { name: "SeaBob", logo: "https://www.seabob.com/media/seabob-logo.svg" },
+              { name: "Awake", logo: "https://www.awakeboards.com/img/awake-logo.svg" },
+              { name: "NautiBuoy", logo: "https://cdn.shopify.com/s/files/1/0086/4865/4740/files/NautiBuoy_Logo_White.png" },
+              { name: "Yamaha", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Yamaha_Motor_logo.svg/2560px-Yamaha_Motor_logo.svg.png" },
+              { name: "Garmin", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Garmin_logo.svg/2560px-Garmin_logo.svg.png" },
+            ].map((brand, index) => (
+              <motion.div
+                key={brand.name}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.1, y: -5 }}
+                className="flex items-center justify-center p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-300"
+              >
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="max-h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = "none";
+                    target.parentElement!.innerHTML = `<span class="text-2xl font-bold text-muted-foreground">${brand.name}</span>`;
+                  }}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Video Section */}
+      <section className="py-20 lg:py-28 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left: Video */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative group"
+            >
+              <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1541599955-d89bfc188927?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
+                  alt="Marine Innovation Video"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                
+                {/* Play Button */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <div className="w-20 h-20 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-2xl group-hover:bg-white transition-all">
+                    <PlayCircleIcon className="h-12 w-12 text-primary" />
+                  </div>
+                </motion.button>
+
+                {/* Decorative elements */}
+                <motion.div
+                  className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-to-br from-primary/30 to-blue-500/30 rounded-full blur-3xl"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Right: Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="space-y-6"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
+                <PlayCircleIcon className="h-4 w-4 text-primary" />
+                <span className="text-sm font-semibold text-primary">{t.watchVideo}</span>
+              </div>
+              
+              <h2 className="text-3xl lg:text-5xl font-bold tracking-tight">
+                {t.videoSectionTitle}
+              </h2>
+              
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                {t.videoSectionDesc}
+              </p>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <ShieldCheckIcon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">Premium Quality</p>
+                    <p className="text-sm text-muted-foreground">Industry-leading standards</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <AwardIcon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">Proven Results</p>
+                    <p className="text-sm text-muted-foreground">Trusted by professionals</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section - Prominent */}
+      <section className="py-20 lg:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-blue-600 to-cyan-600" />
+        <motion.div
+          className="absolute inset-0 opacity-20"
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%"],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+          style={{
+            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+          }}
+        />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-8"
+            >
+              <MailIcon className="h-4 w-4 text-white" />
+              <span className="text-sm font-bold text-white tracking-wider">{t.newsletterTitle}</span>
+            </motion.div>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-white tracking-tight"
+            >
+              {t.newsletterSubtitle}
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-lg text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed"
+            >
+              {t.newsletterDescription}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-xl mx-auto"
+            >
+              <input
+                type="email"
+                placeholder={t.emailPlaceholder}
+                className="w-full sm:flex-1 px-6 py-4 rounded-xl bg-white/95 backdrop-blur-sm border-2 border-white/50 focus:border-white focus:outline-none focus:ring-2 focus:ring-white/50 text-foreground placeholder:text-muted-foreground"
+              />
+              <Button
+                size="lg"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-primary hover:bg-white/90 font-bold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
+              >
+                {t.subscribe}
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </Button>
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="text-sm text-white/70 mt-6"
+            >
+              Join 10,000+ subscribers. Unsubscribe anytime.
+            </motion.p>
           </motion.div>
         </div>
       </section>

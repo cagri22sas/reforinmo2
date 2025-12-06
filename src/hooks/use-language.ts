@@ -103,6 +103,23 @@ export const translations = {
     premiumQuality: "Premium Quality",
     freeShipping: "Free Shipping",
     
+    // Trusted Brands
+    trustedBrands: "Trusted Brands",
+    trustedBrandsDesc: "We partner with the world's leading marine equipment manufacturers",
+    
+    // Newsletter Section
+    newsletterTitle: "Stay Updated",
+    newsletterSubtitle: "Subscribe for Exclusive Offers",
+    newsletterDescription: "Get the latest updates on new products, special offers, and marine insights delivered to your inbox",
+    emailPlaceholder: "Enter your email",
+    subscribe: "Subscribe",
+    subscribeSuccess: "Successfully subscribed!",
+    
+    // Video Section
+    videoSectionTitle: "See Innovation in Action",
+    videoSectionDesc: "Watch how our products transform marine experiences",
+    watchVideo: "Watch Video",
+    
     // Product Card
     addToCart: "Add to Cart",
     addToWishlist: "Add to Wishlist",
@@ -222,8 +239,6 @@ export const translations = {
     // Newsletter
     subscribeNewsletter: "Subscribe to Newsletter",
     enterEmail: "Enter your email",
-    subscribe: "Subscribe",
-    subscribeSuccess: "Successfully subscribed!",
     subscribeError: "Subscription failed",
     
     // Live Chat
@@ -600,6 +615,23 @@ export const translations = {
     premiumQuality: "Calidad Premium",
     freeShipping: "Envío Gratis",
     
+    // Trusted Brands
+    trustedBrands: "Marcas de Confianza",
+    trustedBrandsDesc: "Nos asociamos con los principales fabricantes de equipos marinos del mundo",
+    
+    // Newsletter Section
+    newsletterTitle: "Mantente Actualizado",
+    newsletterSubtitle: "Suscríbete para Ofertas Exclusivas",
+    newsletterDescription: "Recibe las últimas actualizaciones sobre nuevos productos, ofertas especiales e información marina en tu correo",
+    emailPlaceholder: "Ingresa tu correo",
+    subscribe: "Suscribirse",
+    subscribeSuccess: "¡Suscripción exitosa!",
+    
+    // Video Section
+    videoSectionTitle: "Innovación en Acción",
+    videoSectionDesc: "Mira cómo nuestros productos transforman las experiencias marinas",
+    watchVideo: "Ver Video",
+    
     // Product Card
     addToCart: "Añadir al Carrito",
     addToWishlist: "Añadir a Lista de Deseos",
@@ -719,8 +751,6 @@ export const translations = {
     // Newsletter
     subscribeNewsletter: "Suscribirse al Boletín",
     enterEmail: "Ingresa tu correo electrónico",
-    subscribe: "Suscribirse",
-    subscribeSuccess: "¡Suscripción exitosa!",
     subscribeError: "Error en la suscripción",
     
     // Live Chat
