@@ -8,7 +8,7 @@ import Testimonials from "@/components/Testimonials.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Link } from "react-router-dom";
-import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon, PlayCircleIcon, MailIcon } from "lucide-react";
+import { ArrowRightIcon, ShipIcon, ShieldCheckIcon, SparklesIcon, AwardIcon, WavesIcon, UsersIcon, LeafIcon, ClockIcon, PlayCircleIcon } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef, useMemo } from "react";
 import { useLanguage, translations } from "@/hooks/use-language.ts";
@@ -466,12 +466,12 @@ export default function Index() {
             className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12"
           >
             {[
-              { name: "FunAir", logo: "https://funair.com/wp-content/uploads/2023/01/logo-white.png" },
-              { name: "SeaBob", logo: "https://www.seabob.com/media/seabob-logo.svg" },
-              { name: "Awake", logo: "https://www.awakeboards.com/img/awake-logo.svg" },
-              { name: "NautiBuoy", logo: "https://cdn.shopify.com/s/files/1/0086/4865/4740/files/NautiBuoy_Logo_White.png" },
-              { name: "Yamaha", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Yamaha_Motor_logo.svg/2560px-Yamaha_Motor_logo.svg.png" },
-              { name: "Garmin", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Garmin_logo.svg/2560px-Garmin_logo.svg.png" },
+              { name: "Yamaha", logo: "https://logos-world.net/wp-content/uploads/2020/12/Yamaha-Logo.png" },
+              { name: "Garmin", logo: "https://logos-world.net/wp-content/uploads/2021/03/Garmin-Logo.png" },
+              { name: "Mercury", logo: "https://logos-world.net/wp-content/uploads/2021/03/Mercury-Marine-Logo.png" },
+              { name: "Lowrance", logo: "https://www.navico.com/globalassets/global/brands/lowrance-logo-white.png" },
+              { name: "Raymarine", logo: "https://www.raymarine.com/assets/images/brand/logo-white.png" },
+              { name: "Simrad", logo: "https://www.navico.com/globalassets/global/brands/simrad-logo-white.png" },
             ].map((brand, index) => (
               <motion.div
                 key={brand.name}
@@ -498,27 +498,74 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Video Section */}
-      <section className="py-20 lg:py-28 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
-        
+      {/* Video Section - Enhanced */}
+      <section className="py-24 lg:py-32 relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
+          <motion.div
+            className="absolute top-[10%] left-[5%] w-96 h-96 bg-gradient-to-br from-primary/20 to-blue-500/20 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-[10%] right-[5%] w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-primary/20 rounded-full blur-3xl"
+            animate={{
+              scale: [1.3, 1, 1.3],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left: Video */}
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm mb-6">
+              <PlayCircleIcon className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-primary tracking-wide">{t.watchVideo}</span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+              {t.videoSectionTitle}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              {t.videoSectionDesc}
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            {/* Left: Video Player - Takes more space */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="relative group"
+              className="lg:col-span-7 relative group"
             >
               <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1541599955-d89bfc188927?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
+                  src="https://images.unsplash.com/photo-1541599955-d89bfc188927?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1400"
                   alt="Marine Innovation Video"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                 
                 {/* Play Button */}
                 <motion.button
@@ -526,17 +573,42 @@ export default function Index() {
                   whileTap={{ scale: 0.95 }}
                   className="absolute inset-0 flex items-center justify-center"
                 >
-                  <div className="w-20 h-20 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-2xl group-hover:bg-white transition-all">
-                    <PlayCircleIcon className="h-12 w-12 text-primary" />
+                  <div className="relative">
+                    <motion.div
+                      className="absolute inset-0 bg-white/30 rounded-full blur-2xl"
+                      animate={{
+                        scale: [1, 1.3, 1],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
+                    <div className="relative w-24 h-24 rounded-full bg-white/95 backdrop-blur-md flex items-center justify-center shadow-2xl group-hover:bg-white transition-all group-hover:scale-110">
+                      <PlayCircleIcon className="h-14 w-14 text-primary" />
+                    </div>
                   </div>
                 </motion.button>
 
+                {/* Video Stats Overlay */}
+                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                  <div className="backdrop-blur-md bg-white/10 rounded-2xl px-4 py-3 border border-white/20">
+                    <p className="text-white/90 text-xs font-medium mb-1">Watch Time</p>
+                    <p className="text-white text-2xl font-bold">3:45</p>
+                  </div>
+                  <div className="backdrop-blur-md bg-white/10 rounded-2xl px-4 py-3 border border-white/20">
+                    <p className="text-white/90 text-xs font-medium mb-1">Views</p>
+                    <p className="text-white text-2xl font-bold">12K+</p>
+                  </div>
+                </div>
+
                 {/* Decorative elements */}
                 <motion.div
-                  className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-to-br from-primary/30 to-blue-500/30 rounded-full blur-3xl"
+                  className="absolute -top-6 -right-6 w-40 h-40 bg-gradient-to-br from-primary/40 to-blue-500/40 rounded-full blur-3xl"
                   animate={{
                     scale: [1, 1.2, 1],
-                    opacity: [0.3, 0.5, 0.3],
+                    opacity: [0.4, 0.6, 0.4],
                   }}
                   transition={{
                     duration: 4,
@@ -545,112 +617,152 @@ export default function Index() {
                   }}
                 />
               </div>
+
+              {/* Thumbnail Grid */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="mt-6 grid grid-cols-3 gap-4"
+              >
+                {[
+                  "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400",
+                  "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400",
+                  "https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=400",
+                ].map((img, idx) => (
+                  <motion.div
+                    key={idx}
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    className="relative aspect-video rounded-xl overflow-hidden cursor-pointer group/thumb"
+                  >
+                    <img
+                      src={img}
+                      alt={`Thumbnail ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/thumb:opacity-100 transition-opacity">
+                      <PlayCircleIcon className="h-8 w-8 text-white" />
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
             </motion.div>
 
-            {/* Right: Content */}
+            {/* Right: Content & Features */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="space-y-6"
+              className="lg:col-span-5 space-y-8"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
-                <PlayCircleIcon className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-primary">{t.watchVideo}</span>
+              {/* Key Features */}
+              <div className="space-y-4">
+                {[
+                  {
+                    icon: ShieldCheckIcon,
+                    title: "Premium Quality",
+                    desc: "Industry-leading standards & materials",
+                    color: "from-primary to-blue-500"
+                  },
+                  {
+                    icon: AwardIcon,
+                    title: "Proven Results",
+                    desc: "Trusted by 10,000+ professionals",
+                    color: "from-blue-500 to-cyan-500"
+                  },
+                  {
+                    icon: UsersIcon,
+                    title: "Expert Support",
+                    desc: "24/7 professional assistance",
+                    color: "from-cyan-500 to-primary"
+                  },
+                  {
+                    icon: WavesIcon,
+                    title: "Marine Tested",
+                    desc: "Extreme conditions approved",
+                    color: "from-primary to-blue-600"
+                  },
+                ].map((feature, idx) => {
+                  const Icon = feature.icon;
+                  return (
+                    <motion.div
+                      key={feature.title}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: idx * 0.1 }}
+                      whileHover={{ x: 4 }}
+                      className="group/feature flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-br from-card/50 to-accent/20 border border-border/50 hover:border-primary/30 transition-all"
+                    >
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center flex-shrink-0 shadow-lg group-hover/feature:scale-110 transition-transform`}>
+                        <Icon className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-base mb-1 group-hover/feature:text-primary transition-colors">
+                          {feature.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {feature.desc}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
-              
-              <h2 className="text-3xl lg:text-5xl font-bold tracking-tight">
-                {t.videoSectionTitle}
-              </h2>
-              
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                {t.videoSectionDesc}
-              </p>
 
-              <div className="flex flex-wrap gap-4 pt-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <ShieldCheckIcon className="h-6 w-6 text-primary" />
+              {/* Stats */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="grid grid-cols-2 gap-4"
+              >
+                {[
+                  { value: "10K+", label: "Happy Customers" },
+                  { value: "42+", label: "Countries Served" },
+                  { value: "2K+", label: "Products Delivered" },
+                  { value: "4+", label: "Years Experience" },
+                ].map((stat, idx) => (
+                  <div
+                    key={stat.label}
+                    className="text-center p-4 rounded-xl bg-gradient-to-br from-primary/5 to-blue-500/5 border border-border/30"
+                  >
+                    <p className="text-3xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent mb-1">
+                      {stat.value}
+                    </p>
+                    <p className="text-xs text-muted-foreground font-medium">
+                      {stat.label}
+                    </p>
                   </div>
-                  <div>
-                    <p className="font-semibold">Premium Quality</p>
-                    <p className="text-sm text-muted-foreground">Industry-leading standards</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <AwardIcon className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold">Proven Results</p>
-                    <p className="text-sm text-muted-foreground">Trusted by professionals</p>
-                  </div>
-                </div>
-              </div>
+                ))}
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="flex flex-col sm:flex-row gap-3"
+              >
+                <Link to="/products" className="flex-1">
+                  <Button className="w-full rounded-xl shadow-lg hover:shadow-xl transition-all">
+                    Shop Collection
+                    <ArrowRightIcon className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link to="/contact" className="flex-1">
+                  <Button variant="outline" className="w-full rounded-xl border-2 hover:bg-accent/50 transition-all">
+                    Contact Us
+                  </Button>
+                </Link>
+              </motion.div>
             </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* Newsletter Section - Minimal & Professional */}
-      <section className="py-16 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-5xl mx-auto"
-          >
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-card via-card to-accent/20 border border-border/50 shadow-lg">
-              {/* Subtle background decoration */}
-              <div className="absolute inset-0 opacity-[0.03]">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]" />
-              </div>
-
-              <div className="relative z-10 p-8 lg:p-12">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                  {/* Left: Content */}
-                  <div className="space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-                      <MailIcon className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-xs font-semibold text-primary tracking-wide">{t.newsletterTitle}</span>
-                    </div>
-                    
-                    <h3 className="text-2xl lg:text-3xl font-bold tracking-tight">
-                      {t.newsletterSubtitle}
-                    </h3>
-                    
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {t.newsletterDescription}
-                    </p>
-                  </div>
-
-                  {/* Right: Form */}
-                  <div className="space-y-3">
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <input
-                        type="email"
-                        placeholder={t.emailPlaceholder}
-                        className="flex-1 px-4 py-2.5 rounded-lg bg-background border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm placeholder:text-muted-foreground transition-all"
-                      />
-                      <Button
-                        className="sm:w-auto rounded-lg shadow-sm hover:shadow transition-all"
-                      >
-                        {t.subscribe}
-                        <ArrowRightIcon className="ml-2 h-4 w-4" />
-                      </Button>
-                    </div>
-                    
-                    <p className="text-xs text-muted-foreground">
-                      Join 10,000+ subscribers • Unsubscribe anytime
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
