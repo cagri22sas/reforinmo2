@@ -593,94 +593,63 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Newsletter Section - Prominent */}
-      <section className="py-20 lg:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-blue-600 to-cyan-600" />
-        <motion.div
-          className="absolute inset-0 opacity-20"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%"],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-          style={{
-            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)",
-            backgroundSize: "50px 50px",
-          }}
-        />
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Newsletter Section - Minimal & Professional */}
+      <section className="py-16 relative">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto text-center"
+            transition={{ duration: 0.6 }}
+            className="max-w-5xl mx-auto"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-8"
-            >
-              <MailIcon className="h-4 w-4 text-white" />
-              <span className="text-sm font-bold text-white tracking-wider">{t.newsletterTitle}</span>
-            </motion.div>
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-card via-card to-accent/20 border border-border/50 shadow-lg">
+              {/* Subtle background decoration */}
+              <div className="absolute inset-0 opacity-[0.03]">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]" />
+              </div>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-white tracking-tight"
-            >
-              {t.newsletterSubtitle}
-            </motion.h2>
+              <div className="relative z-10 p-8 lg:p-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  {/* Left: Content */}
+                  <div className="space-y-4">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+                      <MailIcon className="h-3.5 w-3.5 text-primary" />
+                      <span className="text-xs font-semibold text-primary tracking-wide">{t.newsletterTitle}</span>
+                    </div>
+                    
+                    <h3 className="text-2xl lg:text-3xl font-bold tracking-tight">
+                      {t.newsletterSubtitle}
+                    </h3>
+                    
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {t.newsletterDescription}
+                    </p>
+                  </div>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-lg text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed"
-            >
-              {t.newsletterDescription}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-xl mx-auto"
-            >
-              <input
-                type="email"
-                placeholder={t.emailPlaceholder}
-                className="w-full sm:flex-1 px-6 py-4 rounded-xl bg-white/95 backdrop-blur-sm border-2 border-white/50 focus:border-white focus:outline-none focus:ring-2 focus:ring-white/50 text-foreground placeholder:text-muted-foreground"
-              />
-              <Button
-                size="lg"
-                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-primary hover:bg-white/90 font-bold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
-              >
-                {t.subscribe}
-                <ArrowRightIcon className="ml-2 h-5 w-5" />
-              </Button>
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-sm text-white/70 mt-6"
-            >
-              Join 10,000+ subscribers. Unsubscribe anytime.
-            </motion.p>
+                  {/* Right: Form */}
+                  <div className="space-y-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="email"
+                        placeholder={t.emailPlaceholder}
+                        className="flex-1 px-4 py-2.5 rounded-lg bg-background border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm placeholder:text-muted-foreground transition-all"
+                      />
+                      <Button
+                        className="sm:w-auto rounded-lg shadow-sm hover:shadow transition-all"
+                      >
+                        {t.subscribe}
+                        <ArrowRightIcon className="ml-2 h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    <p className="text-xs text-muted-foreground">
+                      Join 10,000+ subscribers • Unsubscribe anytime
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
