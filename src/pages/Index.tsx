@@ -136,7 +136,7 @@ export default function Index() {
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6, type: "spring", stiffness: 200 }}
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/20 via-blue-500/20 to-cyan-500/20 backdrop-blur-md border-2 border-primary/30 mb-8 shadow-xl shadow-primary/10"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/15 via-blue-500/15 to-cyan-500/15 backdrop-blur-md border border-primary/20 mb-8 shadow-lg shadow-primary/5"
             >
               <motion.div
                 animate={{ 
@@ -149,9 +149,9 @@ export default function Index() {
                   ease: "easeInOut"
                 }}
               >
-                <SparklesIcon className="h-4 w-4 text-primary" />
+                <SparklesIcon className="h-3.5 w-3.5 text-primary" />
               </motion.div>
-              <span className="text-sm font-bold bg-gradient-to-r from-primary via-blue-600 to-cyan-600 bg-clip-text text-transparent tracking-wider uppercase">
+              <span className="text-xs font-semibold bg-gradient-to-r from-primary via-blue-600 to-cyan-600 bg-clip-text text-transparent tracking-wide uppercase">
                 {t.premiumMarineLifestyle}
               </span>
               <motion.div
@@ -164,7 +164,7 @@ export default function Index() {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-cyan-500"
+                className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-primary to-cyan-500"
               />
             </motion.div>
 
@@ -172,11 +172,11 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-balance mb-6 leading-tight"
+              className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-balance mb-6 leading-tight tracking-tight"
             >
               {t.heroTitle}{" "}
               <br className="hidden sm:block" />
-              <span className="bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary/90 via-blue-500/90 to-cyan-500/90 bg-clip-text text-transparent">
                 {t.heroTitleHighlight}
               </span>
             </motion.h1>
@@ -185,7 +185,7 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-base sm:text-lg text-foreground/80 mb-8 text-balance max-w-2xl mx-auto"
+              className="text-base sm:text-lg text-muted-foreground/90 mb-8 text-balance max-w-2xl mx-auto font-normal leading-relaxed"
             >
               {t.heroDescription}
             </motion.p>

@@ -331,7 +331,12 @@ export default function Header() {
               </DropdownMenu>
             </Authenticated>
             <Unauthenticated>
-              <SignInButton className="hidden sm:inline-flex" />
+              <SignInButton 
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex hover:bg-primary/5 text-foreground font-medium border border-border/40 hover:border-primary/30 transition-all"
+                showIcon={false}
+              />
             </Unauthenticated>
             
             {/* Mobile Menu */}
@@ -533,9 +538,13 @@ export default function Header() {
                 {/* Sign In / Sign Out Section */}
                 <div className="px-6 pb-6 space-y-3">
                   <Unauthenticated>
-                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl p-4 border border-primary/20 mb-6">
+                    <div className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl p-4 border border-border/40 mb-6">
                       <p className="text-sm text-muted-foreground mb-3">{t.signInPrompt || "Sign in to unlock all features"}</p>
-                      <SignInButton className="w-full" />
+                      <SignInButton 
+                        variant="outline"
+                        className="w-full border-primary/30 hover:bg-primary/5 font-medium"
+                        showIcon={false}
+                      />
                     </div>
                   </Unauthenticated>
                   
