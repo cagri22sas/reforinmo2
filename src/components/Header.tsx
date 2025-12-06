@@ -1,10 +1,11 @@
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart, Languages, X } from "lucide-react";
+import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart, Languages, X, ChevronDown, Anchor, Radio, Compass, LifeBuoy, Gauge, Wrench, Ship, Waves, Store, Mail, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
+import type { Id } from "@/convex/_generated/dataModel.d.ts";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,7 +45,23 @@ type SiteConfigWithUrls = {
   faviconUrl: string | null;
 };
 
+// Category icon mapping
+const getCategoryIcon = (categoryName: string) => {
+  const name = categoryName.toLowerCase();
+  if (name.includes("electronic") || name.includes("elektro")) return Radio;
+  if (name.includes("navigation") || name.includes("navigasyon")) return Compass;
+  if (name.includes("safety") || name.includes("güvenlik")) return LifeBuoy;
+  if (name.includes("communication") || name.includes("iletişim")) return Radio;
+  if (name.includes("instrument") || name.includes("enstrüman")) return Gauge;
+  if (name.includes("maintenance") || name.includes("bakım")) return Wrench;
+  if (name.includes("water sport") || name.includes("su sporları")) return Waves;
+  if (name.includes("dock") || name.includes("platform")) return Ship;
+  if (name.includes("accessori") || name.includes("aksesuar")) return PackageIcon;
+  return Anchor; // default icon
+};
+
 export default function Header() {
+  const [showMegaMenu, setShowMegaMenu] = useState(false);
   const categories = useQuery(api.categories.listWithProducts, {});
   const currentUser = useQuery(api.users.getCurrentUser, {});
   const isAdmin = useQuery(api.users.isAdmin, {});
@@ -125,21 +142,98 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">
-            <Link to="/products">
+            {/* Shop Mega Menu */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setShowMegaMenu(true)}
+              onMouseLeave={() => setShowMegaMenu(false)}
+            >
+              <Button 
+                variant="ghost" 
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                {language === "es" ? "Tienda" : "Shop"}
+                <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${showMegaMenu ? 'rotate-180' : ''}`} />
+              </Button>
+              
+              {/* Mega Menu Dropdown */}
+              {showMegaMenu && (
+                <div className="absolute left-0 top-full pt-2 z-50 w-screen max-w-3xl -translate-x-1/4">
+                  <div className="bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl p-8">
+                    <div className="grid grid-cols-3 gap-6">
+                      {/* All Products Card */}
+                      <Link
+                        to="/products"
+                        onClick={() => setShowMegaMenu(false)}
+                        className="group flex flex-col gap-3 p-4 rounded-xl hover:bg-primary/5 transition-all border border-transparent hover:border-primary/20"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="bg-gradient-to-br from-primary/20 to-accent/20 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                            <PackageIcon className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-sm group-hover:text-primary transition-colors">
+                              {t.allProducts}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {language === "es" ? "Ver todos los productos" : "View all products"}
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+
+                      {/* Categories */}
+                      {categories?.map((category) => {
+                        const Icon = getCategoryIcon(category.name);
+                        return (
+                          <Link
+                            key={category._id}
+                            to={`/products?category=${category._id}`}
+                            onClick={() => setShowMegaMenu(false)}
+                            className="group flex flex-col gap-3 p-4 rounded-xl hover:bg-primary/5 transition-all border border-transparent hover:border-primary/20"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                                <Icon className="h-5 w-5 text-primary" />
+                              </div>
+                              <div>
+                                <div className="font-semibold text-sm group-hover:text-primary transition-colors">
+                                  {category.name}
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* About Us */}
+            <Link to="/about">
               <Button variant="ghost" className="text-sm font-medium hover:text-primary transition-colors">
-                {t.allProducts}
+                <Info className="h-4 w-4 mr-1.5" />
+                {language === "es" ? "Sobre Nosotros" : "About Us"}
               </Button>
             </Link>
-            {categories?.slice(0, 3).map((category) => (
-              <Link
-                key={category._id}
-                to={`/products?category=${category._id}`}
-              >
-                <Button variant="ghost" className="text-sm font-medium hover:text-primary transition-colors">
-                  {category.name}
-                </Button>
-              </Link>
-            ))}
+
+            {/* Dealers (Store Locator) */}
+            <Link to="/stores">
+              <Button variant="ghost" className="text-sm font-medium hover:text-primary transition-colors">
+                <Store className="h-4 w-4 mr-1.5" />
+                {language === "es" ? "Distribuidores" : "Dealers"}
+              </Button>
+            </Link>
+
+            {/* Contact */}
+            <Link to="/contact">
+              <Button variant="ghost" className="text-sm font-medium hover:text-primary transition-colors">
+                <Mail className="h-4 w-4 mr-1.5" />
+                {language === "es" ? "Contacto" : "Contact"}
+              </Button>
+            </Link>
           </nav>
 
           {/* Right Side Actions */}
@@ -297,7 +391,7 @@ export default function Header() {
                 {/* Navigation Section */}
                 <div className="p-6 space-y-1">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-3">
-                    {t.shopByCategory || "Shop"}
+                    {language === "es" ? "Tienda" : "Shop"}
                   </p>
                   
                   <Link 
@@ -305,24 +399,70 @@ export default function Header() {
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
                   >
-                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                    <div className="bg-gradient-to-br from-primary/20 to-accent/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
                       <PackageIcon className="h-4 w-4 text-primary" />
                     </div>
                     <span className="font-medium text-base">{t.allProducts}</span>
                   </Link>
                   
-                  {categories?.slice(0, 5).map((category) => (
-                    <Link
-                      key={category._id}
-                      to={`/products?category=${category._id}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-primary/5 transition-colors group pl-12"
-                    >
-                      <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
-                        {category.name}
-                      </span>
-                    </Link>
-                  ))}
+                  {categories?.map((category) => {
+                    const Icon = getCategoryIcon(category.name);
+                    return (
+                      <Link
+                        key={category._id}
+                        to={`/products?category=${category._id}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-primary/5 transition-colors group"
+                      >
+                        <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                          <Icon className="h-4 w-4 text-primary" />
+                        </div>
+                        <span className="text-sm group-hover:text-primary transition-colors">
+                          {category.name}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                {/* Additional Pages */}
+                <div className="px-6 pb-6 space-y-1">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-3">
+                    {language === "es" ? "Información" : "Information"}
+                  </p>
+                  
+                  <Link 
+                    to="/about" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
+                  >
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                      <Info className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="font-medium text-sm">{language === "es" ? "Sobre Nosotros" : "About Us"}</span>
+                  </Link>
+
+                  <Link 
+                    to="/stores" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
+                  >
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                      <Store className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="font-medium text-sm">{language === "es" ? "Distribuidores" : "Dealers"}</span>
+                  </Link>
+
+                  <Link 
+                    to="/contact" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
+                  >
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                      <Mail className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="font-medium text-sm">{language === "es" ? "Contacto" : "Contact"}</span>
+                  </Link>
                 </div>
 
                 {/* User Actions */}
