@@ -764,57 +764,6 @@ export default function Index() {
               ))}
             </div>
           )}
-
-          {/* Bottom CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-center mt-20"
-          >
-            <div className="max-w-4xl mx-auto p-10 rounded-3xl bg-gradient-to-br from-primary/10 via-blue-500/10 to-cyan-500/10 border border-primary/20 backdrop-blur-sm relative overflow-hidden">
-              {/* Animated Background Elements */}
-              <motion.div
-                className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-              
-              <div className="relative z-10">
-                <h3 className="text-3xl lg:text-4xl font-bold mb-4">
-                  Explore Our Complete Collection
-                </h3>
-                <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                  Browse marine electronics, navigation systems, and all premium marine equipment
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/products">
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Button size="lg" className="px-10 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all text-base">
-                        Browse All Products
-                        <ArrowRightIcon className="ml-2 h-5 w-5" />
-                      </Button>
-                    </motion.div>
-                  </Link>
-                  <Link to="/contact">
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Button size="lg" variant="outline" className="px-10 py-6 rounded-xl border-2 hover:bg-accent/50 transition-all text-base">
-                        Contact Expert
-                      </Button>
-                    </motion.div>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
