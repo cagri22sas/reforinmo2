@@ -466,12 +466,36 @@ export default function Index() {
             className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12"
           >
             {[
-              { name: "Yamaha", logo: "https://logos-world.net/wp-content/uploads/2020/12/Yamaha-Logo.png" },
-              { name: "Garmin", logo: "https://logos-world.net/wp-content/uploads/2021/03/Garmin-Logo.png" },
-              { name: "Mercury", logo: "https://logos-world.net/wp-content/uploads/2021/03/Mercury-Marine-Logo.png" },
-              { name: "Lowrance", logo: "https://www.navico.com/globalassets/global/brands/lowrance-logo-white.png" },
-              { name: "Raymarine", logo: "https://www.raymarine.com/assets/images/brand/logo-white.png" },
-              { name: "Simrad", logo: "https://www.navico.com/globalassets/global/brands/simrad-logo-white.png" },
+              { 
+                name: "Yamaha", 
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Yamaha_Motor_logo.svg/320px-Yamaha_Motor_logo.svg.png",
+                fallback: "https://1000logos.net/wp-content/uploads/2018/02/Yamaha-Logo.png"
+              },
+              { 
+                name: "Garmin", 
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Garmin_logo.svg/320px-Garmin_logo.svg.png",
+                fallback: "https://1000logos.net/wp-content/uploads/2021/04/Garmin-logo.png"
+              },
+              { 
+                name: "Mercury", 
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Mercury_Marine_logo.svg/320px-Mercury_Marine_logo.svg.png",
+                fallback: "https://1000logos.net/wp-content/uploads/2020/09/Mercury-Marine-Logo.png"
+              },
+              { 
+                name: "Honda Marine", 
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Honda_Marine_Logo.svg/320px-Honda_Marine_Logo.svg.png",
+                fallback: "https://1000logos.net/wp-content/uploads/2018/08/Honda-Logo.png"
+              },
+              { 
+                name: "Lowrance", 
+                logo: "https://www.lowrance.com/lowrance/type/menu-logo/logo-lowrance.png",
+                fallback: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Lowrance_logo.svg/320px-Lowrance_logo.svg.png"
+              },
+              { 
+                name: "Simrad", 
+                logo: "https://www.simrad-yachting.com/simrad/type/menu-logo/logo-simrad.png",
+                fallback: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Simrad_logo.svg/320px-Simrad_logo.svg.png"
+              },
             ].map((brand, index) => (
               <motion.div
                 key={brand.name}
@@ -488,8 +512,15 @@ export default function Index() {
                   className="max-h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.style.display = "none";
-                    target.parentElement!.innerHTML = `<span class="text-2xl font-bold text-muted-foreground">${brand.name}</span>`;
+                    if (brand.fallback && target.src !== brand.fallback) {
+                      target.src = brand.fallback;
+                    } else {
+                      target.style.display = "none";
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = `<span class="text-xl font-bold text-foreground/70">${brand.name}</span>`;
+                      }
+                    }
                   }}
                 />
               </motion.div>
