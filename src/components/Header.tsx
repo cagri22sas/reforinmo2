@@ -1,6 +1,6 @@
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart, Languages, X, ChevronDown, Anchor, Radio, Compass, LifeBuoy, Gauge, Wrench, Ship, Waves, Store, Mail, Info } from "lucide-react";
+import { ShoppingCartIcon, MenuIcon, UserIcon, PackageIcon, WavesIcon, Heart, Languages, X, ChevronDown, Anchor, Radio, Compass, LifeBuoy, Gauge, Wrench, Ship, Waves, Store, Mail, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useQuery } from "convex/react";
@@ -214,7 +214,7 @@ export default function Header() {
             {/* About Us */}
             <Link to="/about">
               <Button variant="ghost" className="text-sm font-medium hover:text-primary transition-colors">
-                <Info className="h-4 w-4 mr-1.5" />
+                <Users className="h-4 w-4 mr-1" />
                 {language === "es" ? "Sobre Nosotros" : "About Us"}
               </Button>
             </Link>
@@ -222,7 +222,7 @@ export default function Header() {
             {/* Dealers (Store Locator) */}
             <Link to="/stores">
               <Button variant="ghost" className="text-sm font-medium hover:text-primary transition-colors">
-                <Store className="h-4 w-4 mr-1.5" />
+                <Store className="h-4 w-4 mr-1" />
                 {language === "es" ? "Distribuidores" : "Dealers"}
               </Button>
             </Link>
@@ -230,7 +230,7 @@ export default function Header() {
             {/* Contact */}
             <Link to="/contact">
               <Button variant="ghost" className="text-sm font-medium hover:text-primary transition-colors">
-                <Mail className="h-4 w-4 mr-1.5" />
+                <Mail className="h-4 w-4 mr-1" />
                 {language === "es" ? "Contacto" : "Contact"}
               </Button>
             </Link>
@@ -437,7 +437,7 @@ export default function Header() {
                     className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-primary/5 transition-colors group"
                   >
                     <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                      <Info className="h-4 w-4 text-primary" />
+                      <Users className="h-4 w-4 text-primary" />
                     </div>
                     <span className="font-medium text-sm">{language === "es" ? "Sobre Nosotros" : "About Us"}</span>
                   </Link>
