@@ -93,6 +93,7 @@ function ProductDialog({
   });
   
   const [uploadedImages, setUploadedImages] = useState<Id<"_storage">[]>(product?.imageStorageIds || []);
+  const [existingImageUrls, setExistingImageUrls] = useState<string[]>(product?.images || []);
   const [isUploading, setIsUploading] = useState(false);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +128,8 @@ function ProductDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (uploadedImages.length === 0) {
+    // Check if there are any images (either uploaded or existing URLs)
+    if (uploadedImages.length === 0 && existingImageUrls.length === 0) {
       toast.error("Please upload at least one product image");
       return;
     }
@@ -140,7 +142,8 @@ function ProductDialog({
         price: parseFloat(formData.price),
         compareAtPrice: formData.compareAtPrice ? parseFloat(formData.compareAtPrice) : undefined,
         categoryId: formData.categoryId as Id<"categories">,
-        imageStorageIds: uploadedImages,
+        imageStorageIds: uploadedImages.length > 0 ? uploadedImages : undefined,
+        images: existingImageUrls.length > 0 ? existingImageUrls : undefined,
         stock: parseInt(formData.stock),
         sku: formData.sku || undefined,
         featured: formData.featured,
@@ -297,19 +300,25 @@ function ProductDialog({
           disabled={isUploading}
         />
         {isUploading && <p className="text-sm text-muted-foreground">Uploading...</p>}
-        {uploadedImages.length > 0 && (
+        {(existingImageUrls.length > 0 || uploadedImages.length > 0) && (
           <div className="flex gap-2 flex-wrap mt-2">
-            {product?.images?.slice(0, uploadedImages.length).map((url, idx) => (
-              <img
-                key={idx}
-                src={url}
-                alt={`Product ${idx + 1}`}
-                className="h-20 w-20 object-cover rounded border"
-              />
+            {existingImageUrls.map((url, idx) => (
+              <div key={`existing-${idx}`} className="relative">
+                <img
+                  src={url}
+                  alt={`Product ${idx + 1}`}
+                  className="h-20 w-20 object-cover rounded border"
+                />
+                <Badge className="absolute -top-2 -right-2 text-xs" variant="secondary">
+                  Mevcut
+                </Badge>
+              </div>
             ))}
-            <p className="text-sm text-muted-foreground self-center">
-              {uploadedImages.length} image(s) uploaded
-            </p>
+            {uploadedImages.length > existingImageUrls.length && (
+              <p className="text-sm text-muted-foreground self-center">
+                + {uploadedImages.length - existingImageUrls.length} yeni resim yüklendi
+              </p>
+            )}
           </div>
         )}
       </div>
