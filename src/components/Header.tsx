@@ -334,8 +334,8 @@ export default function Header() {
               <SignInButton 
                 variant="ghost"
                 size="sm"
-                className="hidden sm:inline-flex hover:bg-primary/5 text-foreground font-medium border border-border/40 hover:border-primary/30 transition-all"
-                showIcon={false}
+                className="hidden sm:inline-flex hover:bg-primary/5 text-foreground font-medium border border-border/40 hover:border-primary/30 transition-all gap-2"
+                signInText="Login"
               />
             </Unauthenticated>
             
@@ -542,8 +542,8 @@ export default function Header() {
                       <p className="text-sm text-muted-foreground mb-3">{t.signInPrompt || "Sign in to unlock all features"}</p>
                       <SignInButton 
                         variant="outline"
-                        className="w-full border-primary/30 hover:bg-primary/5 font-medium"
-                        showIcon={false}
+                        className="w-full border-primary/30 hover:bg-primary/5 font-medium gap-2"
+                        signInText="Login"
                       />
                     </div>
                   </Unauthenticated>
