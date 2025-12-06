@@ -251,7 +251,7 @@ export default function ProductsPage() {
                 <Card className="mb-4">
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
-                      <span>Filters</span>
+                      <span>{t.filters}</span>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -264,11 +264,11 @@ export default function ProductsPage() {
                   <CardContent className="space-y-6">
                     {/* Search */}
                     <div className="space-y-2">
-                      <Label>Search</Label>
+                      <Label>{t.search}</Label>
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                          placeholder="Search products..."
+                          placeholder={t.searchProducts}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           className="pl-9"
@@ -278,13 +278,13 @@ export default function ProductsPage() {
 
                     {/* Categories */}
                     <div className="space-y-2">
-                      <Label>Category</Label>
+                      <Label>{t.category}</Label>
                       <Select value={selectedCategory} onValueChange={(value) => handleCategoryChange(value as Id<"categories">)}>
                         <SelectTrigger>
-                          <SelectValue placeholder="All Categories" />
+                          <SelectValue placeholder={language === 'en' ? 'All Categories' : 'Todas las Categorías'} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">All Categories</SelectItem>
+                          <SelectItem value="all">{language === 'en' ? 'All Categories' : 'Todas las Categorías'}</SelectItem>
                           {categories?.map((category) => (
                             <SelectItem key={category._id} value={category._id}>
                               {category.name}
@@ -296,7 +296,7 @@ export default function ProductsPage() {
 
                     {/* Price Range */}
                     <div className="space-y-3">
-                      <Label>Price Range</Label>
+                      <Label>{t.priceRange}</Label>
                       <Slider
                         min={0}
                         max={10000}
@@ -318,23 +318,23 @@ export default function ProductsPage() {
                         onCheckedChange={(checked) => setInStockOnly(checked as boolean)}
                       />
                       <Label htmlFor="inStock-mobile" className="cursor-pointer">
-                        In Stock Only
+                        {language === 'en' ? 'In Stock Only' : 'Solo en Stock'}
                       </Label>
                     </div>
 
                     {/* Sort By */}
                     <div className="space-y-2">
-                      <Label>Sort By</Label>
+                      <Label>{t.sortBy}</Label>
                       <Select value={sortBy} onValueChange={(value) => setSortBy(value as typeof sortBy)}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="newest">Newest First</SelectItem>
-                          <SelectItem value="price_asc">Price: Low to High</SelectItem>
-                          <SelectItem value="price_desc">Price: High to Low</SelectItem>
-                          <SelectItem value="name_asc">Name: A to Z</SelectItem>
-                          <SelectItem value="name_desc">Name: Z to A</SelectItem>
+                          <SelectItem value="newest">{language === 'en' ? 'Newest First' : 'Más Reciente'}</SelectItem>
+                          <SelectItem value="price_asc">{language === 'en' ? 'Price: Low to High' : 'Precio: Menor a Mayor'}</SelectItem>
+                          <SelectItem value="price_desc">{language === 'en' ? 'Price: High to Low' : 'Precio: Mayor a Menor'}</SelectItem>
+                          <SelectItem value="name_asc">{language === 'en' ? 'Name: A to Z' : 'Nombre: A a Z'}</SelectItem>
+                          <SelectItem value="name_desc">{language === 'en' ? 'Name: Z to A' : 'Nombre: Z a A'}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -345,7 +345,7 @@ export default function ProductsPage() {
                         onClick={clearFilters}
                         className="w-full"
                       >
-                        Clear All Filters
+                        {t.clearFilters}
                       </Button>
                     )}
                   </CardContent>

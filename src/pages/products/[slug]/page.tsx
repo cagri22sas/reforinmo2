@@ -35,6 +35,7 @@ import {
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth.ts";
+import { useLanguage } from "@/hooks/use-language.ts";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
@@ -42,7 +43,7 @@ import ProductCard from "@/components/ProductCard.tsx";
 import ProductImageGallery from "@/components/ui/product-image-gallery.tsx";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
 
-function RelatedProducts({ productId }: { productId: Id<"products"> }) {
+function RelatedProducts({ productId, language }: { productId: Id<"products">; language: "en" | "es" }) {
   const relatedProducts = useQuery(api.products.getRelated, { productId, limit: 4 });
 
   if (!relatedProducts || relatedProducts.length === 0) {
@@ -52,8 +53,12 @@ function RelatedProducts({ productId }: { productId: Id<"products"> }) {
   return (
     <div className="mt-20 border-t pt-20">
       <div className="mb-12">
-        <h2 className="text-3xl font-bold mb-2">You May Also Like</h2>
-        <p className="text-muted-foreground">Discover similar products</p>
+        <h2 className="text-3xl font-bold mb-2">
+          {language === "en" ? "You May Also Like" : "También Te Puede Gustar"}
+        </h2>
+        <p className="text-muted-foreground">
+          {language === "en" ? "Discover similar products" : "Descubre productos similares"}
+        </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {relatedProducts.map((product) => (
@@ -68,6 +73,7 @@ export default function ProductDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { language } = useLanguage();
   const product = useQuery(api.products.get, { slug: slug! });
   const reviews = useQuery(api.reviews.getByProduct, product ? { productId: product._id } : "skip");
   const reviewStats = useQuery(api.reviews.getStats, product ? { productId: product._id } : "skip");
@@ -697,7 +703,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Related Products Section */}
-          <RelatedProducts productId={product._id} />
+          <RelatedProducts productId={product._id} language={language} />
 
           {/* Reviews Section - Only show if there are reviews */}
           {reviews !== undefined && reviews.length > 0 && (
