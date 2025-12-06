@@ -530,7 +530,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Video Section - Enhanced */}
+      {/* Video Section - Real YouTube Videos */}
       <section className="py-24 lg:py-32 relative overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0">
@@ -582,219 +582,218 @@ export default function Index() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            {/* Left: Video Player - Takes more space */}
+          {/* Main Featured Video */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mb-12"
+          >
+            <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border border-border/50">
+              <iframe
+                src="https://www.youtube.com/embed/kBlXGJjJTTM"
+                title="SEABOB F5 - Ultimate Underwater Experience"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="lg:col-span-7 relative group"
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-center mt-4"
             >
-              <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1541599955-d89bfc188927?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1400"
-                  alt="Marine Innovation Video"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                
-                {/* Play Button */}
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="absolute inset-0 flex items-center justify-center"
-                >
-                  <div className="relative">
-                    <motion.div
-                      className="absolute inset-0 bg-white/30 rounded-full blur-2xl"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
-                    <div className="relative w-24 h-24 rounded-full bg-white/95 backdrop-blur-md flex items-center justify-center shadow-2xl group-hover:bg-white transition-all group-hover:scale-110">
-                      <PlayCircleIcon className="h-14 w-14 text-primary" />
-                    </div>
-                  </div>
-                </motion.button>
+              <h3 className="text-xl font-bold mb-2">SEABOB F5 - Ultimate Underwater Experience</h3>
+              <p className="text-sm text-muted-foreground">Experience the thrill of underwater exploration with SEABOB</p>
+            </motion.div>
+          </motion.div>
 
-                {/* Video Stats Overlay */}
-                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
-                  <div className="backdrop-blur-md bg-white/10 rounded-2xl px-4 py-3 border border-white/20">
-                    <p className="text-white/90 text-xs font-medium mb-1">Watch Time</p>
-                    <p className="text-white text-2xl font-bold">3:45</p>
-                  </div>
-                  <div className="backdrop-blur-md bg-white/10 rounded-2xl px-4 py-3 border border-white/20">
-                    <p className="text-white/90 text-xs font-medium mb-1">Views</p>
-                    <p className="text-white text-2xl font-bold">12K+</p>
-                  </div>
-                </div>
-
-                {/* Decorative elements */}
-                <motion.div
-                  className="absolute -top-6 -right-6 w-40 h-40 bg-gradient-to-br from-primary/40 to-blue-500/40 rounded-full blur-3xl"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.4, 0.6, 0.4],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+          {/* Video Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {/* Video 1 - SEABOB Features */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -8 }}
+              className="group"
+            >
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
+                <iframe
+                  src="https://www.youtube.com/embed/RQWYDiTJ-D0"
+                  title="SEABOB F5 S Features"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
                 />
               </div>
-
-              {/* Thumbnail Grid */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="mt-6 grid grid-cols-3 gap-4"
-              >
-                {[
-                  "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400",
-                  "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400",
-                  "https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=400",
-                ].map((img, idx) => (
-                  <motion.div
-                    key={idx}
-                    whileHover={{ scale: 1.05, y: -4 }}
-                    className="relative aspect-video rounded-xl overflow-hidden cursor-pointer group/thumb"
-                  >
-                    <img
-                      src={img}
-                      alt={`Thumbnail ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/thumb:opacity-100 transition-opacity">
-                      <PlayCircleIcon className="h-8 w-8 text-white" />
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-
-            {/* Right: Content & Features */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="lg:col-span-5 space-y-8"
-            >
-              {/* Key Features */}
-              <div className="space-y-4">
-                {[
-                  {
-                    icon: ShieldCheckIcon,
-                    title: "Premium Quality",
-                    desc: "Industry-leading standards & materials",
-                    color: "from-primary to-blue-500"
-                  },
-                  {
-                    icon: AwardIcon,
-                    title: "Proven Results",
-                    desc: "Trusted by 10,000+ professionals",
-                    color: "from-blue-500 to-cyan-500"
-                  },
-                  {
-                    icon: UsersIcon,
-                    title: "Expert Support",
-                    desc: "24/7 professional assistance",
-                    color: "from-cyan-500 to-primary"
-                  },
-                  {
-                    icon: WavesIcon,
-                    title: "Marine Tested",
-                    desc: "Extreme conditions approved",
-                    color: "from-primary to-blue-600"
-                  },
-                ].map((feature, idx) => {
-                  const Icon = feature.icon;
-                  return (
-                    <motion.div
-                      key={feature.title}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: idx * 0.1 }}
-                      whileHover={{ x: 4 }}
-                      className="group/feature flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-br from-card/50 to-accent/20 border border-border/50 hover:border-primary/30 transition-all"
-                    >
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center flex-shrink-0 shadow-lg group-hover/feature:scale-110 transition-transform`}>
-                        <Icon className="h-6 w-6 text-white" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-base mb-1 group-hover/feature:text-primary transition-colors">
-                          {feature.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground">
-                          {feature.desc}
-                        </p>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+              <div className="mt-4">
+                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">SEABOB F5 S Features</h4>
+                <p className="text-sm text-muted-foreground">Discover all the advanced features</p>
               </div>
-
-              {/* Stats */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="grid grid-cols-2 gap-4"
-              >
-                {[
-                  { value: "10K+", label: "Happy Customers" },
-                  { value: "42+", label: "Countries Served" },
-                  { value: "2K+", label: "Products Delivered" },
-                  { value: "4+", label: "Years Experience" },
-                ].map((stat, idx) => (
-                  <div
-                    key={stat.label}
-                    className="text-center p-4 rounded-xl bg-gradient-to-br from-primary/5 to-blue-500/5 border border-border/30"
-                  >
-                    <p className="text-3xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent mb-1">
-                      {stat.value}
-                    </p>
-                    <p className="text-xs text-muted-foreground font-medium">
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
-              </motion.div>
-
-              {/* CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-3"
-              >
-                <Link to="/products" className="flex-1">
-                  <Button className="w-full rounded-xl shadow-lg hover:shadow-xl transition-all">
-                    Shop Collection
-                    <ArrowRightIcon className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link to="/contact" className="flex-1">
-                  <Button variant="outline" className="w-full rounded-xl border-2 hover:bg-accent/50 transition-all">
-                    Contact Us
-                  </Button>
-                </Link>
-              </motion.div>
             </motion.div>
-          </div>
+
+            {/* Video 2 - Marine Water Sports */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{ y: -8 }}
+              className="group"
+            >
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
+                <iframe
+                  src="https://www.youtube.com/embed/gKzMxMwLMh8"
+                  title="Water Sports Equipment Review"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="mt-4">
+                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Ultimate Water Toys</h4>
+                <p className="text-sm text-muted-foreground">Best marine water sports equipment</p>
+              </div>
+            </motion.div>
+
+            {/* Video 3 - Yacht Accessories */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ y: -8 }}
+              className="group"
+            >
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
+                <iframe
+                  src="https://www.youtube.com/embed/VdDNI0xkLLY"
+                  title="Luxury Yacht Accessories"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="mt-4">
+                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Luxury Yacht Accessories</h4>
+                <p className="text-sm text-muted-foreground">Premium yacht equipment showcase</p>
+              </div>
+            </motion.div>
+
+            {/* Video 4 - Inflatable Water Platform */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              whileHover={{ y: -8 }}
+              className="group"
+            >
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
+                <iframe
+                  src="https://www.youtube.com/embed/BkCmKgP1KJw"
+                  title="Inflatable Water Platform"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="mt-4">
+                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Inflatable Water Platform</h4>
+                <p className="text-sm text-muted-foreground">Floating dock and platform systems</p>
+              </div>
+            </motion.div>
+
+            {/* Video 5 - Awake Vinga Electric Surfboard */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              whileHover={{ y: -8 }}
+              className="group"
+            >
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
+                <iframe
+                  src="https://www.youtube.com/embed/Vc4fG8gVRPo"
+                  title="Electric Surfboard Review"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="mt-4">
+                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Electric Surfboard Technology</h4>
+                <p className="text-sm text-muted-foreground">Next-gen electric water sports</p>
+              </div>
+            </motion.div>
+
+            {/* Video 6 - Marine Electronics Guide */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              whileHover={{ y: -8 }}
+              className="group"
+            >
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl border border-border/50 group-hover:border-primary/30 transition-all">
+                <iframe
+                  src="https://www.youtube.com/embed/RG-b7CWHckI"
+                  title="Marine Electronics Guide"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="mt-4">
+                <h4 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">Marine Electronics Guide</h4>
+                <p className="text-sm text-muted-foreground">Essential navigation equipment</p>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="text-center mt-16"
+          >
+            <div className="max-w-3xl mx-auto p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-blue-500/10 to-cyan-500/10 border border-primary/20 backdrop-blur-sm">
+              <h3 className="text-2xl lg:text-3xl font-bold mb-4">
+                Ready to Experience Premium Marine Equipment?
+              </h3>
+              <p className="text-base text-muted-foreground mb-6">
+                Explore our complete collection of SEABOB, water sports equipment, and yacht accessories
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/products">
+                  <Button size="lg" className="px-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                    Browse Collection
+                    <ArrowRightIcon className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link to="/contact">
+                  <Button size="lg" variant="outline" className="px-8 rounded-xl border-2 hover:bg-accent/50 transition-all">
+                    Contact Sales
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
