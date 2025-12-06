@@ -161,11 +161,39 @@ export default function Index() {
   const { language } = useLanguage();
   const t = translations[language];
   
-  // Shuffle featured products to mix categories
+  // Category IDs for platforms and water toys
+  const platformAndWaterToysCategories = useMemo(() => {
+    if (!categories) return [];
+    return categories
+      .filter(cat => 
+        cat.name === "Water Sports" ||
+        cat.name === "HEX Platforms" ||
+        cat.name === "Square Platforms & Pavilions" ||
+        cat.name === "Premium Teak Platforms" ||
+        cat.name === "Docks & Multi-Use Platforms"
+      )
+      .map(cat => cat._id);
+  }, [categories]);
+  
+  // Premium Collection: Only platforms and water toys
+  const premiumCollectionProducts = useMemo(() => {
+    if (!featuredProductsRaw || platformAndWaterToysCategories.length === 0) return undefined;
+    return shuffleArray(
+      featuredProductsRaw.filter(product => 
+        platformAndWaterToysCategories.includes(product.categoryId)
+      )
+    );
+  }, [featuredProductsRaw, platformAndWaterToysCategories]);
+  
+  // Featured Products: Exclude platforms and water toys
   const featuredProducts = useMemo(() => {
-    if (!featuredProductsRaw) return undefined;
-    return shuffleArray(featuredProductsRaw);
-  }, [featuredProductsRaw]);
+    if (!featuredProductsRaw || platformAndWaterToysCategories.length === 0) return undefined;
+    return shuffleArray(
+      featuredProductsRaw.filter(product => 
+        !platformAndWaterToysCategories.includes(product.categoryId)
+      )
+    );
+  }, [featuredProductsRaw, platformAndWaterToysCategories]);
   
   const { scrollYProgress } = useScroll();
   const heroRef = useRef<HTMLDivElement>(null);
@@ -710,28 +738,28 @@ export default function Index() {
             </div>
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
               <span className="bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-                Premium Collection
+                Platforms & Water Toys
               </span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Explore our handpicked selection of elite marine equipment with interactive 3D showcase
+              Explore our handpicked collection of floating platforms, docks, and premium water sports equipment
             </p>
           </motion.div>
 
           {/* 3D Product Grid */}
-          {!featuredProducts ? (
+          {!premiumCollectionProducts ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {Array.from({ length: 6 }).map((_, i) => (
                 <Skeleton key={i} className="h-[500px] w-full rounded-3xl" />
               ))}
             </div>
-          ) : featuredProducts.length === 0 ? (
+          ) : premiumCollectionProducts.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-lg text-muted-foreground">No featured products available</p>
+              <p className="text-lg text-muted-foreground">No platform or water toy products available</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-              {featuredProducts.slice(0, 6).map((product, index) => (
+              {premiumCollectionProducts.slice(0, 6).map((product, index) => (
                 <Interactive3DProductCard key={product._id} product={product} index={index} />
               ))}
             </div>
@@ -762,10 +790,10 @@ export default function Index() {
               
               <div className="relative z-10">
                 <h3 className="text-3xl lg:text-4xl font-bold mb-4">
-                  Discover More Premium Products
+                  Explore Our Complete Collection
                 </h3>
                 <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                  Explore our complete collection of SEABOB, marine electronics, and luxury yacht accessories
+                  Browse marine electronics, navigation systems, and all premium marine equipment
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link to="/products">
