@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import Header from "@/components/Header.tsx";
@@ -77,6 +77,29 @@ export default function ProductsPage() {
     sortBy !== "newest";
 
   const selectedCategoryData = categories?.find((c) => c._id === selectedCategory);
+
+  // Shuffle products randomly when no active filters (except category)
+  const displayProducts = useMemo(() => {
+    if (!products) return null;
+    
+    // Only shuffle when sortBy is "newest" and no other filters are active
+    const shouldShuffle = 
+      sortBy === "newest" && 
+      searchQuery.trim() === "" &&
+      priceRange[0] === 0 &&
+      priceRange[1] === 10000 &&
+      !inStockOnly;
+    
+    if (!shouldShuffle) return products;
+    
+    // Fisher-Yates shuffle algorithm
+    const shuffled = [...products];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, [products, sortBy, searchQuery, priceRange, inStockOnly]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -335,9 +358,9 @@ export default function ProductsPage() {
               {/* Results Count */}
               <div className="mb-6 flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
-                  {products ? (
+                  {displayProducts ? (
                     <>
-                      {language === 'en' ? 'Showing' : 'Mostrando'} <span className="font-semibold text-foreground">{products.length}</span> {language === 'en' ? (products.length !== 1 ? 'products' : 'product') : (products.length !== 1 ? 'productos' : 'producto')}
+                      {language === 'en' ? 'Showing' : 'Mostrando'} <span className="font-semibold text-foreground">{displayProducts.length}</span> {language === 'en' ? (displayProducts.length !== 1 ? 'products' : 'product') : (displayProducts.length !== 1 ? 'productos' : 'producto')}
                     </>
                   ) : (
                     t.loading
@@ -346,13 +369,13 @@ export default function ProductsPage() {
               </div>
 
               {/* Products */}
-              {!products ? (
+              {!displayProducts ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {Array.from({ length: 9 }).map((_, i) => (
                     <Skeleton key={i} className="h-96 w-full" />
                   ))}
                 </div>
-              ) : products.length === 0 ? (
+              ) : displayProducts.length === 0 ? (
                 <Card className="p-12">
                   <div className="text-center">
                     <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -369,7 +392,7 @@ export default function ProductsPage() {
                 </Card>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {products.map((product) => (
+                  {displayProducts.map((product) => (
                     <ProductCard key={product._id} product={product} />
                   ))}
                 </div>
