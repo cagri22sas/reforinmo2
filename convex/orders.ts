@@ -94,14 +94,13 @@ export const create = mutation({
     // Calculate totals and validate products
     let subtotal = 0;
     const items = [];
-    const invalidItems = [];
+    const validCartItemIds = [];
 
     for (const cartItem of cartItems) {
       const product = await ctx.db.get(cartItem.productId);
       
       // Skip invalid or inactive products, but delete them from cart
       if (!product || !product.active) {
-        invalidItems.push(cartItem._id);
         await ctx.db.delete(cartItem._id);
         continue;
       }
@@ -129,6 +128,9 @@ export const create = mutation({
         quantity: cartItem.quantity,
         price: product.price,
       });
+      
+      // Track valid cart items to delete later
+      validCartItemIds.push(cartItem._id);
     }
 
     // If all items were invalid, throw error
@@ -182,9 +184,9 @@ export const create = mutation({
       });
     }
 
-    // Clear cart
-    for (const cartItem of cartItems) {
-      await ctx.db.delete(cartItem._id);
+    // Clear only valid cart items (invalid ones were already deleted)
+    for (const cartItemId of validCartItemIds) {
+      await ctx.db.delete(cartItemId);
     }
 
     return orderId;
