@@ -55,6 +55,7 @@ const AdminUpdateImagesPage = lazy(() => import("./pages/admin/update-images.tsx
 const AdminReviewsPage = lazy(() => import("./pages/admin/reviews/page.tsx"));
 const AdminRemoveYachtbeachPage = lazy(() => import("./pages/admin/remove-yachtbeach/page.tsx"));
 const AdminMigrateImagesPage = lazy(() => import("./pages/admin/migrate-images/page.tsx"));
+const AdminUpdateLegalPagesPage = lazy(() => import("./pages/admin/update-legal-pages/page.tsx"));
 
 // Loading fallback component
 function PageLoader() {
@@ -118,6 +119,7 @@ export default function App() {
             <Route path="/admin/update-images" element={<AdminUpdateImagesPage />} />
             <Route path="/admin/remove-yachtbeach" element={<AdminRemoveYachtbeachPage />} />
             <Route path="/admin/migrate-images" element={<AdminMigrateImagesPage />} />
+            <Route path="/admin/update-legal-pages" element={<AdminUpdateLegalPagesPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

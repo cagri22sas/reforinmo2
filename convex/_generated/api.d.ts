@@ -42,11 +42,13 @@ import type * as products from "../products.js";
 import type * as removeYachtbeach from "../removeYachtbeach.js";
 import type * as reviews from "../reviews.js";
 import type * as runRemoveYachtbeach from "../runRemoveYachtbeach.js";
+import type * as runUpdateLegalPages from "../runUpdateLegalPages.js";
 import type * as shipping from "../shipping.js";
 import type * as stripe from "../stripe.js";
 import type * as stripeWebhook from "../stripeWebhook.js";
 import type * as testimonials from "../testimonials.js";
 import type * as updateImages from "../updateImages.js";
+import type * as updateLegalPages from "../updateLegalPages.js";
 import type * as users from "../users.js";
 import type * as wishlist from "../wishlist.js";
 
@@ -91,11 +93,13 @@ declare const fullApi: ApiFromModules<{
   removeYachtbeach: typeof removeYachtbeach;
   reviews: typeof reviews;
   runRemoveYachtbeach: typeof runRemoveYachtbeach;
+  runUpdateLegalPages: typeof runUpdateLegalPages;
   shipping: typeof shipping;
   stripe: typeof stripe;
   stripeWebhook: typeof stripeWebhook;
   testimonials: typeof testimonials;
   updateImages: typeof updateImages;
+  updateLegalPages: typeof updateLegalPages;
   users: typeof users;
   wishlist: typeof wishlist;
 }>;
