@@ -91,17 +91,19 @@ export const create = mutation({
       });
     }
 
-    // Calculate totals
+    // Calculate totals and validate products
     let subtotal = 0;
     const items = [];
+    const invalidItems = [];
 
     for (const cartItem of cartItems) {
       const product = await ctx.db.get(cartItem.productId);
+      
+      // Skip invalid or inactive products, but delete them from cart
       if (!product || !product.active) {
-        throw new ConvexError({
-          message: `Product not available: ${product?.name || "Unknown product"}`,
-          code: "BAD_REQUEST",
-        });
+        invalidItems.push(cartItem._id);
+        await ctx.db.delete(cartItem._id);
+        continue;
       }
 
       if (product.stock < cartItem.quantity) {
@@ -126,6 +128,14 @@ export const create = mutation({
         productImage: imageUrl || "",
         quantity: cartItem.quantity,
         price: product.price,
+      });
+    }
+
+    // If all items were invalid, throw error
+    if (items.length === 0) {
+      throw new ConvexError({
+        message: "All cart items are invalid. Please add products to your cart.",
+        code: "BAD_REQUEST",
       });
     }
 

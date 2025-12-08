@@ -40,7 +40,8 @@ export const get = query({
     const itemsWithProducts = await Promise.all(
       cartItems.map(async (item) => {
         const product = await ctx.db.get(item.productId);
-        if (!product) {
+        if (!product || !product.active) {
+          // Return null for invalid products, they'll be filtered out
           return null;
         }
         // Get image URLs
@@ -64,6 +65,7 @@ export const get = query({
       }),
     );
 
+    // Filter out null items (invalid products)
     return itemsWithProducts.filter((item) => item !== null);
   },
 });
