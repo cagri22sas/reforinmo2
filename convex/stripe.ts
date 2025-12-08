@@ -104,11 +104,13 @@ export const createCheckoutSession = action({
       },
     });
 
-    // Update order with payment intent
-    await ctx.runMutation(internal.orders.updatePaymentIntent, {
-      orderId: args.orderId,
-      paymentIntentId: session.payment_intent as string,
-    });
+    // Update order with payment intent (only if available)
+    if (session.payment_intent) {
+      await ctx.runMutation(internal.orders.updatePaymentIntent, {
+        orderId: args.orderId,
+        paymentIntentId: session.payment_intent as string,
+      });
+    }
 
     return { url: session.url };
   },
