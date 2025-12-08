@@ -172,6 +172,12 @@ function CheckoutForm() {
       return;
     }
 
+    // Check minimum order amount
+    if (total < 0.50) {
+      toast.error("Minimum order amount is €0.50. Please add more items to your cart.");
+      return;
+    }
+
     if (!stripe || !elements) {
       toast.error("Stripe is not loaded");
       return;
@@ -675,13 +681,18 @@ function CheckoutForm() {
                           <span>Total</span>
                           <span>€{total.toFixed(2)}</span>
                         </div>
+                        {total < 0.50 && (
+                          <p className="text-sm text-destructive mt-2">
+                            Minimum order amount is €0.50
+                          </p>
+                        )}
                       </div>
 
                       <Button
                         type="submit"
                         size="lg"
                         className="w-full rounded-full text-base py-6 shadow-lg hover:shadow-xl transition-all"
-                        disabled={isProcessing || !stripe || !elements}
+                        disabled={isProcessing || !stripe || !elements || total < 0.50}
                       >
                         {isProcessing ? (
                           <>

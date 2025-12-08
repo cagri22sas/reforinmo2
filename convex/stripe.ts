@@ -43,6 +43,11 @@ export const createPaymentIntent = action({
       throw new Error("Full order data not found");
     }
 
+    // Check minimum order amount (Stripe requires minimum 50 cents)
+    if (fullOrder.total < 0.50) {
+      throw new Error("Minimum order amount is €0.50");
+    }
+
     // Determine customer email
     const customerEmail = order.user?.email || fullOrder.guestEmail;
 
