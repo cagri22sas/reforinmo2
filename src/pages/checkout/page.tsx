@@ -54,8 +54,8 @@ const COUNTRIES = [
   "Zambia", "Zimbabwe"
 ];
 
-// Load Stripe - replace with your publishable key
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_placeholder");
+// Load Stripe
+const stripePromise = loadStripe("pk_live_51RtmYD5qD0qJf1JEgPyUBClL4RQm0y62QSmgIwS6LjHXYSgg93Z2MVns2HhvNkHKrSkFNLvy1uP5wn4PJ7X3EvTN00lZksu83z");
 
 interface CheckoutForm {
   email?: string;
