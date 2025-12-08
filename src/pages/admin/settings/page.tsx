@@ -121,7 +121,7 @@ function SettingsContent() {
                 onChange={(e) =>
                   setFormData({ ...formData, storeName: e.target.value })
                 }
-                placeholder="YachtBeach"
+                placeholder="Reforinmo Marine"
               />
             </div>
 
@@ -134,7 +134,7 @@ function SettingsContent() {
                 onChange={(e) =>
                   setFormData({ ...formData, storeEmail: e.target.value })
                 }
-                placeholder="info@yachtbeach.com"
+                placeholder="info@reforinmomarine.com"
               />
             </div>
 
@@ -162,7 +162,7 @@ function SettingsContent() {
                 onChange={(e) =>
                   setFormData({ ...formData, supportEmail: e.target.value })
                 }
-                placeholder="destek@yachtbeach.com"
+                placeholder="destek@reforinmomarine.com"
               />
               <p className="text-sm text-muted-foreground">
                 Müşterilerin destek için iletişime geçebileceği e-posta adresi

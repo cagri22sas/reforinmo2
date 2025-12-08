@@ -78,14 +78,14 @@ export default function ContactPage() {
     {
       icon: PhoneIcon,
       title: t("phoneTitle"),
-      value: siteConfig?.contactInfo?.phone || "+1 (555) 123-4567",
+      value: siteConfig?.contactInfo?.phone || "+34 661 171 490",
       color: "from-green-500 to-emerald-600",
       delay: 0.1
     },
     {
       icon: MapPinIcon,
       title: t("addressTitle"),
-      value: siteConfig?.contactInfo?.address || "123 Harbor Street, Miami, FL 33101",
+      value: siteConfig?.contactInfo?.address || "CALLE URB LOS PINOS, NUM 16 PUERTA C, 03710 CALP - (ALICANTE), Spain",
       color: "from-purple-500 to-pink-600",
       delay: 0.2
     },

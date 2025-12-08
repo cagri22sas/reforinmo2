@@ -206,7 +206,7 @@ function SiteConfigContent() {
                     onChange={(e) =>
                       setFormData({ ...formData, siteName: e.target.value })
                     }
-                    placeholder="YachtBeach"
+                    placeholder="Reforinmo Marine"
                     required
                   />
                 </div>
@@ -238,7 +238,7 @@ function SiteConfigContent() {
                     onChange={(e) =>
                       setFormData({ ...formData, footerText: e.target.value })
                     }
-                    placeholder="© 2024 YachtBeach. All rights reserved."
+                    placeholder="© 2024 Reforinmo Marine. All rights reserved."
                     required
                   />
                 </div>
@@ -426,7 +426,7 @@ function SiteConfigContent() {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    placeholder="info@yachtbeach.com"
+                    placeholder="info@reforinmomarine.com"
                     required
                   />
                 </div>
@@ -480,7 +480,7 @@ function SiteConfigContent() {
                       onChange={(e) =>
                         setFormData({ ...formData, facebook: e.target.value })
                       }
-                      placeholder="https://facebook.com/yachtbeach"
+                      placeholder="https://facebook.com/reforinmomarine"
                     />
                   </div>
 
@@ -494,7 +494,7 @@ function SiteConfigContent() {
                       onChange={(e) =>
                         setFormData({ ...formData, instagram: e.target.value })
                       }
-                      placeholder="https://instagram.com/yachtbeach"
+                      placeholder="https://instagram.com/reforinmomarine"
                     />
                   </div>
 
@@ -508,7 +508,7 @@ function SiteConfigContent() {
                       onChange={(e) =>
                         setFormData({ ...formData, twitter: e.target.value })
                       }
-                      placeholder="https://twitter.com/yachtbeach"
+                      placeholder="https://twitter.com/reforinmomarine"
                     />
                   </div>
 
@@ -522,7 +522,7 @@ function SiteConfigContent() {
                       onChange={(e) =>
                         setFormData({ ...formData, youtube: e.target.value })
                       }
-                      placeholder="https://youtube.com/@yachtbeach"
+                      placeholder="https://youtube.com/@reforinmomarine"
                     />
                   </div>
                 </div>

@@ -9,7 +9,7 @@ export const get = query({
     
     if (!config) {
       return {
-        siteName: "YachtBeach",
+        siteName: "Reforinmo Marine",
         siteDescription: "Premium marine lifestyle products",
         primaryColor: "#0ea5e9",
         secondaryColor: "#0284c7",
@@ -20,11 +20,11 @@ export const get = query({
           youtube: "",
         },
         contactInfo: {
-          email: "info@yachtbeach.com",
-          phone: "+90 (555) 123 45 67",
-          address: "123 Marina Street, Istanbul, Turkey",
+          email: "info@reforinmomarine.com",
+          phone: "+34 661 171 490",
+          address: "CALLE URB LOS PINOS, NUM 16 PUERTA C, 03710 CALP - (ALICANTE), Spain",
         },
-        footerText: "© 2024 YachtBeach. All rights reserved.",
+        footerText: "© 2024 Reforinmo Marine. All rights reserved.",
       };
     }
     
@@ -162,17 +162,17 @@ export const updateLogo = mutation({
       await ctx.db.patch(config._id, { logoStorageId: args.storageId });
     } else {
       await ctx.db.insert("siteConfig", {
-        siteName: "YachtBeach",
+        siteName: "Reforinmo Marine",
         siteDescription: "Premium marine lifestyle products",
         primaryColor: "#0ea5e9",
         secondaryColor: "#0284c7",
         socialLinks: {},
         contactInfo: {
-          email: "info@yachtbeach.com",
-          phone: "+90 (555) 123 45 67",
-          address: "123 Marina Street, Istanbul, Turkey",
+          email: "info@reforinmomarine.com",
+          phone: "+34 661 171 490",
+          address: "CALLE URB LOS PINOS, NUM 16 PUERTA C, 03710 CALP - (ALICANTE), Spain",
         },
-        footerText: "© 2024 YachtBeach. All rights reserved.",
+        footerText: "© 2024 Reforinmo Marine. All rights reserved.",
         logoStorageId: args.storageId,
       });
     }
@@ -212,17 +212,17 @@ export const updateFavicon = mutation({
       await ctx.db.patch(config._id, { faviconStorageId: args.storageId });
     } else {
       await ctx.db.insert("siteConfig", {
-        siteName: "YachtBeach",
+        siteName: "Reforinmo Marine",
         siteDescription: "Premium marine lifestyle products",
         primaryColor: "#0ea5e9",
         secondaryColor: "#0284c7",
         socialLinks: {},
         contactInfo: {
-          email: "info@yachtbeach.com",
-          phone: "+90 (555) 123 45 67",
-          address: "123 Marina Street, Istanbul, Turkey",
+          email: "info@reforinmomarine.com",
+          phone: "+34 661 171 490",
+          address: "CALLE URB LOS PINOS, NUM 16 PUERTA C, 03710 CALP - (ALICANTE), Spain",
         },
-        footerText: "© 2024 YachtBeach. All rights reserved.",
+        footerText: "© 2024 Reforinmo Marine. All rights reserved.",
         faviconStorageId: args.storageId,
       });
     }

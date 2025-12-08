@@ -389,7 +389,7 @@ export default function CheckoutPage() {
                             id="phone"
                             type="tel"
                             className="h-12 rounded-xl text-base"
-                            placeholder="+34 123 456 789"
+                            placeholder="+34 661 171 490"
                             {...register("phone", {
                               required: "Phone is required",
                               pattern: {
