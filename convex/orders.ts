@@ -76,13 +76,19 @@ export const create = mutation({
     }
 
     if (cartItems.length === 0) {
-      throw new Error("Cart is empty");
+      throw new ConvexError({
+        message: "Cart is empty",
+        code: "BAD_REQUEST",
+      });
     }
 
     // Get shipping method
     const shippingMethod = await ctx.db.get(args.shippingMethodId);
     if (!shippingMethod || !shippingMethod.active) {
-      throw new Error("Invalid shipping method");
+      throw new ConvexError({
+        message: "Invalid shipping method",
+        code: "BAD_REQUEST",
+      });
     }
 
     // Calculate totals
@@ -92,11 +98,17 @@ export const create = mutation({
     for (const cartItem of cartItems) {
       const product = await ctx.db.get(cartItem.productId);
       if (!product || !product.active) {
-        throw new Error(`Product not available: ${cartItem.productId}`);
+        throw new ConvexError({
+          message: `Product not available: ${product?.name || "Unknown product"}`,
+          code: "BAD_REQUEST",
+        });
       }
 
       if (product.stock < cartItem.quantity) {
-        throw new Error(`Not enough stock for: ${product.name}`);
+        throw new ConvexError({
+          message: `Not enough stock for: ${product.name}. Available: ${product.stock}, Requested: ${cartItem.quantity}`,
+          code: "BAD_REQUEST",
+        });
       }
 
       // Get first image URL
@@ -264,6 +276,13 @@ export const trackOrder = query({
 });
 
 // Internal queries and mutations for Stripe
+export const getById = internalQuery({
+  args: { orderId: v.id("orders") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.orderId);
+  },
+});
+
 export const getOrderForCheckout = internalQuery({
   args: { orderId: v.id("orders") },
   handler: async (ctx, args) => {

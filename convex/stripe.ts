@@ -36,6 +36,15 @@ export const createCheckoutSession = action({
       throw new Error("Order not found");
     }
 
+    // Get the full order with orderId to pass to metadata
+    const fullOrder = await ctx.runQuery(internal.orders.getById, {
+      orderId: args.orderId,
+    }) as { _id: string; guestEmail?: string } | null;
+    
+    if (!fullOrder) {
+      throw new Error("Full order data not found");
+    }
+
     // Create line items from order items
     const lineItems: Array<{
       price_data: {
@@ -75,6 +84,9 @@ export const createCheckoutSession = action({
       });
     }
 
+    // Determine customer email
+    const customerEmail = order.user?.email || fullOrder.guestEmail;
+
     // Create checkout session
     const session: Stripe.Checkout.Session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -82,9 +94,14 @@ export const createCheckoutSession = action({
       success_url: `${process.env.SITE_URL || "http://localhost:5173"}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.SITE_URL || "http://localhost:5173"}/checkout/cancel`,
       metadata: {
-        orderId: args.orderId,
+        orderId: fullOrder._id,
       },
-      customer_email: order.user?.email,
+      customer_email: customerEmail,
+      payment_intent_data: {
+        metadata: {
+          orderId: fullOrder._id,
+        },
+      },
     });
 
     // Update order with payment intent
