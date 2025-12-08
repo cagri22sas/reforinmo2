@@ -111,6 +111,17 @@ export const create = mutation({
       label: v.string(),
       value: v.string(),
     }))),
+    dimensions: v.optional(v.object({
+      length: v.number(),
+      width: v.number(),
+      height: v.number(),
+      unit: v.string(),
+    })),
+    weight: v.optional(v.object({
+      value: v.number(),
+      unit: v.string(),
+    })),
+    relatedProducts: v.optional(v.array(v.id("products"))),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);
@@ -161,6 +172,17 @@ export const update = mutation({
       label: v.string(),
       value: v.string(),
     }))),
+    dimensions: v.optional(v.object({
+      length: v.number(),
+      width: v.number(),
+      height: v.number(),
+      unit: v.string(),
+    })),
+    weight: v.optional(v.object({
+      value: v.number(),
+      unit: v.string(),
+    })),
+    relatedProducts: v.optional(v.array(v.id("products"))),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);
