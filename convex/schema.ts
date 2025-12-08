@@ -94,6 +94,7 @@ export default defineSchema({
   orders: defineTable({
     userId: v.optional(v.id("users")),
     guestEmail: v.optional(v.string()),
+    guestSessionId: v.optional(v.string()),
     orderNumber: v.string(),
     status: v.union(
       v.literal("pending"),

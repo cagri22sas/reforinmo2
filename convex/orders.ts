@@ -154,6 +154,7 @@ export const create = mutation({
     const orderId = await ctx.db.insert("orders", {
       userId,
       guestEmail,
+      guestSessionId: sessionId,
       orderNumber,
       status: "pending",
       subtotal,
@@ -184,10 +185,8 @@ export const create = mutation({
       });
     }
 
-    // Clear only valid cart items (invalid ones were already deleted)
-    for (const cartItemId of validCartItemIds) {
-      await ctx.db.delete(cartItemId);
-    }
+    // DO NOT clear cart here - cart will be cleared after successful payment
+    // This prevents the checkout page from unmounting Stripe Elements during payment
 
     return orderId;
   },
@@ -397,6 +396,27 @@ export const handleSuccessfulPayment = internalMutation({
         await ctx.db.patch(item.productId, {
           stock: Math.max(0, product.stock - item.quantity),
         });
+      }
+    }
+
+    // Clear cart after successful payment
+    if (order.userId) {
+      // Clear cart for authenticated user
+      const cartItems = await ctx.db
+        .query("cart")
+        .withIndex("by_user", (q) => q.eq("userId", order.userId!))
+        .collect();
+      for (const cartItem of cartItems) {
+        await ctx.db.delete(cartItem._id);
+      }
+    } else if (order.guestSessionId) {
+      // Clear cart for guest user
+      const cartItems = await ctx.db
+        .query("cart")
+        .withIndex("by_session", (q) => q.eq("sessionId", order.guestSessionId!))
+        .collect();
+      for (const cartItem of cartItems) {
+        await ctx.db.delete(cartItem._id);
       }
     }
   },
