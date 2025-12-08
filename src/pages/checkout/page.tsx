@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useAction, useConvex } from "convex/react";
+import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
@@ -18,6 +18,8 @@ import { useGuestSession } from "@/hooks/use-guest-session.ts";
 import { useAuth } from "@/hooks/use-auth.ts";
 import { ConvexError } from "convex/values";
 import type { Id } from "@/convex/_generated/dataModel.d.ts";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const COUNTRIES = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", 
@@ -52,6 +54,9 @@ const COUNTRIES = [
   "Zambia", "Zimbabwe"
 ];
 
+// Load Stripe - replace with your publishable key
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_placeholder");
+
 interface CheckoutForm {
   email?: string;
   name: string;
@@ -65,11 +70,12 @@ interface CheckoutForm {
   notes?: string;
 }
 
-export default function CheckoutPage() {
+function CheckoutForm() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const sessionId = useGuestSession();
-  const convex = useConvex();
+  const stripe = useStripe();
+  const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<{
@@ -83,17 +89,10 @@ export default function CheckoutPage() {
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
 
   const cartItems = useQuery(api.cart.get, sessionId ? { sessionId } : "skip");
-  const shippingMethods = useQuery(api.shipping.getActiveMethods, {}) as Array<{
-    _id: Id<"shippingMethods">;
-    name: string;
-    description: string;
-    price: number;
-    estimatedDays: string;
-    active: boolean;
-    order: number;
-  }> | undefined;
+  const shippingMethods = useQuery(api.shipping.getActiveMethods, {});
   const createOrder = useMutation(api.orders.create);
-  const createCheckout = useAction(api.stripe.createCheckoutSession);
+  const createPaymentIntent = useAction(api.stripe.createPaymentIntent);
+  const confirmPayment = useAction(api.stripe.confirmPayment);
 
   const {
     register,
@@ -106,7 +105,7 @@ export default function CheckoutPage() {
   const selectedShippingMethodId = watch("shippingMethodId");
   const selectedCountry = watch("country");
   const selectedShippingMethod = shippingMethods?.find(
-    (m: { _id: Id<"shippingMethods"> }) => m._id === selectedShippingMethodId,
+    (m) => m._id === selectedShippingMethodId,
   );
 
   const subtotal =
@@ -127,10 +126,11 @@ export default function CheckoutPage() {
     setIsApplyingCoupon(true);
 
     try {
-      const result = await convex.query(api.coupons.validate, {
-        code: couponCode.toUpperCase(),
-        orderAmount: subtotal,
-      });
+      const result = await fetch("/api/coupons/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: couponCode.toUpperCase(), orderAmount: subtotal }),
+      }).then(r => r.json());
       
       if (result && result.valid) {
         setAppliedCoupon({
@@ -172,9 +172,21 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (!stripe || !elements) {
+      toast.error("Stripe is not loaded");
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) {
+      toast.error("Card element not found");
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
+      // Step 1: Create order
       const orderId = await createOrder({
         shippingMethodId: data.shippingMethodId,
         shippingAddress: {
@@ -194,16 +206,37 @@ export default function CheckoutPage() {
         couponId: appliedCoupon?._id,
       });
 
-      const { url } = await createCheckout({ orderId });
+      // Step 2: Create payment intent
+      const { clientSecret } = await createPaymentIntent({ orderId });
 
-      if (url) {
-        window.location.href = url;
+      // Step 3: Confirm payment with Stripe
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: data.name,
+            email: user?.profile.email || data.email,
+          },
+        },
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (paymentIntent?.status === "succeeded") {
+        // Step 4: Confirm payment in our backend
+        await confirmPayment({ orderId });
+        
+        // Navigate to success page
+        navigate("/checkout/success");
       } else {
-        throw new Error("Failed to create checkout session");
+        throw new Error("Payment was not successful");
       }
     } catch (error) {
+      console.error("Payment error:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create order",
+        error instanceof Error ? error.message : "Failed to process payment",
       );
       setIsProcessing(false);
     }
@@ -234,10 +267,6 @@ export default function CheckoutPage() {
                     Checking out as a guest
                   </p>
                 )}
-              </div>
-              <div className="flex sm:hidden items-center gap-3 bg-card px-4 py-2 rounded-full border border-border/50 w-fit">
-                <LockIcon className="h-4 w-4 text-green-600" />
-                <span className="text-xs font-medium">Secure Checkout</span>
               </div>
               <div className="hidden sm:flex items-center gap-3 bg-card px-6 py-3 rounded-full border border-border/50">
                 <LockIcon className="h-5 w-5 text-green-600" />
@@ -429,7 +458,7 @@ export default function CheckoutPage() {
                         </Select>
                         {errors.country && (
                           <p className="text-sm text-destructive mt-2">
-                            {errors.country.message}
+                            Please select a country
                           </p>
                         )}
                       </div>
@@ -485,12 +514,40 @@ export default function CheckoutPage() {
                     )}
                   </div>
 
+                  {/* Payment Information */}
+                  <div className="bg-card rounded-2xl p-8 border border-border/50">
+                    <h2 className="text-xl font-bold mb-6">Payment Information</h2>
+                    <div className="bg-muted/30 rounded-xl p-4 border border-border/30">
+                      <CardElement
+                        options={{
+                          style: {
+                            base: {
+                              fontSize: "16px",
+                              color: "hsl(var(--foreground))",
+                              "::placeholder": {
+                                color: "hsl(var(--muted-foreground))",
+                              },
+                            },
+                            invalid: {
+                              color: "hsl(var(--destructive))",
+                            },
+                          },
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-3 flex items-center gap-2">
+                      <LockIcon className="h-3 w-3" />
+                      Your payment information is encrypted and secure
+                    </p>
+                  </div>
+
                   {/* Notes */}
                   <div className="bg-card rounded-2xl p-8 border border-border/50">
                     <h2 className="text-xl font-bold mb-6">Order Notes (Optional)</h2>
                     <Textarea
                       {...register("notes")}
                       className="min-h-[120px] rounded-xl resize-none text-base"
+                      placeholder="Any special instructions for your order?"
                     />
                   </div>
                 </div>
@@ -624,17 +681,17 @@ export default function CheckoutPage() {
                         type="submit"
                         size="lg"
                         className="w-full rounded-full text-base py-6 shadow-lg hover:shadow-xl transition-all"
-                        disabled={isProcessing}
+                        disabled={isProcessing || !stripe || !elements}
                       >
                         {isProcessing ? (
                           <>
                             <Loader2Icon className="mr-2 h-5 w-5 animate-spin" />
-                            Processing...
+                            Processing Payment...
                           </>
                         ) : (
                           <>
                             <CreditCardIcon className="mr-2 h-5 w-5" />
-                            Complete Order
+                            Pay €{total.toFixed(2)}
                           </>
                         )}
                       </Button>
@@ -656,5 +713,13 @@ export default function CheckoutPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Elements stripe={stripePromise}>
+      <CheckoutForm />
+    </Elements>
   );
 }

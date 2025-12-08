@@ -15,20 +15,19 @@ const getStripe = () => {
   });
 };
 
-export const createCheckoutSession = action({
+export const createPaymentIntent = action({
   args: {
     orderId: v.id("orders"),
   },
-  handler: async (ctx, args): Promise<{ url: string | null }> => {
+  handler: async (ctx, args): Promise<{ clientSecret: string }> => {
     const stripe = getStripe();
     
     // Get order details
     const order = await ctx.runQuery(internal.orders.getOrderForCheckout, {
       orderId: args.orderId,
     }) as {
-      items: Array<{ productName: string; productImage: string; price: number; quantity: number }>;
-      shippingCost: number;
-      shippingMethod: { name: string } | null;
+      total: number;
+      guestEmail?: string;
       user: { email?: string } | null;
     } | null;
 
@@ -36,83 +35,49 @@ export const createCheckoutSession = action({
       throw new Error("Order not found");
     }
 
-    // Get the full order with orderId to pass to metadata
     const fullOrder = await ctx.runQuery(internal.orders.getById, {
       orderId: args.orderId,
-    }) as { _id: string; guestEmail?: string } | null;
+    }) as { _id: string; total: number; guestEmail?: string } | null;
     
     if (!fullOrder) {
       throw new Error("Full order data not found");
     }
 
-    // Create line items from order items
-    const lineItems: Array<{
-      price_data: {
-        currency: string;
-        product_data: {
-          name: string;
-          images?: string[];
-          description?: string;
-        };
-        unit_amount: number;
-      };
-      quantity: number;
-    }> = order.items.map((item) => ({
-      price_data: {
-        currency: "eur",
-        product_data: {
-          name: item.productName,
-          images: [item.productImage],
-        },
-        unit_amount: Math.round(item.price * 100), // Convert to cents
-      },
-      quantity: item.quantity,
-    }));
-
-    // Add shipping as a line item
-    if (order.shippingCost > 0 && order.shippingMethod) {
-      lineItems.push({
-        price_data: {
-          currency: "eur",
-          product_data: {
-            name: "Shipping Cost",
-            description: order.shippingMethod.name,
-          },
-          unit_amount: Math.round(order.shippingCost * 100),
-        },
-        quantity: 1,
-      });
-    }
-
     // Determine customer email
     const customerEmail = order.user?.email || fullOrder.guestEmail;
 
-    // Create checkout session
-    const session: Stripe.Checkout.Session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: lineItems,
-      success_url: `${process.env.SITE_URL || "http://localhost:5173"}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.SITE_URL || "http://localhost:5173"}/checkout/cancel`,
+    // Create payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(fullOrder.total * 100), // Convert to cents
+      currency: "eur",
       metadata: {
         orderId: fullOrder._id,
       },
-      customer_email: customerEmail,
-      payment_intent_data: {
-        metadata: {
-          orderId: fullOrder._id,
-        },
-      },
+      receipt_email: customerEmail,
     });
 
-    // Update order with payment intent (only if available)
-    if (session.payment_intent) {
-      await ctx.runMutation(internal.orders.updatePaymentIntent, {
-        orderId: args.orderId,
-        paymentIntentId: session.payment_intent as string,
-      });
-    }
+    // Update order with payment intent
+    await ctx.runMutation(internal.orders.updatePaymentIntent, {
+      orderId: args.orderId,
+      paymentIntentId: paymentIntent.id,
+    });
 
-    return { url: session.url };
+    return { clientSecret: paymentIntent.client_secret! };
+  },
+});
+
+export const confirmPayment = action({
+  args: {
+    orderId: v.id("orders"),
+  },
+  handler: async (ctx, args): Promise<{ success: boolean }> => {
+    // Mark the payment as successful
+    await ctx.runMutation(internal.orders.handleSuccessfulPayment, {
+      orderId: args.orderId as string,
+      paymentIntentId: "", // Will be set from metadata
+    });
+
+    return { success: true };
   },
 });
 
