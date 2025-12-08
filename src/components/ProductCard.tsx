@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import { toast } from "sonner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useCallback } from "react";
 import type { Doc } from "@/convex/_generated/dataModel.d.ts";
 import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
 import { useLanguage, translations } from "@/hooks/use-language.ts";
@@ -19,7 +19,7 @@ interface ProductCardProps {
   product: Product;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product }: ProductCardProps) {
   const addToCart = useMutation(api.cart.add);
   const [sessionId, setSessionId] = useState<string>("");
   const { language } = useLanguage();
@@ -36,7 +36,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     ? Math.round(((product.compareAtPrice! - product.price) / product.compareAtPrice!) * 100)
     : 0;
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const handleAddToCart = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault();
 
     try {
@@ -45,7 +45,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     } catch (error) {
       toast.error(error instanceof Error ? error.message : t.errorOccurred);
     }
-  };
+  }, [addToCart, product._id, sessionId, t.addToCart, t.errorOccurred]);
 
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-all duration-500 group border-border/50 bg-card rounded-3xl h-full flex flex-col">
@@ -56,6 +56,8 @@ export default function ProductCard({ product }: ProductCardProps) {
               <img
                 src={product.images[0]}
                 alt={product.name}
+                loading="lazy"
+                decoding="async"
                 className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -113,3 +115,5 @@ export default function ProductCard({ product }: ProductCardProps) {
     </Card>
   );
 }
+
+export default memo(ProductCard);

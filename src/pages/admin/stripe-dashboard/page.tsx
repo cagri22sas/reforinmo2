@@ -1,7 +1,7 @@
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AdminLayout from "@/components/AdminLayout.tsx";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -67,7 +67,7 @@ function StripeDashboardContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setIsRefreshing(true);
       const [statsData, paymentsData, customersData] = await Promise.all([
@@ -85,11 +85,11 @@ function StripeDashboardContent() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  };
+  }, [getDashboardStats, getRecentPayments, getRecentCustomers]);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat("tr-TR", {
