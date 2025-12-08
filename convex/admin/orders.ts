@@ -235,3 +235,60 @@ export const getChartData = query({
     };
   },
 });
+
+export const remove = mutation({
+  args: { orderId: v.id("orders") },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUser(ctx);
+    if (user.role !== "admin") {
+      throw new ConvexError({
+        message: "Unauthorized",
+        code: "FORBIDDEN",
+      });
+    }
+
+    // Delete order items first
+    const items = await ctx.db
+      .query("orderItems")
+      .withIndex("by_order", (q) => q.eq("orderId", args.orderId))
+      .collect();
+    
+    for (const item of items) {
+      await ctx.db.delete(item._id);
+    }
+
+    // Delete the order
+    await ctx.db.delete(args.orderId);
+  },
+});
+
+export const bulkRemove = mutation({
+  args: { orderIds: v.array(v.id("orders")) },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUser(ctx);
+    if (user.role !== "admin") {
+      throw new ConvexError({
+        message: "Unauthorized",
+        code: "FORBIDDEN",
+      });
+    }
+
+    // Delete all orders and their items
+    for (const orderId of args.orderIds) {
+      // Delete order items first
+      const items = await ctx.db
+        .query("orderItems")
+        .withIndex("by_order", (q) => q.eq("orderId", orderId))
+        .collect();
+      
+      for (const item of items) {
+        await ctx.db.delete(item._id);
+      }
+
+      // Delete the order
+      await ctx.db.delete(orderId);
+    }
+
+    return { deletedCount: args.orderIds.length };
+  },
+});

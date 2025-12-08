@@ -31,7 +31,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, Trash2Icon, Trash2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
 import AdminLayout from "@/components/AdminLayout.tsx";
 import { toast } from "sonner";
 
@@ -207,6 +208,9 @@ function OrdersContent() {
   const [statusFilter, setStatusFilter] = useState<OrderStatus | undefined>();
   const orders = useQuery(api.admin.orders.list, { status: statusFilter });
   const [selectedOrderId, setSelectedOrderId] = useState<Id<"orders"> | null>(null);
+  const [selectedOrders, setSelectedOrders] = useState<Set<Id<"orders">>>(new Set());
+  const deleteOrder = useMutation(api.admin.orders.remove);
+  const bulkDeleteOrders = useMutation(api.admin.orders.bulkRemove);
 
   if (orders === undefined) {
     return <Skeleton className="h-96 w-full" />;
@@ -231,6 +235,62 @@ function OrdersContent() {
       year: "numeric",
     });
 
+  const handleDelete = async (orderId: Id<"orders">) => {
+    if (confirm("Bu siparişi silmek istediğinizden emin misiniz?")) {
+      try {
+        await deleteOrder({ orderId });
+        toast.success("Sipariş silindi");
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("Bir hata oluştu");
+        }
+      }
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedOrders.size === 0) {
+      toast.error("Lütfen silinecek siparişleri seçin");
+      return;
+    }
+
+    if (confirm(`${selectedOrders.size} siparişi silmek istediğinizden emin misiniz?`)) {
+      try {
+        await bulkDeleteOrders({ orderIds: Array.from(selectedOrders) as never[] });
+        toast.success(`${selectedOrders.size} sipariş silindi`);
+        setSelectedOrders(new Set());
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("Bir hata oluştu");
+        }
+      }
+    }
+  };
+
+  const toggleOrder = (orderId: Id<"orders">) => {
+    const newSelected = new Set(selectedOrders);
+    if (newSelected.has(orderId)) {
+      newSelected.delete(orderId);
+    } else {
+      newSelected.add(orderId);
+    }
+    setSelectedOrders(newSelected);
+  };
+
+  const toggleAll = () => {
+    if (selectedOrders.size === orders.length) {
+      setSelectedOrders(new Set());
+    } else {
+      setSelectedOrders(new Set(orders.map(o => o._id)));
+    }
+  };
+
+  const isAllSelected = orders.length > 0 && selectedOrders.size === orders.length;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -238,31 +298,50 @@ function OrdersContent() {
           <h1 className="text-3xl font-bold">Siparişler</h1>
           <p className="text-muted-foreground">
             {orders.length} sipariş bulundu
+            {selectedOrders.size > 0 && ` • ${selectedOrders.size} seçili`}
           </p>
         </div>
 
-        <Select 
-          value={statusFilter || "all"} 
-          onValueChange={(value) => setStatusFilter(value === "all" ? undefined : value as OrderStatus)}
-        >
-          <SelectTrigger className="w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tüm Siparişler</SelectItem>
-            <SelectItem value="pending">Beklemede</SelectItem>
-            <SelectItem value="processing">İşleniyor</SelectItem>
-            <SelectItem value="shipped">Kargoda</SelectItem>
-            <SelectItem value="delivered">Teslim Edildi</SelectItem>
-            <SelectItem value="cancelled">İptal Edildi</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex gap-2">
+          {selectedOrders.size > 0 && (
+            <Button
+              variant="destructive"
+              onClick={handleBulkDelete}
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Seçilenleri Sil ({selectedOrders.size})
+            </Button>
+          )}
+          <Select 
+            value={statusFilter || "all"} 
+            onValueChange={(value) => setStatusFilter(value === "all" ? undefined : value as OrderStatus)}
+          >
+            <SelectTrigger className="w-48">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tüm Siparişler</SelectItem>
+              <SelectItem value="pending">Beklemede</SelectItem>
+              <SelectItem value="processing">İşleniyor</SelectItem>
+              <SelectItem value="shipped">Kargoda</SelectItem>
+              <SelectItem value="delivered">Teslim Edildi</SelectItem>
+              <SelectItem value="cancelled">İptal Edildi</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <Card>
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-12">
+                <Checkbox
+                  checked={isAllSelected}
+                  onCheckedChange={toggleAll}
+                  aria-label="Tümünü seç"
+                />
+              </TableHead>
               <TableHead>Sipariş No</TableHead>
               <TableHead>Müşteri</TableHead>
               <TableHead>Tarih</TableHead>
@@ -277,6 +356,13 @@ function OrdersContent() {
               const statusConfig = getStatusBadge(order.status);
               return (
                 <TableRow key={order._id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedOrders.has(order._id)}
+                      onCheckedChange={() => toggleOrder(order._id)}
+                      aria-label={`Sipariş ${order.orderNumber} seç`}
+                    />
+                  </TableCell>
                   <TableCell className="font-medium">{order.orderNumber}</TableCell>
                   <TableCell>
                     <div>
@@ -291,13 +377,22 @@ function OrdersContent() {
                     <Badge variant={statusConfig.variant}>{statusConfig.label}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setSelectedOrderId(order._id)}
-                    >
-                      <EyeIcon className="h-4 w-4" />
-                    </Button>
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setSelectedOrderId(order._id)}
+                      >
+                        <EyeIcon className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDelete(order._id)}
+                      >
+                        <Trash2Icon className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               );
