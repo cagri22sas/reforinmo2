@@ -153,6 +153,9 @@ export default defineSchema({
     secretKey: v.string(),
     webhookSecret: v.optional(v.string()),
     isTestMode: v.boolean(),
+    stripeUserId: v.optional(v.string()),
+    stripeAccountId: v.optional(v.string()),
+    connectedViaOAuth: v.optional(v.boolean()),
   }),
 
   mediaLibrary: defineTable({

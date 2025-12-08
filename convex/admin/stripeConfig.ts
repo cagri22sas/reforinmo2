@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query } from "../_generated/server";
+import { mutation, query, internalMutation } from "../_generated/server";
 import { ConvexError } from "convex/values";
 
 export const get = query({
@@ -71,5 +71,39 @@ export const update = mutation({
     }
 
     return { success: true };
+  },
+});
+
+export const saveOAuthCredentials = internalMutation({
+  args: {
+    tokenIdentifier: v.string(),
+    accessToken: v.string(),
+    refreshToken: v.string(),
+    publishableKey: v.string(),
+    stripeUserId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Check if config exists
+    const existingConfig = await ctx.db.query("stripeConfig").first();
+
+    if (existingConfig) {
+      // Update existing
+      await ctx.db.patch(existingConfig._id, {
+        publishableKey: args.publishableKey,
+        secretKey: args.accessToken,
+        stripeUserId: args.stripeUserId,
+        connectedViaOAuth: true,
+        isTestMode: args.publishableKey.startsWith("pk_test_"),
+      });
+    } else {
+      // Create new
+      await ctx.db.insert("stripeConfig", {
+        publishableKey: args.publishableKey,
+        secretKey: args.accessToken,
+        stripeUserId: args.stripeUserId,
+        connectedViaOAuth: true,
+        isTestMode: args.publishableKey.startsWith("pk_test_"),
+      });
+    }
   },
 });

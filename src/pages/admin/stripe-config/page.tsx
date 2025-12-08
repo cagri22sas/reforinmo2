@@ -1,7 +1,7 @@
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { SignInButton } from "@/components/ui/signin.tsx";
@@ -12,13 +12,17 @@ import { Switch } from "@/components/ui/switch.tsx";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import AdminLayout from "@/components/AdminLayout.tsx";
 import { toast } from "sonner";
-import { SaveIcon, CreditCardIcon, AlertTriangleIcon, CheckCircle2Icon, ExternalLinkIcon } from "lucide-react";
+import { SaveIcon, CreditCardIcon, AlertTriangleIcon, CheckCircle2Icon, ExternalLinkIcon, LinkIcon, Loader2Icon } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 function StripeConfigContent() {
+  const [searchParams] = useSearchParams();
   const stripeConfig = useQuery(api.admin.stripeConfig.get, {});
   const updateConfig = useMutation(api.admin.stripeConfig.update);
+  const getAuthorizationUrl = useAction(api.stripeOAuth.getAuthorizationUrl);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [formData, setFormData] = useState({
     publishableKey: "",
     secretKey: "",
@@ -27,6 +31,22 @@ function StripeConfigContent() {
   });
 
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  // Handle OAuth success/error messages
+  useEffect(() => {
+    const success = searchParams.get("success");
+    const error = searchParams.get("error");
+
+    if (success === "true") {
+      toast.success("Stripe hesabınız başarıyla bağlandı!");
+      // Clear URL params
+      window.history.replaceState({}, "", "/admin/stripe-config");
+    } else if (error) {
+      toast.error(`Bağlantı hatası: ${error}`);
+      // Clear URL params
+      window.history.replaceState({}, "", "/admin/stripe-config");
+    }
+  }, [searchParams]);
 
   if (stripeConfig !== undefined && !isDataLoaded) {
     if (stripeConfig) {
@@ -67,7 +87,19 @@ function StripeConfigContent() {
     }
   };
 
+  const handleConnectWithStripe = async () => {
+    setIsConnecting(true);
+    try {
+      const { url } = await getAuthorizationUrl({});
+      window.location.href = url;
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Bağlantı başlatılamadı");
+      setIsConnecting(false);
+    }
+  };
+
   const isConfigured = stripeConfig !== null && stripeConfig.publishableKey && stripeConfig.secretKey;
+  const connectedViaOAuth = stripeConfig?.connectedViaOAuth === true;
 
   return (
     <div className="space-y-6">
@@ -86,6 +118,7 @@ function StripeConfigContent() {
             <AlertTitle className="text-lg font-semibold">Stripe Aktif</AlertTitle>
             <AlertDescription className="text-base">
               Ödeme sisteminiz yapılandırılmış ve çalışıyor. {formData.isTestMode ? "Test modunda" : "Canlı modda"} çalışıyorsunuz.
+              {connectedViaOAuth && " OAuth ile bağlandınız."}
             </AlertDescription>
           </>
         ) : (
@@ -93,11 +126,73 @@ function StripeConfigContent() {
             <AlertTriangleIcon className="h-5 w-5" />
             <AlertTitle className="text-lg font-semibold">Stripe Yapılandırması Gerekli</AlertTitle>
             <AlertDescription className="text-base">
-              Ödeme kabul etmek için Stripe API anahtarlarınızı aşağıya girmelisiniz.
+              Ödeme kabul etmek için Stripe hesabınızı bağlamanız gerekiyor.
             </AlertDescription>
           </>
         )}
       </Alert>
+
+      {/* OAuth Connect Card */}
+      {!isConfigured && (
+        <Card className="border-primary bg-gradient-to-br from-primary/5 to-primary/10">
+          <CardHeader>
+            <CardTitle className="text-2xl flex items-center gap-2">
+              <LinkIcon className="h-6 w-6" />
+              Stripe Hesabınızı Bağlayın
+            </CardTitle>
+            <CardDescription className="text-base">
+              Otomatik bağlantı ile Stripe hesabınızı hızlıca entegre edin. API anahtarlarını manuel olarak kopyalamanıza gerek yok!
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <h4 className="font-semibold">Nasıl Çalışır?</h4>
+              <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
+                <li>Aşağıdaki butona tıklayın</li>
+                <li>Stripe'ın sayfasına yönlendirileceksiniz</li>
+                <li>Stripe hesabınıza giriş yapın</li>
+                <li>İzin verin ve otomatik olarak geri dönün</li>
+                <li>Hazır! Ödeme almaya başlayabilirsiniz</li>
+              </ol>
+            </div>
+
+            <Button 
+              size="lg" 
+              onClick={handleConnectWithStripe}
+              disabled={isConnecting}
+              className="w-full sm:w-auto"
+            >
+              {isConnecting ? (
+                <>
+                  <Loader2Icon className="h-5 w-5 mr-2 animate-spin" />
+                  Bağlanıyor...
+                </>
+              ) : (
+                <>
+                  <LinkIcon className="h-5 w-5 mr-2" />
+                  Stripe ile Bağlan
+                </>
+              )}
+            </Button>
+
+            <div className="pt-4 border-t">
+              <p className="text-sm text-muted-foreground">
+                Veya{" "}
+                <a 
+                  href="#manual-config" 
+                  className="text-primary hover:underline font-medium"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("manual-config")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  manuel olarak API anahtarlarını girin
+                </a>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Instructions Card */}
       <Card className="border-primary/20 bg-primary/5">
@@ -142,12 +237,12 @@ function StripeConfigContent() {
       </Card>
 
       {/* Configuration Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6" id="manual-config">
         <Card>
           <CardHeader>
-            <CardTitle>API Anahtarları</CardTitle>
+            <CardTitle>API Anahtarları {!isConfigured && "(Manuel Yapılandırma)"}</CardTitle>
             <CardDescription>
-              Stripe hesabınızdaki API anahtarlarını girin
+              Stripe hesabınızdaki API anahtarlarını manuel olarak girin
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
