@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api.js";
 import { toast } from "sonner";
-import { useState, useEffect, memo, useCallback } from "react";
+import { memo, useCallback } from "react";
 import type { Doc } from "@/convex/_generated/dataModel.d.ts";
 import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
 import { useLanguage, translations } from "@/hooks/use-language.ts";
+import { useGuestSession } from "@/hooks/use-guest-session.ts";
 
 type Product = Doc<"products"> & {
   category: Doc<"categories"> | null;
@@ -21,15 +22,9 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const addToCart = useMutation(api.cart.add);
-  const [sessionId, setSessionId] = useState<string>("");
+  const sessionId = useGuestSession();
   const { language } = useLanguage();
   const t = translations[language];
-  
-  useEffect(() => {
-    // Guest session is now created by useGuestSession hook with UUID
-    const id = localStorage.getItem("guestSessionId") || "";
-    setSessionId(id);
-  }, []);
   
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
   const discountPercentage = hasDiscount

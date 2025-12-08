@@ -36,6 +36,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth.ts";
 import { useLanguage } from "@/hooks/use-language.ts";
+import { useGuestSession } from "@/hooks/use-guest-session.ts";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton } from "@/components/ui/signin.tsx";
 import { WishlistButton } from "@/components/ui/wishlist-button.tsx";
@@ -74,6 +75,7 @@ export default function ProductDetailPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { language } = useLanguage();
+  const sessionId = useGuestSession();
   const product = useQuery(api.products.get, { slug: slug! });
   const reviews = useQuery(api.reviews.getByProduct, product ? { productId: product._id } : "skip");
   const reviewStats = useQuery(api.reviews.getStats, product ? { productId: product._id } : "skip");
@@ -83,7 +85,6 @@ export default function ProductDetailPage() {
   const updateProduct = useMutation(api.admin.products.update);
   const generateUploadUrl = useMutation(api.products.generateUploadUrl);
   const [quantity, setQuantity] = useState(1);
-  const [sessionId, setSessionId] = useState<string>("");
   
   // Review form state
   const [reviewRating, setReviewRating] = useState(5);
@@ -112,12 +113,6 @@ export default function ProductDetailPage() {
 
   const currentUser = useQuery(api.users.getCurrentUser, {});
   const isAdmin = currentUser?.role === "admin";
-
-  useEffect(() => {
-    // Guest session is now created by useGuestSession hook with UUID
-    const id = localStorage.getItem("guestSessionId") || "";
-    setSessionId(id);
-  }, []);
 
   useEffect(() => {
     if (product && !editPrice) {
