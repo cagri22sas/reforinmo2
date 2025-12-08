@@ -228,8 +228,8 @@ function CheckoutForm() {
         // Step 4: Confirm payment in our backend
         await confirmPayment({ orderId });
         
-        // Navigate to success page
-        navigate("/checkout/success");
+        // Navigate to success page - use replace to prevent back navigation
+        navigate("/checkout/success", { replace: true });
       } else {
         throw new Error("Payment was not successful");
       }
@@ -277,7 +277,7 @@ function CheckoutForm() {
 
           {!cartItems || !shippingMethods ? (
             <Skeleton className="h-96 w-full rounded-2xl" />
-          ) : cartItems.length === 0 ? (
+          ) : cartItems.length === 0 && !isProcessing ? (
             <div className="text-center py-32">
               <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-muted/50 mb-6">
                 <ShoppingBagIcon className="h-12 w-12 text-muted-foreground" />
@@ -290,7 +290,7 @@ function CheckoutForm() {
                 <Button size="lg" className="rounded-full px-8">Start Shopping</Button>
               </Link>
             </div>
-          ) : (
+          ) : cartItems.length > 0 || isProcessing ? (
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid lg:grid-cols-3 gap-8">
                 {/* Checkout Form */}
@@ -707,7 +707,7 @@ function CheckoutForm() {
                 </div>
               </div>
             </form>
-          )}
+          ) : null}
         </div>
       </div>
 
