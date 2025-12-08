@@ -44,6 +44,7 @@ import type * as reviews from "../reviews.js";
 import type * as runRemoveYachtbeach from "../runRemoveYachtbeach.js";
 import type * as shipping from "../shipping.js";
 import type * as stripe from "../stripe.js";
+import type * as stripeWebhook from "../stripeWebhook.js";
 import type * as testimonials from "../testimonials.js";
 import type * as updateImages from "../updateImages.js";
 import type * as users from "../users.js";
@@ -92,6 +93,7 @@ declare const fullApi: ApiFromModules<{
   runRemoveYachtbeach: typeof runRemoveYachtbeach;
   shipping: typeof shipping;
   stripe: typeof stripe;
+  stripeWebhook: typeof stripeWebhook;
   testimonials: typeof testimonials;
   updateImages: typeof updateImages;
   users: typeof users;

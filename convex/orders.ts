@@ -307,13 +307,19 @@ export const handleSuccessfulPayment = internalMutation({
     paymentIntentId: v.string(),
   },
   handler: async (ctx, args) => {
-    const order = await ctx.db
-      .query("orders")
-      .withIndex("by_order_number", (q) => q.eq("orderNumber", args.orderId))
-      .unique();
+    // orderId comes from Stripe metadata and is a Convex ID
+    // Try to get it from orders table
+    const orders = await ctx.db.query("orders").collect();
+    const order = orders.find(o => o._id === args.orderId);
 
     if (!order) {
       console.error("Order not found:", args.orderId);
+      return;
+    }
+
+    // Idempotency: prevent double processing
+    if (order.status !== "pending") {
+      console.log("Order already processed:", args.orderId, "Status:", order.status);
       return;
     }
 

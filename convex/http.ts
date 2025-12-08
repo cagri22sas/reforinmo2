@@ -12,37 +12,27 @@ http.route({
     const sig = request.headers.get("stripe-signature");
 
     if (!sig) {
+      console.error("Stripe webhook: No signature header");
       return new Response("No signature", { status: 400 });
     }
 
-    // In production, you should verify the webhook signature
-    // For now, we'll just parse the event
-    let event;
     try {
-      event = JSON.parse(body);
+      await ctx.runAction(internal.stripeWebhook.handleWebhook, {
+        body,
+        signature: sig,
+      });
+
+      return new Response(JSON.stringify({ received: true }), { 
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
     } catch (err) {
-      return new Response(`Webhook Error: ${err}`, { status: 400 });
+      console.error("Stripe webhook error:", err);
+      return new Response(
+        `Webhook Error: ${err instanceof Error ? err.message : "Unknown error"}`,
+        { status: 400 }
+      );
     }
-
-    switch (event.type) {
-      case "checkout.session.completed": {
-        const session = event.data.object;
-        await ctx.runMutation(internal.orders.handleSuccessfulPayment, {
-          orderId: session.metadata.orderId,
-          paymentIntentId: session.payment_intent,
-        });
-        break;
-      }
-      case "payment_intent.payment_failed": {
-        const paymentIntent = event.data.object;
-        await ctx.runMutation(internal.orders.handleFailedPayment, {
-          paymentIntentId: paymentIntent.id,
-        });
-        break;
-      }
-    }
-
-    return new Response(JSON.stringify({ received: true }), { status: 200 });
   }),
 });
 
